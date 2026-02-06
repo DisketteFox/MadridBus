@@ -1,7 +1,13 @@
 <p align=center><image src="./docs/images/MadridBusLogo.png" height="150" /></p>
 <h1 align="center">Madrid Bus</h1>
 
+[![Static Badge](https://img.shields.io/badge/-Figma-d8cded?style=flat&logo=Figma&)](https://www.figma.com/design/BzCBkvpquUvUQghGU2Qyu1/)
+![Static Badge](https://img.shields.io/badge/-Android_Studio-10161d?style=flat&logo=android)
+
 **Madrid Bus** es la primera aplicación de software libre y codigo abierto encargada de ofrecerte la información en tiempo real sobre las horas de llegada de los buses, mapas de transporte público e información de horarios y rutas de las líneas de los buses de la EMT.
+
+> [!WARNING]
+> (!) Este proyecto se encuentra en una fase de prototipado
 
 ## Características
 
@@ -21,8 +27,6 @@
     <img src="./docs/images/scr4.png" width=29%>
 </div>
 
-[Link de Figma](https://www.figma.com/design/BzCBkvpquUvUQghGU2Qyu1/)
-
 ## Análisis del entorno
 
 Si bien es cierto que existe una aplicación oficial de buses de la EMT esta tiene ciertos defectos que resultan molestos para los usuarios, ya sea a nivel de diseño, funcionalidad o flujo, lo que esta aplicación no es competir sino tratar de aportar con algo que sea visualmente atractivo e intuitivo para los usuarios.
@@ -30,6 +34,12 @@ Si bien es cierto que existe una aplicación oficial de buses de la EMT esta tie
 ### Requisitos
 
 Utilizaremos unas cuantas APIs, siendo la primera y principal la que toca utilizar una clave/token para poder utilizarla, las demas son mas sencillas ya que no requieren de token para poder acceder a ellas, si es de carácter obligatorio el uso o implemento de una base de datos recurriremos a ella solamente para administrar las paradas favoritas del usuario.
+
+**Requisitos de usuario**
+
+- Dispositivo móvil con Android
+- Conexión a Internet
+- 128mb de almacenamiento libres
 
 ## Público objetivo
 
@@ -41,13 +51,19 @@ Esta aplicación está dirigida específicamente para las personas que utilizan 
 
 Utilizaremos como tema de colores principal Material You, y los colores representativos de la EMT, para que la aplicación se adapte al teléfono del usuario, pero también utilizaremos varios colores forzados correspondientes a la paleta de colores establecida por la EMT, es decir, azul marino, azul celeste y amarillo.
 
+| Color | Hex |
+|---|---|
+| <img src="./docs/images/color-blue.png" style="margin-top: 5px; margin-right: 5px"> **Azúl marino** | `#0f6bb4` |
+| <img src="./docs/images/color-turquoise.png" style="margin-top: 5px; margin-right: 5px"> **Turquesa oscuro** | `#00adcf` |
+| <img src="./docs/images/color-gold.png" style="margin-top: 5px; margin-right: 5px"> **Amarillo dorado** | `#f8dd43` |
+
 ### Sentido
 
 Decidimos usar esta la gama de colores, ya que son los colores que utiliza la EMT y así los usuarios no se confundan al momento de buscar sus buses o paradas, además del diseño principal de Material You y lo que hace es que el diseño sea adaptable al teléfono.
 
 ### Tipografía
 
-Usamos la tipografía predeterminada de Android, específicamente Roboto, siguiendo las guías de diseño de Material 3, para homogeneizar nuestra aplicación en el entorno Android.
+Usamos la tipografía predeterminada de Android, específicamente [**Roboto**](https://fonts.google.com/specimen/Roboto), siguiendo las guías de diseño de **Material 3**, para homogeneizar nuestra aplicación en el entorno Android.
 
 ### Componentes y diseño general
 
@@ -94,31 +110,40 @@ Como usuarios de la aplicación Madrid Bus, queremos facilitar a los ciudadanos 
 
 ### Modelo ER
 
-**Parada:**
+<div style="display: flex">
+<div style="display: block">
+
+**Parada**
 
 - id_parada
 - Nombre
 - ubicación 
 - Líneas asociadas
 
-**Línea:**
+**Línea**
 
 - id_linea
 - Nombre 
 - Destino
 
-**Llegada:**
+</div>
+<div style="display: block">
+
+**Llegada**
 
 - id_llegada
 - Tiempo estimado
 - id_parada
 - id_linea
 
-**Favorito:**
+**Favorito**
 
 - id_favorito
 - id_parada
 - id_linea
+
+</div>
+</div>
 
 ### Diagrama
 
