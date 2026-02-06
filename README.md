@@ -7,7 +7,7 @@
 **Madrid Bus** es la primera aplicación de software libre y codigo abierto encargada de ofrecerte la información en tiempo real sobre las horas de llegada de los buses, mapas de transporte público e información de horarios y rutas de las líneas de los buses de la EMT.
 
 > [!WARNING]
-> (!) Este proyecto se encuentra en una fase de prototipado
+> Este proyecto se encuentra en una fase de prototipado
 
 ## Características
 
