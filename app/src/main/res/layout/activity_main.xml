@@ -9,7 +9,6 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
-        android:background="?attr/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
@@ -37,7 +36,13 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-<<<<<<< HEAD
+            <com.google.android.material.search.SearchBar
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search stop"
+                app:liftOnScroll="true"
+                app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
@@ -48,19 +53,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
-
             </androidx.recyclerview.widget.RecyclerView>
-
-=======
-            <com.google.android.material.search.SearchBar
-                android:id="@+id/search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorPrimary"
-                android:hint="Search stop"
-                app:liftOnScroll="true"
-                app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"/>
->>>>>>> 004f9030f44a8031dbd5edf4b4bf2d084f14359f
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -71,8 +64,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         app:menu="@menu/bottom_nav_menu"
-        app:color="@color/black"
-
         />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
