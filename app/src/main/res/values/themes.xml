@@ -8,6 +8,8 @@
         <item name="textAppearanceBody2">@color/material_dynamic_primary30</item>
         <item name="textAppearanceHeadline1">@color/material_dynamic_neutral20</item>
         <item name="textAppearanceButton">@color/material_dynamic_neutral20</item>
+        <item name="colorSecondaryContainer">@color/material_dynamic_primary90</item>
+        <item name="colorSurfaceContainer">@color/material_dynamic_primary95</item>
     </style>
 
     <style name="Theme.MadridBus" parent="Base.Theme.MadridBus" />
