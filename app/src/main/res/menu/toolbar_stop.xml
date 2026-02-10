@@ -6,6 +6,7 @@
         android:icon="@drawable/ic_back_24dp"
         android:id="@+id/back"
         app:showAsAction="always"
+        con
         />
     <item
         android:title="Favorite"
