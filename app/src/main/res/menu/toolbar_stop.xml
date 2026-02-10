@@ -2,15 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="Back"
-        android:icon="@drawable/ic_back_24dp"
-        android:id="@+id/back"
-        app:showAsAction="always"
-        con
-        />
-    <item
         android:title="Favorite"
-        android:icon="@drawable/ic_favorite24dp"
+        android:icon="@drawable/ic_favorite_24dp"
         android:id="@+id/favorite"
         app:showAsAction="ifRoom"
         />
