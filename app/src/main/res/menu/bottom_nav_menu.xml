@@ -2,9 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="Stops"
         android:id="@+id/stops_Main"
+        android:icon="@drawable/ic_bus_24dp"
         />
     <item android:title="Lines"
-        android:id="@+id/lines"/>
+        android:id="@+id/lines"
+        android:icon="@drawable/ic_calendar_24dp"
+        />
     <item android:title="Maps"
-        android:id="@+id/maps"/>
+        android:id="@+id/maps"
+        android:icon="@drawable/ic_location_24dp"
+        />
 </menu>
