@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="menu"
-        android:icon="@drawable/ic_menu_24dp"
-        android:id="@+id/menu"
+    <item
+        android:title="Token"
+        android:id="@+id/token"
+        />
+    <item
+        android:title="Settings"
+        android:id="@+id/settings"
         />
 </menu>
