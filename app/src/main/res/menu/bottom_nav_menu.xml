@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:title="Stops"
         android:id="@+id/stops_Main"
         android:icon="@drawable/ic_bus_24dp"
+        app:showAsAction="always"
         />
     <item android:title="Lines"
         android:id="@+id/lines"
         android:icon="@drawable/ic_calendar_24dp"
+        app:showAsAction="always"
         />
     <item android:title="Maps"
         android:id="@+id/maps"
         android:icon="@drawable/ic_location_24dp"
+        app:showAsAction="always"
         />
 </menu>
