@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Stops"
+        android:id="@+id/stops_Main"
+        />
+    <item android:title="Lines"
+        android:id="@+id/lines"/>
+    <item android:title="Maps"
+        android:id="@+id/maps"/>
+</menu>
