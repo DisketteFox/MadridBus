@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
         FrameLayout frameLayout=findViewById(R.id.framelayout);
-        cargaFragment(new Fragment_main(),true);
+        cargaFragment(new FragmentMain(),true);
 
         // navegation bar login esto es solo pa que cambie de fragment
         navigationBarView.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -31,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 int itemId=menuItem.getItemId();
                 if (itemId==R.id.menu_stops){
-                    cargaFragment(new Fragment_main(),false);
+                    cargaFragment(new FragmentMain(),false);
                 } else if (itemId==R.id.menu_lines) {
-                    cargaFragment(new Fragment_lines(),false);
+                    cargaFragment(new FragmentLines(),false);
                 } else if (itemId==R.id.menu_maps) {
-                    cargaFragment(new Fragment_map(),false);
+                    cargaFragment(new FragmentMap(),false);
                 }
                 return true;
             }
