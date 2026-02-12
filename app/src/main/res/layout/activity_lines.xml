@@ -17,8 +17,7 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/toolbar_menu"
-            app:title="Stops"
+            app:title="Lines"
             app:titleCentered="true" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -40,10 +39,9 @@
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search stop"
+                android:hint="Search line"
                 app:liftOnScroll="true"
                 app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"/>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
@@ -53,8 +51,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"/>
-
+                app:layout_constraintVertical_bias="0.0">
+            </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
