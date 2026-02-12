@@ -25,9 +25,6 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.stops_Main) {
                 return true;
             } else if (itemId == R.id.lines) {
-                Intent intent = new Intent(MainActivity.this, LinesActivity.class);
-                startActivity(intent);
-                finish();
                 return true;
             } else if (itemId == R.id.maps) {
                 return true;

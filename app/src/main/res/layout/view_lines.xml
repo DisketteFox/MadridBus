@@ -16,9 +16,8 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/toolbar_stop"
-            app:navigationIcon="@drawable/ic_back_24dp"
-            />
+            app:title="Lines"
+            app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -27,55 +26,20 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="80dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="16dp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/busTimeCard"
+            <com.google.android.material.search.SearchBar
+                android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorSecondary"
-                app:cardCornerRadius="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/stop_id"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:text="5135"
-                        android:textColor="?attr/textAppearanceBody2"
-                        android:textSize="20sp"
-                        android:gravity="center"
-                        android:background="@drawable/circle"
-                        android:backgroundTint="?attr/colorSecondaryContainer"
-                        android:layout_margin="15dp"
-                        android:textStyle="bold"
-                        />
-
-                    <TextView
-                        android:id="@+id/stop_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="Círculo de las Bellas Artes"
-                        android:layout_gravity="center_vertical"
-                        android:textStyle="bold"
-                        />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
+                android:hint="Search line"
+                app:liftOnScroll="true"
+                app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
