@@ -1,13 +1,17 @@
 package dev.diskettefox.madridbus;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,21 +22,37 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
-        navigationBarView.setSelectedItemId(R.id.stops_Main);
+        FrameLayout frameLayout=findViewById(R.id.framelayout);
+        cargaFragment(new Fragment_main(),true);
 
-        navigationBarView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.stops_Main) {
-                return true;
-            } else if (itemId == R.id.lines) {
-                return true;
-            } else if (itemId == R.id.maps) {
+        // navegation bar login esto es solo pa que cambie de fragment
+        navigationBarView.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                int itemId=menuItem.getItemId();
+                if (itemId==R.id.menu_stops){
+                    cargaFragment(new Fragment_main(),false);
+                } else if (itemId==R.id.menu_lines) {
+                    cargaFragment(new Fragment_lines(),false);
+                } else if (itemId==R.id.menu_maps) {
+                    cargaFragment(new Fragment_map(),false);
+                }
                 return true;
             }
-            return false;
         });
 
+    }
 
+    public void cargaFragment(Fragment fragment,boolean seInicioLaApp){
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+        if (seInicioLaApp){
+            fragmentTransaction.add(R.id.framelayout,fragment);
+        }
+        else {
+            fragmentTransaction.replace(R.id.framelayout,fragment);
+        }
+        fragmentTransaction.commit();
     }
 
 }
