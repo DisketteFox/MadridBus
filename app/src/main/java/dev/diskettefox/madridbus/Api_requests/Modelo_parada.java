@@ -18,15 +18,19 @@ public class Modelo_parada {
         private String idParada;
         @SerializedName("name")
         private String nombre;
+
+        @SerializedName("dataLine")
         private DatosDLinea datosDLinea;
 
     }
     public class DatosDLinea{
-        "dataLine"
-                :"label",
-                "direction",
-                "headerA",
-                "headerB",
-
+        @SerializedName("label")
+        private String numeroDlinea;
+        @SerializedName("direction")
+        private String direccion;
+        @SerializedName("headerA")
+        private String DestinoA;
+        @SerializedName("headerB")
+        private String DestinoB;
     }
 }
