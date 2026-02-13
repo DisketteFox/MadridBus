@@ -30,6 +30,5 @@ public class Modelo_parada {
         private String DestinoA;
         @SerializedName("headerB")
         private String DestinoB;
-
     }
 }
