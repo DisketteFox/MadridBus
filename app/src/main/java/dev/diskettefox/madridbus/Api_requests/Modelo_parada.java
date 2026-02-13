@@ -22,7 +22,14 @@ public class Modelo_parada {
 
     }
     public class DatosDLinea{
-
+        @SerializedName("label")
+        private String numeroDlinea;
+        @SerializedName("direction")
+        private String direccion;
+        @SerializedName("headerA")
+        private String DestinoA;
+        @SerializedName("headerB")
+        private String DestinoB;
 
     }
 }
