@@ -18,6 +18,8 @@ public class Modelo_parada {
         private String idParada;
         @SerializedName("name")
         private String nombre;
+
+        @SerializedName("dataLine")
         private DatosDLinea datosDLinea;
 
     }
