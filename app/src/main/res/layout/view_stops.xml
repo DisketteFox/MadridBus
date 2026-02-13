@@ -42,7 +42,7 @@
                 app:liftOnScroll="true"
                 app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"/>
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
+                android:id="@+id/recycler_stops"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -1,6 +1,7 @@
 package dev.diskettefox.madridbus;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -10,16 +11,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+
+import dev.diskettefox.madridbus.Api_requests.ApiCall;
+import dev.diskettefox.madridbus.Api_requests.ApiInterface;
+import dev.diskettefox.madridbus.Api_requests.Modelo_parada;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
+    ArrayList<Modelo_parada.Parada> listaDparadas=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        ApiInterface apiInterface= ApiCall.getStop().create(ApiInterface.class);
+        RecyclerView recyclerStops=findViewById(R.id.recycler_stops);
 
         BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
         FrameLayout frameLayout=findViewById(R.id.framelayout);
@@ -41,6 +56,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Call<Modelo_parada> call=apiInterface.getAllParadas("4f6e5f2f-2f96-4415-b634-78ec45d10753");
+
+        call.enqueue(new Callback<Modelo_parada>() {
+            @Override
+            public void onResponse(Call<Modelo_parada> call, Response<Modelo_parada> response) {
+                Modelo_parada parada=response.body();
+
+                listaDparadas.addAll(parada.getParadas());
+                BusAdapter adapter=new BusAdapter(MainActivity.this,listaDparadas);
+                recyclerStops.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<Modelo_parada> call, Throwable t) {
+                if (listaDparadas.isEmpty()){
+                    Log.d("mensaje de error","Lo sentimos pero hubo un error inesperado.... Paguina caida :(");
+                }
+                Log.d("Error! llamada fallida.",t.toString());
+            }
+        });
+
+
     }
 
     public void cargaFragment(Fragment fragment,boolean seInicioLaApp){
@@ -54,5 +91,6 @@ public class MainActivity extends AppCompatActivity {
         }
         fragmentTransaction.commit();
     }
+
 
 }
