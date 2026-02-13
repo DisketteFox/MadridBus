@@ -7,7 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiCall {
-    public static String BASE_URL="https://datos.emtmadrid.es";
+    public static String BASE_URL="https://datos.emtmadrid.es/";
     public static final String token="4f6e5f2f-2f96-4415-b634-78ec45d10753";
     private static Retrofit retrofit;
 
@@ -21,8 +21,7 @@ public class ApiCall {
                     .addInterceptor(chain -> {
                         Request request=chain.request().newBuilder()
                                 .addHeader(
-                                        "Authorization",
-                                        "Beader " +token
+                                        "X-ApiKey",token
                                 )
                                 .build();
                         return chain.proceed(request);
