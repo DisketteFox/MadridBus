@@ -22,11 +22,7 @@ public class Modelo_parada {
 
     }
     public class DatosDLinea{
-        "dataLine"
-                :"label",
-                "direction",
-                "headerA",
-                "headerB",
+
 
     }
 }
