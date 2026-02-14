@@ -1,8 +1,6 @@
 package dev.diskettefox.madridbus;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +46,8 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvStopId=itemView.findViewById(R.id.stop_id);
-            tvStopName=itemView.findViewById(R.id.stop_name);
+            tvStopId=itemView.findViewById(R.id.stop_id_Stops);
+            tvStopName=itemView.findViewById(R.id.stop_name_Stops);
 
         }
     }
