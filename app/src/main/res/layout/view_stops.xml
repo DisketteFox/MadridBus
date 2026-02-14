@@ -35,7 +35,7 @@
             android:padding="16dp">
 
             <com.google.android.material.search.SearchBar
-                android:id="@+id/search_bar"
+                android:id="@+id/search_bar_Stops"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Search stop"

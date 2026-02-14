@@ -7,7 +7,7 @@
     android:fitsSystemWindows="false"
     >
     <FrameLayout
-        android:id="@+id/framelayout"
+        android:id="@+id/framelayout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
