@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Stops"
+        android:icon="@drawable/ic_bus" />
+    <item android:title="Lines"
+        android:icon="@drawable/ic_calendar"/>
+    <item android:title="Maps"
+        android:icon="@drawable/ic_location"/>
+</menu>
