@@ -17,7 +17,7 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
     private Context contexto;
     private ArrayList<Modelo_parada.Parada> listaDParadas;
-    public BusAdapter(Context context, ArrayList<Modelo_parada.Parada>listaDParadas) {
+    public BusAdapter(Context context, ArrayList<Modelo_parada.Parada> listaDParadas) {
         this.contexto = context;
         this.listaDParadas=listaDParadas;
     }

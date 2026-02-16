@@ -9,8 +9,6 @@ import retrofit2.http.Query;
 
 public interface ApiInterface{
 
-    //@GET("/v1/transport/busemtmad/stops/{stopId}/detail/\")\n")
-
     @POST("/v1/transport/busemtmad/stops/list/")
     Call<Modelo_parada>getAllParadas(@Header("accessToken") String accessToken);
 
