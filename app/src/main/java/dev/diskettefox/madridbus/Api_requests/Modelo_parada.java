@@ -28,23 +28,8 @@ public class Modelo_parada {
         public String getNombreParada() {
             return nombreParada;
         }
-
         public String[] getListaLineas() {
             return listaLineas;
         }
-
-        /*@SerializedName("dataLine")
-        private DatosDLinea datosDLinea;*/
-
     }
-    /*public class DatosDLinea{
-        @SerializedName("label")
-        private String numeroDlinea;
-        @SerializedName("direction")
-        private String direccion;
-        @SerializedName("headerA")
-        private String DestinoA;
-        @SerializedName("headerB")
-        private String DestinoB;
-    }*/
 }
