@@ -25,7 +25,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    ArrayList<Modelo_parada.Parada> listaDparadas=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +32,8 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerStops=findViewById(R.id.recycler_stops);
-        ApiInterface apiInterface= ApiCall.getStop().create(ApiInterface.class);
 
         BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
-        FrameLayout frameLayout=findViewById(R.id.framelayout_main);
         cargaFragment(new FragmentMain(),true);
 
         // navegation bar login esto es solo pa que cambie de fragment
@@ -47,33 +43,13 @@ public class MainActivity extends AppCompatActivity {
                 int itemId=menuItem.getItemId();
                 if (itemId==R.id.menu_stops){
                     cargaFragment(new FragmentMain(),false);
+
                 } else if (itemId==R.id.menu_lines) {
                     cargaFragment(new FragmentLines(),false);
                 } else if (itemId==R.id.menu_maps) {
                     cargaFragment(new FragmentMap(),false);
                 }
                 return true;
-            }
-        });
-
-
-        Call<Modelo_parada> call=apiInterface.getAllParadas("4f6e5f2f-2f96-4415-b634-78ec45d10753");
-        call.enqueue(new Callback<Modelo_parada>() {
-            @Override
-            public void onResponse(Call<Modelo_parada> call, Response<Modelo_parada> response) {
-                Modelo_parada parada=response.body();
-
-                listaDparadas.addAll(parada.getParadas());
-                BusAdapter adapter=new BusAdapter(MainActivity.this,listaDparadas);
-                recyclerStops.setAdapter(adapter);
-            }
-
-            @Override
-            public void onFailure(Call<Modelo_parada> call, Throwable t) {
-                if (listaDparadas.isEmpty()){
-                    Log.d("mensaje de error","Lo sentimos pero hubo un error inesperado.... Paguina caida :(");
-                }
-                Log.d("Error! llamada fallida.",t.toString());
             }
         });
 
