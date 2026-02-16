@@ -25,22 +25,19 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(new FragmentMain(),true);
 
         // Navigation bar logic
-        navigationBarView.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int itemId=menuItem.getItemId();
+        navigationBarView.setOnItemSelectedListener((BottomNavigationView.OnNavigationItemSelectedListener) menuItem -> {
+            int itemId=menuItem.getItemId();
 
-                // Menu selection
-                if (itemId==R.id.menu_stops){
-                    loadFragment(new FragmentMain(),false);
-                } else if (itemId==R.id.menu_lines) {
-                    loadFragment(new FragmentLines(),false);
-                } else if (itemId==R.id.menu_maps) {
-                    loadFragment(new FragmentMap(),false);
-                }
-
-                return true;
+            // Menu selection
+            if (itemId==R.id.menu_stops){
+                loadFragment(new FragmentMain(),false);
+            } else if (itemId==R.id.menu_lines) {
+                loadFragment(new FragmentLines(),false);
+            } else if (itemId==R.id.menu_maps) {
+                loadFragment(new FragmentMap(),false);
             }
+
+            return true;
         });
     }
 
