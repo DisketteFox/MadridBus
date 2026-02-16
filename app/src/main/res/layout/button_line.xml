@@ -6,12 +6,12 @@
 
     <Button
         android:id="@+id/line_button"
-        android:layout_width="55dp"
-        android:layout_height="wrap_content"
+        android:layout_width="42dp"
+        android:layout_height="34dp"
         android:backgroundTint="@color/blue"
         android:padding="0dp"
         android:text="156"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

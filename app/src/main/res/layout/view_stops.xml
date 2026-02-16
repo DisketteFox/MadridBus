@@ -46,6 +46,7 @@
                 android:id="@+id/recycler_stops"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -53,12 +54,9 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
 
-                app:spanCount="2"
-                android:layout_marginTop="10dp"
-                tools:itemCount="5"
+                tools:itemCount="4"
                 tools:listitem="@layout/card_stop"
-                >
-            </androidx.recyclerview.widget.RecyclerView>
+                />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -11,13 +11,13 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
-import dev.diskettefox.madridbus.Api_requests.Modelo_parada;
+import dev.diskettefox.madridbus.Api_requests.ModeloStop;
 
 public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
     private Context contexto;
-    private ArrayList<Modelo_parada.Parada> listaDParadas;
-    public BusAdapter(Context context, ArrayList<Modelo_parada.Parada> listaDParadas) {
+    private ArrayList<ModeloStop.Stops> listaDParadas;
+    public BusAdapter(Context context, ArrayList<ModeloStop.Stops>listaDParadas) {
         this.contexto = context;
         this.listaDParadas=listaDParadas;
     }
@@ -32,15 +32,23 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull BusAdapter.ViewHolder holder, int position) {
-        holder.tvStopId.setText(listaDParadas.get(position).getIdParada());
-        holder.tvStopName.setText(listaDParadas.get(position).getNombreParada());
+        holder.tvStopId.setText(listaDParadas.get(position).getStop().getIdParada());
+        holder.tvStopName.setText(listaDParadas.get(position).getStop().getNombreParada());
+
+        ModeloStop.Stop parada= listaDParadas.get(position).getStop();
+        if (parada!=null){
+            holder.tvStopId.setText(parada.getIdParada());
+            holder.tvStopId.setText(parada.getNombreParada());
+        }
 
     }
 
     @Override
-    public int getItemCount() {return listaDParadas.size();}
+    public int getItemCount() {
+        return listaDParadas!=null ? listaDParadas.size():0;
+    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvStopId, tvStopName;
         CardView card;
 
@@ -48,6 +56,7 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
             super(itemView);
             tvStopId=itemView.findViewById(R.id.stop_id_Stops);
             tvStopName=itemView.findViewById(R.id.stop_name_Stops);
+            card=itemView.findViewById(R.id.busCard_Stop);
 
         }
     }
