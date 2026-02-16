@@ -1,10 +1,10 @@
-package dev.diskettefox.madridbus.Api_requests;
+package dev.diskettefox.madridbus.api;
 
 import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ModeloStop {
+public class StopModel {
     @SerializedName("data")
     private ArrayList<Data> stops = new ArrayList<>();
 
@@ -12,7 +12,7 @@ public class ModeloStop {
         return stops;
     }
 
-    public class Data {
+    public static class Data {
         @SerializedName("stops")
         private List<Stop> stops;
 
@@ -21,7 +21,7 @@ public class ModeloStop {
         }
     }
 
-    public class Stop {
+    public static class Stop {
         @SerializedName("stop")
         private String stopId;
         @SerializedName("name")
@@ -40,7 +40,7 @@ public class ModeloStop {
         }
     }
 
-    public class Dataline {
+    public static class Dataline {
         @SerializedName("line")
         private String lineId;
         @SerializedName("label")

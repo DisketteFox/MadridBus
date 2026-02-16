@@ -1,4 +1,4 @@
-package dev.diskettefox.madridbus.Api_requests;
+package dev.diskettefox.madridbus.api;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

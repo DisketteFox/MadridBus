@@ -1,6 +1,10 @@
 package dev.diskettefox.madridbus;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,68 +12,90 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.diskettefox.madridbus.Api_requests.ApiCall;
-import dev.diskettefox.madridbus.Api_requests.ApiInterface;
-import dev.diskettefox.madridbus.Api_requests.ModeloStop;
+import dev.diskettefox.madridbus.adapters.BusAdapter;
+import dev.diskettefox.madridbus.api.ApiCall;
+import dev.diskettefox.madridbus.api.ApiInterface;
+import dev.diskettefox.madridbus.api.StopModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragmentMain extends Fragment {
-    ArrayList<ModeloStop.Stop> stopsList = new ArrayList<>(); // Change Stops to Stop
+    private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
+    private BusAdapter adapter;
+    private LoadingIndicator loadingIndicator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_stops, container, false);
-        RecyclerView recyclerStops = (RecyclerView) view.findViewById(R.id.recycler_stops);
+        RecyclerView recyclerStops = view.findViewById(R.id.recycler_stops);
+        loadingIndicator = view.findViewById(R.id.progress_bar);
+
         ApiInterface apiInterface = ApiCall.getStop().create(ApiInterface.class);
         String accessToken = ApiCall.token;
 
-        // Call to API
-        Call<ModeloStop> call = apiInterface.getStop(373, accessToken);
-        call.enqueue(new Callback<ModeloStop>() {
+        // Initialize RecyclerView and Adapter
+        recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new BusAdapter(getContext(), stopsList);
+        recyclerStops.setAdapter(adapter);
+
+        // Show loading screen
+        loadingIndicator.setVisibility(View.VISIBLE);
+
+        // Array of stop IDs to fetch
+        int[] stopIds = {321, 2018, 1927};
+
+        // Fetch data for all stop IDs
+        for (int stopId : stopIds) {
+            fetchStopData(apiInterface, stopId, accessToken);
+        }
+
+        return view;
+    }
+
+    private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
+        Call<StopModel> call = apiInterface.getStop(stopId, accessToken);
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<ModeloStop> call, Response<ModeloStop> response) {
-                ModeloStop stop = response.body();
-                if (stop != null) {
-                    // Loop through each Data item and add stops to the list
-                    for (ModeloStop.Data data : stop.getStopsData()) {
-                        List<ModeloStop.Stop> stops = data.getStops();
-                        if (stops != null) {
-                            stopsList.addAll(stops);
+            public void onResponse(@NonNull Call<StopModel> call, @NonNull Response<StopModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    StopModel stop = response.body();
+                    // Process the response
+                    if (stop.getStopsData() != null) {
+                        for (StopModel.Data data : stop.getStopsData()) {
+                            List<StopModel.Stop> stops = data.getStops();
+                            if (stops != null) {
+                                stopsList.addAll(stops);
+                            }
                         }
+                        adapter.notifyDataSetChanged();
+                        Log.d("JustWorking", "Stops loaded: " + stopsList);
+                    } else {
+                        Log.d("API Response", "No stops data for stop ID: " + stopId);
                     }
-
-                    // Set up RecyclerView
-                    recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
-                    BusAdapter adapter = new BusAdapter(getContext(), stopsList);
-                    recyclerStops.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-
-                    // Notify success
-                    Log.d("JustWorking", stopsList.toString());
                 } else {
-                    Log.d("API Response", "No data returned");
+                    Log.d("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
                 }
+
+                hideLoadingIndicator(); // Hide loading indicator after all calls
             }
 
             @Override
-            public void onFailure(Call<ModeloStop> call, Throwable t) {
-                if (stopsList.isEmpty()) {
-                    Log.d("Message error", "Unexpected error (Unreachable API)");
-                }
-                Log.d("Call error", t.toString());
+            public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
+                Log.e("Call Error", "Error retrieving data for stop ID: " + stopId, t);
+                hideLoadingIndicator(); // Hide loading indicator if it fails
             }
         });
-        return view;
+    }
+
+    // Pretty self-explanatory
+    private void hideLoadingIndicator() {
+        loadingIndicator.setVisibility(View.GONE);
     }
 
     @Override
