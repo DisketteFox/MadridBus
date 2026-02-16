@@ -8,6 +8,8 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiInterface{
+    @GET("/v1/transport/busemtmad/stops/1023/detail/")
+    Call<Modelo_parada> testApiKey();
 
     //@GET("/v1/transport/busemtmad/stops/{stopId}/detail/\")\n")
 
