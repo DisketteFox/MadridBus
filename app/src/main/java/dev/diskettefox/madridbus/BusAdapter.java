@@ -32,15 +32,19 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull BusAdapter.ViewHolder holder, int position) {
-        holder.tvStopId.setText(listaDParadas.get(position).getIdParada());
-        holder.tvStopName.setText(listaDParadas.get(position).getNombreParada());
-
+        Modelo_parada.Parada parada=listaDParadas.get(position);
+        if (parada!=null){
+            holder.tvStopId.setText(parada.getIdParada());
+            holder.tvStopId.setText(parada.getNombreParada());
+        }
     }
 
     @Override
-    public int getItemCount() {return listaDParadas.size();}
+    public int getItemCount() {
+        return listaDParadas!=null ? listaDParadas.size():0;
+    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvStopId, tvStopName;
         CardView card;
 
@@ -48,6 +52,7 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
             super(itemView);
             tvStopId=itemView.findViewById(R.id.stop_id_Stops);
             tvStopName=itemView.findViewById(R.id.stop_name_Stops);
+            card=itemView.findViewById(R.id.busCard_Stop);
 
         }
     }
