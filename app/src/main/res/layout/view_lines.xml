@@ -34,14 +34,14 @@
             android:padding="16dp">
 
             <com.google.android.material.search.SearchBar
-                android:id="@+id/search_bar"
+                android:id="@+id/search_bar_Lines"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Search line"
                 app:liftOnScroll="true"
                 app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"/>
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
+                android:id="@+id/recycler_Lines"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"

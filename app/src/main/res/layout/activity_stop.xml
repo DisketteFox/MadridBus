@@ -34,7 +34,7 @@
             android:padding="20dp">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/busTimeCard"
+                android:id="@+id/busCard_Stop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorSecondary"
@@ -77,7 +77,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
+                android:id="@+id/recycler_stop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"

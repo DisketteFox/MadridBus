@@ -34,7 +34,7 @@
             android:padding="20dp">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/busTimeCard"
+                android:id="@+id/busCard_Line"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorSecondary"
@@ -51,7 +51,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/stop_id"
+                        android:id="@+id/stop_id_Line"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:text="1"
@@ -70,7 +70,7 @@
                         android:gravity="center_vertical"
                         android:orientation="vertical">
                         <TextView
-                            android:id="@+id/textView"
+                            android:id="@+id/destino_A_Line"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
@@ -80,7 +80,7 @@
                             />
 
                         <TextView
-                            android:id="@+id/textView2"
+                            android:id="@+id/destino_B_Line"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="20sp"
