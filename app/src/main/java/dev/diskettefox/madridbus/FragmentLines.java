@@ -8,8 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class FragmentLines extends Fragment {
+    public FragmentLines(){
+
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.view_lines, container, false);
+        View view= inflater.inflate(R.layout.view_lines, container, false);
+        return view;
     }
 }
