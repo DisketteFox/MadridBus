@@ -33,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        ApiInterface apiInterface= ApiCall.getStop().create(ApiInterface.class);
         RecyclerView recyclerStops=findViewById(R.id.recycler_stops);
+        ApiInterface apiInterface= ApiCall.getStop().create(ApiInterface.class);
 
         BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
-        FrameLayout frameLayout=findViewById(R.id.framelayout);
+        FrameLayout frameLayout=findViewById(R.id.framelayout_main);
         cargaFragment(new FragmentMain(),true);
 
         // navegation bar login esto es solo pa que cambie de fragment
@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Call<Modelo_parada> call=apiInterface.getAllParadas("4f6e5f2f-2f96-4415-b634-78ec45d10753");
 
+        Call<Modelo_parada> call=apiInterface.getAllParadas("4f6e5f2f-2f96-4415-b634-78ec45d10753");
         call.enqueue(new Callback<Modelo_parada>() {
             @Override
             public void onResponse(Call<Modelo_parada> call, Response<Modelo_parada> response) {
@@ -84,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager=getSupportFragmentManager();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         if (seInicioLaApp){
-            fragmentTransaction.add(R.id.framelayout,fragment);
+            fragmentTransaction.add(R.id.framelayout_main,fragment);
         }
         else {
-            fragmentTransaction.replace(R.id.framelayout,fragment);
+            fragmentTransaction.replace(R.id.framelayout_main,fragment);
         }
         fragmentTransaction.commit();
     }
