@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 
 import dev.diskettefox.madridbus.Api_requests.ModeloStop;
@@ -16,36 +17,35 @@ import dev.diskettefox.madridbus.Api_requests.ModeloStop;
 public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
     private Context contexto;
-    private ArrayList<ModeloStop.Stops> listaDParadas;
-    public BusAdapter(Context context, ArrayList<ModeloStop.Stops>listaDParadas) {
+    private ArrayList<ModeloStop.Stop> listaDParadas; // Changed to Stop
+
+    public BusAdapter(Context context, ArrayList<ModeloStop.Stop> listaDParadas) { // Changed to Stop
         this.contexto = context;
-        this.listaDParadas=listaDParadas;
+        this.listaDParadas = listaDParadas;
     }
 
     @NonNull
     @Override
     public BusAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater=LayoutInflater.from(contexto);
-        View view=inflater.inflate(R.layout.card_stop,parent,false);
+        LayoutInflater inflater = LayoutInflater.from(contexto);
+        View view = inflater.inflate(R.layout.card_stop, parent, false);
         return new BusAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BusAdapter.ViewHolder holder, int position) {
-        holder.tvStopId.setText(listaDParadas.get(position).getStop().getIdParada());
-        holder.tvStopName.setText(listaDParadas.get(position).getStop().getNombreParada());
+        ModeloStop.Stop stop = listaDParadas.get(position);
 
-        ModeloStop.Stop parada= listaDParadas.get(position).getStop();
-        if (parada!=null){
-            holder.tvStopId.setText(parada.getIdParada());
-            holder.tvStopId.setText(parada.getNombreParada());
+        // Set stop text
+        if (stop != null) {
+            holder.tvStopId.setText(stop.getStopId());
+            holder.tvStopName.setText(stop.getName());
         }
-
     }
 
     @Override
     public int getItemCount() {
-        return listaDParadas!=null ? listaDParadas.size():0;
+        return listaDParadas != null ? listaDParadas.size() : 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -54,10 +54,9 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvStopId=itemView.findViewById(R.id.stop_id_Stops);
-            tvStopName=itemView.findViewById(R.id.stop_name_Stops);
-            card=itemView.findViewById(R.id.busCard_Stop);
-
+            tvStopId = itemView.findViewById(R.id.stop_id_Stops);
+            tvStopName = itemView.findViewById(R.id.stop_name_Stops);
+            card = itemView.findViewById(R.id.busCard_Stop);
         }
     }
 }

@@ -1,79 +1,71 @@
 package dev.diskettefox.madridbus.Api_requests;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModeloStop {
     @SerializedName("data")
-    private ArrayList<Stops> stopsDates=new ArrayList<>();
+    private ArrayList<Data> stops = new ArrayList<>();
 
-    public ArrayList<Stops> getStop() {
-        return stopsDates;
+    public ArrayList<Data> getStopsData() {
+        return stops;
     }
 
-    public class Stops {
+    public class Data {
         @SerializedName("stops")
-        private Stop stop;
+        private List<Stop> stops;
 
-        public Stop getStop() {
-            return stop;
+        public List<Stop> getStops() {
+            return stops;
         }
     }
 
     public class Stop {
         @SerializedName("stop")
-        private String idParada;
+        private String stopId;
         @SerializedName("name")
-        private String nombreParada;
-
+        private String name;
         @SerializedName("dataLine")
-        private DatosDLinea datosDLinea;
+        private List<Dataline> dataLine;
 
-        public String getIdParada() {
-            return idParada;
+        public String getStopId() {
+            return stopId;
         }
-
-        public String getNombreParada() {
-            return nombreParada;
+        public String getName() {
+            return name;
         }
-
-        public DatosDLinea getDatosDLinea() {
-            return datosDLinea;
+        public List<Dataline> getDataLine() {
+            return dataLine;
         }
-
     }
 
-    public class DatosDLinea{
+    public class Dataline {
         @SerializedName("line")
-        private String idDLinea;
+        private String lineId;
         @SerializedName("label")
-        private String numeroDlinea;
+        private String label;
         @SerializedName("direction")
-        private String direccion;
+        private String direction;
         @SerializedName("headerA")
-        private String DestinoA;
+        private String headerA;
         @SerializedName("headerB")
-        private String DestinoB;
+        private String headerB;
 
-        public String getIdDLinea() {
-            return idDLinea;
+        public String getLineId() {
+            return lineId;
         }
-
-        public String getNumeroDlinea() {
-            return numeroDlinea;
+        public String getLabel() {
+            return label;
         }
-
-        public String getDireccion() {
-            return direccion;
+        public String getDirection() {
+            return direction;
         }
-
-        public String getDestinoA() {
-            return DestinoA;
+        public String getHeaderA() {
+            return headerA;
         }
-
-        public String getDestinoB() {
-            return DestinoB;
+        public String getHeaderB() {
+            return headerB;
         }
     }
 }

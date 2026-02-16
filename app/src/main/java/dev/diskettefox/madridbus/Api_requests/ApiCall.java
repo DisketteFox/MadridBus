@@ -8,15 +8,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiCall {
     public static String BASE_URL="https://datos.emtmadrid.es/";
-    public static final String token="4f6e5f2f-2f96-4415-b634-78ec45d10753";
+    public static final String token="349af0a5-f239-4317-804d-4d459b780bb0";
     private static Retrofit retrofit;
 
     public static Retrofit getStop(){
         if (retrofit == null) {
-            HttpLoggingInterceptor interceptor=new HttpLoggingInterceptor();
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-            OkHttpClient stop=new OkHttpClient.Builder()
+            OkHttpClient stop = new OkHttpClient.Builder()
                     .addInterceptor(interceptor)
                     .addInterceptor(chain -> {
                         Request request=chain.request().newBuilder()
@@ -27,7 +27,7 @@ public class ApiCall {
                         return chain.proceed(request);
                     })
                     .build();
-            retrofit =new Retrofit.Builder()
+            retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .client(stop)
                     .addConverterFactory(GsonConverterFactory.create())
