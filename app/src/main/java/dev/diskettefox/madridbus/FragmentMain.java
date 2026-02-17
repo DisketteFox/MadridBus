@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 
 import dev.diskettefox.madridbus.Api_requests.ApiCall;
@@ -29,7 +31,7 @@ public class FragmentMain extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.view_stops, container, false);
-        RecyclerView recyclerStops=(RecyclerView)view.findViewById(R.id.recycler_stops);
+        RecyclerView recyclerStops=view.findViewById(R.id.recycler_stops);
         ApiInterface apiInterface= ApiCall.getStop().create(ApiInterface.class);
 
         Call<ModeloStop> call=apiInterface.getStop(373,"da0a4f54-aaa7-4f6f-b2e7-155d1ce0957d");
@@ -37,7 +39,10 @@ public class FragmentMain extends Fragment {
             @Override
             public void onResponse(Call<ModeloStop> call, Response<ModeloStop> response) {
                 ModeloStop stop=response.body();
-                listaDparadas.addAll(stop.getStop());
+                Log.d("RESpuestaaa",stop.getStops().toString());
+                //listaDparadas.addAll(stop.getStops());
+
+                JsonObject parentObjt=new JsonObject();
 
                 recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
                 BusAdapter adapter=new BusAdapter(getContext(),listaDparadas);

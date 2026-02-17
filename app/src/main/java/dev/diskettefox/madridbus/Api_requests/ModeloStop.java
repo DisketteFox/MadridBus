@@ -3,12 +3,13 @@ package dev.diskettefox.madridbus.Api_requests;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class ModeloStop {
     @SerializedName("data")
     private ArrayList<Stops> stopsDates=new ArrayList<>();
 
-    public ArrayList<Stops> getStop() {
+    public ArrayList<Stops> getStops() {
         return stopsDates;
     }
 
@@ -27,8 +28,6 @@ public class ModeloStop {
         @SerializedName("name")
         private String nombreParada;
 
-        @SerializedName("dataLine")
-        private DatosDLinea datosDLinea;
 
         public String getIdParada() {
             return idParada;
@@ -38,9 +37,6 @@ public class ModeloStop {
             return nombreParada;
         }
 
-        public DatosDLinea getDatosDLinea() {
-            return datosDLinea;
-        }
 
     }
 

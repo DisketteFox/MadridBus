@@ -32,14 +32,8 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull BusAdapter.ViewHolder holder, int position) {
-        holder.tvStopId.setText(listaDParadas.get(position).getStop().getIdParada());
-        holder.tvStopName.setText(listaDParadas.get(position).getStop().getNombreParada());
-
-        ModeloStop.Stop parada= listaDParadas.get(position).getStop();
-        if (parada!=null){
-            holder.tvStopId.setText(parada.getIdParada());
-            holder.tvStopId.setText(parada.getNombreParada());
-        }
+        holder.tvStopId.setText(listaDParadas.get(0).getStop().getIdParada());
+        holder.tvStopName.setText(listaDParadas.get(0).getStop().getNombreParada());
 
     }
 
