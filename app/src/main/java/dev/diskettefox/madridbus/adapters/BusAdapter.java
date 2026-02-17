@@ -1,6 +1,7 @@
 package dev.diskettefox.madridbus.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.diskettefox.madridbus.R;
+import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.api.StopModel;
 
 public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
@@ -44,6 +46,13 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
         if (stop != null) {
             holder.tvStopId.setText(stop.getStopId());
             holder.tvStopName.setText(stop.getName());
+
+            holder.card.setOnClickListener(v -> {
+                Intent intent = new Intent(context, StopActivity.class);
+                intent.putExtra("stopId", stop.getStopId());
+                intent.putExtra("stopName", stop.getName());
+                context.startActivity(intent);
+            });
 
             // Clear previous views to fix duplication in recycler views
             holder.linesContainer.removeAllViews();
