@@ -4,5 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#0f6bb4</color>
     <color name="turquoise">#00adcf</color>
+    <color name="lightblue">#7bb7e9</color>
     <color name="gold">#f8dd43</color>
+    <color name="yellow">#ede939</color>
+    <color name="brown">#764709</color>
 </resources>

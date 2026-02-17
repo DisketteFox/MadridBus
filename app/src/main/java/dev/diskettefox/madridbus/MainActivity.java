@@ -21,41 +21,37 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-
         BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
-        cargaFragment(new FragmentMain(),true);
+        loadFragment(new FragmentMain(),true);
 
-        // navegation bar login esto es solo pa que cambie de fragment
-        navigationBarView.setOnItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int itemId=menuItem.getItemId();
-                if (itemId==R.id.menu_stops){
-                    cargaFragment(new FragmentMain(),false);
+        // Navigation bar logic
+        navigationBarView.setOnItemSelectedListener((BottomNavigationView.OnNavigationItemSelectedListener) menuItem -> {
+            int itemId=menuItem.getItemId();
 
-                } else if (itemId==R.id.menu_lines) {
-                    cargaFragment(new FragmentLines(),false);
-                } else if (itemId==R.id.menu_maps) {
-                    cargaFragment(new FragmentMap(),false);
-                }
-                return true;
+            // Menu selection
+            if (itemId==R.id.menu_stops){
+                loadFragment(new FragmentMain(),false);
+            } else if (itemId==R.id.menu_lines) {
+                loadFragment(new FragmentLines(),false);
+            } else if (itemId==R.id.menu_maps) {
+                loadFragment(new FragmentMap(),false);
             }
+
+            return true;
         });
-
-
     }
 
-    public void cargaFragment(Fragment fragment,boolean seInicioLaApp){
-        FragmentManager fragmentManager=getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        if (seInicioLaApp){
+    // Fragment manager
+    public void loadFragment(Fragment fragment, boolean booted){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        if (booted){
             fragmentTransaction.add(R.id.framelayout_main,fragment);
-        }
-        else {
+        } else {
             fragmentTransaction.replace(R.id.framelayout_main,fragment);
         }
+
         fragmentTransaction.commit();
     }
-
-
 }
