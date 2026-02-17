@@ -66,6 +66,12 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
                         } else if (Integer.parseInt(line.getLineId()) > 89 & Integer.parseInt(line.getLineId()) < 100) {
                             btnLine.setBackgroundColor(ContextCompat.getColor(context, R.color.lightblue));
                             btnLine.setTextColor(ContextCompat.getColor(context, R.color.white));
+                        } else if (Integer.parseInt(line.getLineId()) > 451 & Integer.parseInt(line.getLineId()) < 458) {
+                            btnLine.setBackgroundColor(ContextCompat.getColor(context, R.color.brown));
+                            btnLine.setTextColor(ContextCompat.getColor(context, R.color.white));
+                        } else if (Integer.parseInt(line.getLineId()) > 600 & Integer.parseInt(line.getLineId()) < 604) {
+                            btnLine.setBackgroundColor(ContextCompat.getColor(context, R.color.yellow));
+                            btnLine.setTextColor(ContextCompat.getColor(context, R.color.black));
                         }
                         btnLine.setText(line.getLabel());
                         holder.linesContainer.addView(lineView);
