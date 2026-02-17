@@ -19,9 +19,11 @@ public class FragmentMap extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View view=inflater.inflate(R.layout.view_map,container,false);
             PhotoView map1=view.findViewById(R.id.imgMap1);
+         
 
 
-            return view;
+
+        return view;
 
         }
 }
