@@ -13,9 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MadridBus">
         <activity
-            android:name=".LinesActivity"
+            android:name=".StopActivity"
             android:exported="false"
-            android:label="@string/title_activity_lines"
+            android:label="@string/title_activity_stop"
             android:theme="@style/Theme.MadridBus" />
         <activity
             android:name=".MainActivity"
