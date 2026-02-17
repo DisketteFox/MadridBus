@@ -48,7 +48,7 @@ public class FragmentMain extends Fragment {
         loadingIndicator.setVisibility(View.VISIBLE);
 
         // Array of stop IDs to fetch
-        int[] stopIds = {321, 2018, 1927};
+        int[] stopIds = {5710, 3862, 3542};
 
         // Fetch data for all stop IDs
         for (int stopId : stopIds) {
