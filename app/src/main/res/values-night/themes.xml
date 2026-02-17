@@ -12,5 +12,7 @@
         <item name="colorSurfaceContainerHighest">@color/material_dynamic_secondary20</item>
         <item name="colorOnSurface">@color/material_dynamic_neutral90</item>
         <item name="colorOnSurfaceVariant">@color/material_dynamic_neutral90</item>
+        <item name="colorOnPrimaryContainer">@color/material_dynamic_primary95</item>
+        <item name="colorPrimaryContainer">@color/material_dynamic_primary20</item>
     </style>
 </resources>
