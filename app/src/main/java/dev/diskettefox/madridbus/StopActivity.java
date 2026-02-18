@@ -69,7 +69,7 @@ public class StopActivity extends AppCompatActivity {
     }
 
     private void fetchStopDetails(int stopId) {
-        ApiInterface apiInterface = ApiCall.getStop().create(ApiInterface.class);
+        ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         Call<StopModel> call = apiInterface.getStop(stopId, ApiCall.token);
 
         call.enqueue(new Callback<StopModel>() {

@@ -36,7 +36,7 @@ public class FragmentMain extends Fragment {
         RecyclerView recyclerStops = view.findViewById(R.id.recycler_stops);
         loadingIndicator = view.findViewById(R.id.progress_bar);
 
-        ApiInterface apiInterface = ApiCall.getStop().create(ApiInterface.class);
+        ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         String accessToken = ApiCall.token;
 
         // Initialize RecyclerView and Adapter

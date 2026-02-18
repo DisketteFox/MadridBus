@@ -11,7 +11,7 @@ public class ApiCall {
     public static final String token="349af0a5-f239-4317-804d-4d459b780bb0";
     private static Retrofit retrofit;
 
-    public static Retrofit getStop(){
+    public static Retrofit callApi(){
         if (retrofit == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
