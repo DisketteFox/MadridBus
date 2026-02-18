@@ -20,6 +20,9 @@ import java.util.List;
 import dev.diskettefox.madridbus.adapters.BusAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
+import dev.diskettefox.madridbus.api.BaseDatosCall;
+import dev.diskettefox.madridbus.api.BaseDatosInterface;
+import dev.diskettefox.madridbus.api.BaseDatosModel;
 import dev.diskettefox.madridbus.api.StopModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,6 +57,22 @@ public class FragmentMain extends Fragment {
         for (int stopId : stopIds) {
             fetchStopData(apiInterface, stopId, accessToken);
         }
+
+        BaseDatosModel modelo=new BaseDatosModel("373",true);
+        BaseDatosInterface apiInterface2 = BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
+        Call<BaseDatosModel>call2=apiInterface2.anadeFavorito(modelo);
+        call2.enqueue(new Callback<BaseDatosModel>() {
+            @Override
+            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
+                Log.d("respuesta","FELIZIDADES FUNCIONA.");
+            }
+
+            @Override
+            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
+                Log.d("respuesta","LA MALA NENE MO FUNCIONA.");
+            }
+        });
+
         return view;
     }
 

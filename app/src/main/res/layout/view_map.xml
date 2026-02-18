@@ -9,12 +9,10 @@
         android:id="@+id/imgMap1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        android:contentDescription="Mapa 1"
         android:src="@drawable/imagen1_map"
+        app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
