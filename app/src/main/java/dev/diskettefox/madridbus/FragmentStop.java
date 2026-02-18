@@ -25,7 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class FragmentMain extends Fragment {
+public class FragmentStop extends Fragment {
     private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
     private BusAdapter adapter;
     private LoadingIndicator loadingIndicator;

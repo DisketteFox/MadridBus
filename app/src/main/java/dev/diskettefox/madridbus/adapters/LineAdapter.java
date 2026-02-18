@@ -17,13 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.diskettefox.madridbus.LineActivity;
 import dev.diskettefox.madridbus.R;
+import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.api.LineModel;
 
 public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
 
     private final Context context;
     private final ArrayList<LineModel.Data> data;
+
 
     public LineAdapter(Context context, ArrayList<LineModel.Data> data) {
         this.context = context;
@@ -44,6 +47,13 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
         holder.tvLineLabel.setText(line.getLabel());
         holder.tvLineNameA.setText(line.getNameA());
         holder.tvLineNameB.setText(line.getNameB());
+
+        holder.card.setOnClickListener(v -> {
+            Intent intent = new Intent(context, LineActivity.class);
+            intent.putExtra("lineId", line.getLineId());
+            intent.putExtra("lineLabel", line.getLabel());
+            context.startActivity(intent);
+        });
 
         if (line.getLineId() > 500 & line.getLineId() < 600) {
             holder.tvLineLabel.setBackgroundColor(ContextCompat.getColor(context, R.color.black));
@@ -76,6 +86,7 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvLineLabel, tvLineNameA, tvLineNameB;
+        CardView card;
         LinearLayout linesContainer;
 
         public ViewHolder(@NonNull View itemView) {
@@ -83,6 +94,7 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
             tvLineLabel = itemView.findViewById(R.id.line_label);
             tvLineNameA = itemView.findViewById(R.id.line_name_a);
             tvLineNameB = itemView.findViewById(R.id.line_name_b);
+            card = itemView.findViewById(R.id.busCard_Lines);
             linesContainer = itemView.findViewById(R.id.lines_container);
         }
     }
