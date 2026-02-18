@@ -16,10 +16,9 @@ public interface ApiInterface{
 
     // "StopModel" to be changed
     @GET("https://datos.emtmadrid.es/v2/transport/busemtmad/lines/info/{dateref}/")
-    Call<StopModel> getLinesInfo(@Header("accessToken") String accessToken);
-
-    // "StopModel" to be changed + doesn't work at all
-    @GET("/v1/transport/busemtmad/lines/{lineId}/info/{dateref}/")
-    Call<StopModel> getLineDetail(@Path("lineId") Integer lineId, @Header("accessToken") String accessToken);
+    Call<StopModel> getLines(@Header("accessToken") String accessToken);
+    
+    @GET("/v1/transport/busemtmad/lines/{lineId}/info/20260218/")
+    Call<LineModel> getLineDetail(@Path("lineId") Integer lineId, @Header("accessToken") String accessToken);
 
 }
