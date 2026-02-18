@@ -18,6 +18,11 @@
             android:label="@string/title_activity_stop"
             android:theme="@style/Theme.MadridBus" />
         <activity
+            android:name=".LineActivity"
+            android:exported="false"
+            android:label="@string/title_activity_line"
+            android:theme="@style/Theme.MadridBus" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

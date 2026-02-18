@@ -1,10 +1,8 @@
 package dev.diskettefox.madridbus;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -22,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
-        loadFragment(new FragmentMain(),true);
+        loadFragment(new FragmentStop(),true);
 
         // Navigation bar logic
         navigationBarView.setOnItemSelectedListener((BottomNavigationView.OnNavigationItemSelectedListener) menuItem -> {
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Menu selection
             if (itemId==R.id.menu_stops){
-                loadFragment(new FragmentMain(),false);
+                loadFragment(new FragmentStop(),false);
             } else if (itemId==R.id.menu_lines) {
                 loadFragment(new FragmentLines(),false);
             } else if (itemId==R.id.menu_maps) {
