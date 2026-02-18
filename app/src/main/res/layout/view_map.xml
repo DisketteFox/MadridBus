@@ -7,11 +7,11 @@
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/imgMap1"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="fitCenter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:adjustViewBounds="true"
-        android:contentDescription="Mapa 1"
+        android:contentDescription="Mapa de buses de Madrid"
         android:src="@drawable/imagen1_map"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
