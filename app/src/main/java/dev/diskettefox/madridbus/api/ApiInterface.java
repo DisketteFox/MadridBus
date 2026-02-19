@@ -7,12 +7,15 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ApiInterface{
-    @GET("/v1/transport/busemtmad/stops/{stopId}/detail")
-    Call<StopModel> getStop(@Path("stopId") Integer stopId, @Header("accessToken") String accessToken);
 
     // "StopModel" to be changed
     @POST("/v1/transport/busemtmad/stops/list/")
     Call<StopModel> getStopsList(@Header("accessToken") String accessToken);
+    @GET("/v1/transport/busemtmad/stops/{stopId}/detail")
+    Call<StopModel> getStop(@Path("stopId") Integer stopId, @Header("accessToken") String accessToken);
+
+    @POST("/v2/transport/busemtmad/stops/{stopId}/arrives/{lineArrive}/")
+    Call<StopModel> getLineTime(@Path("stopId") Integer stopId, @Path("lineId") Integer lineId, @Header("accessToken") String accessToken);
 
     // "StopModel" to be changed
     @GET("https://datos.emtmadrid.es/v2/transport/busemtmad/lines/info/{dateref}/")
