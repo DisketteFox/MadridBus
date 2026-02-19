@@ -51,9 +51,10 @@ public class StopModel {
         private String headerA;
         @SerializedName("headerB")
         private String headerB;
-
-        private String timeArriving;
-        private String timeNext;
+        @SerializedName("time1")
+        private String time1;
+        @SerializedName("time2")
+        private String time2;
 
         public String getLineId() {
             return lineId;
@@ -70,21 +71,11 @@ public class StopModel {
         public String getHeaderB() {
             return headerB;
         }
-
-        public String getTimeArriving() {
-            return timeArriving;
+        public String getTime1() {
+            return time1;
         }
-
-        public void setTimeArriving(String timeArriving) {
-            this.timeArriving = timeArriving;
-        }
-
-        public String getTimeNext() {
-            return timeNext;
-        }
-
-        public void setTimeNext(String timeNext) {
-            this.timeNext = timeNext;
+        public String getTime2() {
+            return time2;
         }
     }
 }

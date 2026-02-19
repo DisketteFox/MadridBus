@@ -34,16 +34,16 @@ public class FragmentLines extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_lines, container, false);
-        RecyclerView recyclerStops = view.findViewById(R.id.recycler_lines);
+        RecyclerView recyclerLines = view.findViewById(R.id.recycler_lines);
         loadingIndicator = view.findViewById(R.id.progress_bar);
 
         ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         String accessToken = ApiCall.token;
 
         // Initialize RecyclerView and Adapter
-        recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerLines.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new LineAdapter(getContext(), lineData);
-        recyclerStops.setAdapter(adapter);
+        recyclerLines.setAdapter(adapter);
 
         // Show loading screen
         loadingIndicator.setVisibility(View.VISIBLE);
