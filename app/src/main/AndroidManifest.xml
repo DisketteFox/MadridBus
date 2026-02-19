@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
     <application
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
@@ -18,6 +16,11 @@
             android:name=".StopActivity"
             android:exported="false"
             android:label="@string/title_activity_stop"
+            android:theme="@style/Theme.MadridBus" />
+        <activity
+            android:name=".LineActivity"
+            android:exported="false"
+            android:label="@string/title_activity_line"
             android:theme="@style/Theme.MadridBus" />
         <activity
             android:name=".MainActivity"

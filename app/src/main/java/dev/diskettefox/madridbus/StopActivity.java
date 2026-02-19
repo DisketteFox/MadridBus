@@ -3,14 +3,18 @@ package dev.diskettefox.madridbus;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,21 +34,27 @@ public class StopActivity extends AppCompatActivity {
     private List<StopModel.Dataline> linesList = new ArrayList<>();
     private TextView stopIdTextView;
     private TextView stopNameTextView;
+    private LoadingIndicator loadingIndicator;
+    private CardView stopCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_stop);
+        loadingIndicator = findViewById(R.id.progress_bar);
+        stopCard = findViewById(R.id.busCard_Stop);
 
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(true);
         }
 
         String stopId = getIntent().getStringExtra("stopId");
+        stopCard.setVisibility(View.GONE);
+        loadingIndicator.setVisibility(View.VISIBLE);
 
         stopIdTextView = findViewById(R.id.stop_id);
         stopNameTextView = findViewById(R.id.stop_name);
@@ -69,7 +79,7 @@ public class StopActivity extends AppCompatActivity {
     }
 
     private void fetchStopDetails(int stopId) {
-        ApiInterface apiInterface = ApiCall.getStop().create(ApiInterface.class);
+        ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         Call<StopModel> call = apiInterface.getStop(stopId, ApiCall.token);
 
         call.enqueue(new Callback<StopModel>() {
@@ -99,11 +109,14 @@ public class StopActivity extends AppCompatActivity {
                         }
                     }
                 }
+                loadingIndicator.setVisibility(View.GONE);
+                stopCard.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(Call<StopModel> call, Throwable t) {
                 Log.e("StopActivity", "Error fetching stop details", t);
+                loadingIndicator.setVisibility(View.GONE);
             }
         });
     }

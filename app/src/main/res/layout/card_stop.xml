@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<<< HEAD:app/src/main/res/layout/card_line.xml
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/busCard_Lines"
+========
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -7,6 +15,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/busCard_Stops"
+>>>>>>>> f0e19048c50d4c707d6c8ae85d2884b3e3c55bfc:app/src/main/res/layout/card_stop.xml
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="?attr/colorSecondary"
@@ -15,7 +24,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+<<<<<<<< HEAD:app/src/main/res/layout/card_line.xml
+        android:layout_marginBottom="13dp"
+========
         android:layout_marginBottom="10dp"
+>>>>>>>> f0e19048c50d4c707d6c8ae85d2884b3e3c55bfc:app/src/main/res/layout/card_stop.xml
         >
 
         <LinearLayout
@@ -24,6 +37,18 @@
             android:orientation="horizontal">
 
             <TextView
+<<<<<<<< HEAD:app/src/main/res/layout/card_line.xml
+                android:id="@+id/stop_id_Lines"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:gravity="center"
+                android:background="@drawable/circle"
+                android:backgroundTint="@color/blue"
+                android:layout_margin="15dp"
+========
                 android:id="@+id/stop_id_Stops"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -33,6 +58,7 @@
                 android:gravity="center"
                 android:background="@drawable/circle"
                 android:layout_margin="14dp"
+>>>>>>>> f0e19048c50d4c707d6c8ae85d2884b3e3c55bfc:app/src/main/res/layout/card_stop.xml
                 android:textStyle="bold"
                 />
 
@@ -43,6 +69,25 @@
                 android:orientation="vertical">
 
                 <TextView
+<<<<<<<< HEAD:app/src/main/res/layout/card_line.xml
+                    android:id="@+id/destino_A_Lines"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:textSize="20sp"
+                    android:text="Cristo Rey"
+                    android:textStyle="bold"
+                    />
+
+                <TextView
+                    android:id="@+id/destino_B_Lines"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="Prosperidad"
+                    android:textStyle="bold"
+                    />
+========
                     android:id="@+id/stop_name_Stops"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,6 +104,7 @@
                     android:orientation="horizontal">
 
                 </LinearLayout>
+>>>>>>>> f0e19048c50d4c707d6c8ae85d2884b3e3c55bfc:app/src/main/res/layout/card_stop.xml
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
