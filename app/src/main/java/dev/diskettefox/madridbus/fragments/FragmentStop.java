@@ -25,7 +25,7 @@ import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.adapters.StopAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
-import dev.diskettefox.madridbus.api.StopModel;
+import dev.diskettefox.madridbus.models.StopModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

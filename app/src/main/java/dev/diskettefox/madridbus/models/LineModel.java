@@ -1,45 +1,37 @@
 package dev.diskettefox.madridbus.models;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
-import java.util.List;
-
-import dev.diskettefox.madridbus.api.StopModel;
 
 public class LineModel {
     @SerializedName("data")
-    private ArrayList<StopModel.Data> stops = new ArrayList<>();
+    private ArrayList<Data> data = new ArrayList<>();
 
-    public ArrayList<StopModel.Data> getStopsData() {
-        return stops;
+    public ArrayList<Data> getData() {
+        return data;
     }
 
     public static class Data {
-        @SerializedName("stops")
-        private List<StopModel.Stop> stops;
+        @SerializedName("line")
+        private int lineId;
+        @SerializedName("nameA")
+        private String nameA;
+        @SerializedName("nameB")
+        private String nameB;
+        @SerializedName("label")
+        private String label;
 
-        public List<StopModel.Stop> getStops() {
-            return stops;
+        public int getLineId() {
+            return lineId;
         }
-    }
-
-    public static class Stop {
-        @SerializedName("stop")
-        private String stopId;
-        @SerializedName("name")
-        private String name;
-        @SerializedName("dataLine")
-        private List<StopModel.Dataline> dataLine;
-
-        public String getStopId() {
-            return stopId;
+        public String getNameA() {
+            return nameA;
         }
-        public String getName() {
-            return name;
+        public String getNameB() {
+            return nameB;
         }
-        public List<StopModel.Dataline> getDataLine() {
-            return dataLine;
+        public String getLabel() {
+            return label;
         }
     }
 }
