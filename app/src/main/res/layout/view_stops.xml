@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:fitsSystemWindows="false">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -26,7 +25,6 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="80dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -42,15 +40,6 @@
                 android:hint="Search stop"
                 app:liftOnScroll="true"
                 app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"/>
-
-            <com.google.android.material.search.SearchView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="busqueda"
-                app:layout_anchor="@id/search_bar">
-
-            </com.google.android.material.search.SearchView>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_stops"
                 android:layout_width="match_parent"
@@ -65,6 +54,7 @@
 
                 tools:itemCount="4"
                 tools:listitem="@layout/card_stop"
+
                 />
 
             <com.google.android.material.loadingindicator.LoadingIndicator

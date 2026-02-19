@@ -1,16 +1,18 @@
 package dev.diskettefox.madridbus;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import dev.diskettefox.madridbus.fragments.FragmentLines;
+import dev.diskettefox.madridbus.fragments.FragmentMap;
+import dev.diskettefox.madridbus.fragments.FragmentStop;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,34 +24,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
-        loadFragment(new FragmentMain(),true);
+
+        if (savedInstanceState == null) {
+            loadFragment(new FragmentStop(), true);
+        }
 
         // Navigation bar logic
-        navigationBarView.setOnItemSelectedListener((BottomNavigationView.OnNavigationItemSelectedListener) menuItem -> {
-            int itemId=menuItem.getItemId();
+        navigationBarView.setOnItemSelectedListener(menuItem -> {
+            int itemId = menuItem.getItemId();
 
             // Menu selection
-            if (itemId==R.id.menu_stops){
-                loadFragment(new FragmentMain(),false);
-            } else if (itemId==R.id.menu_lines) {
-                loadFragment(new FragmentLines(),false);
-            } else if (itemId==R.id.menu_maps) {
-                loadFragment(new FragmentMap(),false);
+            if (itemId == R.id.menu_stops) {
+                loadFragment(new FragmentStop(), false);
+            } else if (itemId == R.id.menu_lines) {
+                loadFragment(new FragmentLines(), false);
+            } else if (itemId == R.id.menu_maps) {
+                loadFragment(new FragmentMap(), false);
             }
-
             return true;
         });
     }
 
     // Fragment manager
-    public void loadFragment(Fragment fragment, boolean booted){
+    public void loadFragment(Fragment fragment, boolean booted) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        if (booted){
-            fragmentTransaction.add(R.id.framelayout_main,fragment);
+        if (booted) {
+            fragmentTransaction.add(R.id.framelayout_main, fragment);
         } else {
-            fragmentTransaction.replace(R.id.framelayout_main,fragment);
+            fragmentTransaction.replace(R.id.framelayout_main, fragment);
         }
 
         fragmentTransaction.commit();
