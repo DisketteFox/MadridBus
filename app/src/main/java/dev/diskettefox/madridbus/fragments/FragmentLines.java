@@ -48,13 +48,9 @@ public class FragmentLines extends Fragment {
         // Show loading screen
         loadingIndicator.setVisibility(View.VISIBLE);
 
-        // Array of line IDs to fetch
-        int[] lineIds = {527, 203, 148, 621, 452};
+        // se llama a la API y rellena con todas las lineas.
+        llamaAlaslineas(apiInterface, accessToken);
 
-        // Fetch data for all line IDs
-        for (int lineId : lineIds) {
-            fetchStopData(apiInterface, lineId, accessToken);
-        }
         return view;
     }
 
@@ -82,6 +78,30 @@ public class FragmentLines extends Fragment {
             @Override
             public void onFailure(@NonNull Call<LineModel> call, @NonNull Throwable t) {
                 Log.e("Call Error", "Error retrieving data for stop ID: " + lineId, t);
+                hideLoadingIndicator(); // Hide loading indicator if it fails
+            }
+        });
+    }
+
+    private void llamaAlaslineas(ApiInterface apiInterface, String accessToken) {
+        Call<LineModel> call = apiInterface.getLines( accessToken);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<LineModel> call, @NonNull Response<LineModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    LineModel line = response.body();
+                    lineData.addAll(line.getData());
+                    adapter.notifyDataSetChanged();
+
+                } else {
+                    Log.d("API Response", "fallo en la comunicación.");
+                }
+                hideLoadingIndicator(); // Hide loading indicator after all calls
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<LineModel> call, @NonNull Throwable t) {
+                Log.e("Call Error", "Error recibiendo los datos ",t);
                 hideLoadingIndicator(); // Hide loading indicator if it fails
             }
         });
