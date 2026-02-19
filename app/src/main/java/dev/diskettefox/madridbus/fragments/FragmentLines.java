@@ -1,4 +1,4 @@
-package dev.diskettefox.madridbus;
+package dev.diskettefox.madridbus.fragments;
 
 import android.os.Bundle;
 
@@ -16,13 +16,12 @@ import android.view.ViewGroup;
 import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.adapters.LineAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.api.LineModel;
-import dev.diskettefox.madridbus.api.StopModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
