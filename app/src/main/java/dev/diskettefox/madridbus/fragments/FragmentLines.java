@@ -35,6 +35,7 @@ public class FragmentLines extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_lines, container, false);
         RecyclerView recyclerStops = view.findViewById(R.id.recycler_lines);
+        loadingIndicator = view.findViewById(R.id.progress_bar);
 
         ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         String accessToken = ApiCall.token;
@@ -44,6 +45,9 @@ public class FragmentLines extends Fragment {
         adapter = new LineAdapter(getContext(), lineData);
         recyclerStops.setAdapter(adapter);
 
+        // Show loading screen
+        loadingIndicator.setVisibility(View.VISIBLE);
+
         // Array of line IDs to fetch
         int[] lineIds = {527, 203, 148, 621, 452};
 
@@ -51,7 +55,6 @@ public class FragmentLines extends Fragment {
         for (int lineId : lineIds) {
             fetchStopData(apiInterface, lineId, accessToken);
         }
-
         return view;
     }
 
@@ -73,13 +76,19 @@ public class FragmentLines extends Fragment {
                 } else {
                     Log.d("API Response", "Failed response for stop ID: " + lineId + ", Response: " + response);
                 }
+                hideLoadingIndicator(); // Hide loading indicator after all calls
             }
 
             @Override
             public void onFailure(@NonNull Call<LineModel> call, @NonNull Throwable t) {
                 Log.e("Call Error", "Error retrieving data for stop ID: " + lineId, t);
+                hideLoadingIndicator(); // Hide loading indicator if it fails
             }
         });
+    }
+
+    private void hideLoadingIndicator() {
+        loadingIndicator.setVisibility(View.GONE);
     }
 
     @Override

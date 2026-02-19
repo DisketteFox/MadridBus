@@ -81,7 +81,6 @@ public class FragmentStop extends Fragment {
                 } else {
                     Log.d("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
                 }
-
                 hideLoadingIndicator(); // Hide loading indicator after all calls
             }
 
