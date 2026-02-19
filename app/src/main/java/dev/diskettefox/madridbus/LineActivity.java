@@ -2,25 +2,18 @@ package dev.diskettefox.madridbus;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import dev.diskettefox.madridbus.adapters.BusTimeAdapter;
 import dev.diskettefox.madridbus.adapters.LineActivityAdapter;
-import dev.diskettefox.madridbus.adapters.LineAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.api.LineModel;
-import dev.diskettefox.madridbus.api.StopModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.diskettefox.madridbus.R;
-import dev.diskettefox.madridbus.adapters.BusAdapter;
+import dev.diskettefox.madridbus.adapters.StopAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.api.StopModel;
@@ -28,7 +28,7 @@ import retrofit2.Response;
 
 public class FragmentStop extends Fragment {
     private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
-    private BusAdapter adapter;
+    private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
 
     @Override
@@ -42,7 +42,7 @@ public class FragmentStop extends Fragment {
 
         // Initialize RecyclerView and Adapter
         recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BusAdapter(getContext(), stopsList);
+        adapter = new StopAdapter(getContext(), stopsList);
         recyclerStops.setAdapter(adapter);
 
         // Show loading screen
