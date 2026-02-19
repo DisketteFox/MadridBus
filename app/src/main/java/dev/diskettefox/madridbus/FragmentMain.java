@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.loadingindicator.LoadingIndicator;
+import com.google.android.material.search.SearchBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +31,13 @@ public class FragmentMain extends Fragment {
     private BusAdapter adapter;
     private LoadingIndicator loadingIndicator;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_stops, container, false);
         RecyclerView recyclerStops = view.findViewById(R.id.recycler_stops);
         loadingIndicator = view.findViewById(R.id.progress_bar);
+        SearchBar searchBar=view.findViewById(R.id.search_bar_Stops);
 
         ApiInterface apiInterface = ApiCall.getStop().create(ApiInterface.class);
         String accessToken = ApiCall.token;
@@ -54,9 +57,16 @@ public class FragmentMain extends Fragment {
         for (int stopId : stopIds) {
             fetchStopData(apiInterface, stopId, accessToken);
         }
+
+        busqueda(searchBar);
+
         return view;
     }
 
+    private void busqueda(SearchBar searchBar){
+
+
+    }
     private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
         Call<StopModel> call = apiInterface.getStop(stopId, accessToken);
         call.enqueue(new Callback<>() {

@@ -20,6 +20,6 @@ public interface ApiInterface{
 
     // "StopModel" to be changed + doesn't work at all
     @GET("/v1/transport/busemtmad/lines/{lineId}/info/{dateref}/")
-    Call<StopModel> getLineDetail(@Path("lineId") Integer lineId, @Header("accessToken") String accessToken);
+    Call<StopModel> getLineDetail(@Path("lineId") Integer lineId,@Path("lineId") Integer dateref, @Header("accessToken") String accessToken);
 
 }

@@ -42,6 +42,15 @@
                 android:hint="Search stop"
                 app:liftOnScroll="true"
                 app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"/>
+
+            <com.google.android.material.search.SearchView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="busqueda"
+                app:layout_anchor="@id/search_bar">
+
+            </com.google.android.material.search.SearchView>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_stops"
                 android:layout_width="match_parent"
