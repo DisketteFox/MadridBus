@@ -53,7 +53,7 @@ public class LineActivity extends AppCompatActivity {
             try {
                 fetchStopDetails(apiInterface, lineId);
             } catch (NumberFormatException e) {
-                Log.e("StopActivity", "Invalid stop ID format", e);
+                Log.d("StopActivity", "Invalid stop ID format", e);
             }
         }
     }
