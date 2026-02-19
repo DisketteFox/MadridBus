@@ -1,4 +1,4 @@
-package dev.diskettefox.madridbus;
+package dev.diskettefox.madridbus.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +17,7 @@ import com.google.android.material.loadingindicator.LoadingIndicator;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.adapters.BusAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;

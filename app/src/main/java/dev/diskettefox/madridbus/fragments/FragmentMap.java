@@ -1,4 +1,4 @@
-package dev.diskettefox.madridbus;
+package dev.diskettefox.madridbus.fragments;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import dev.diskettefox.madridbus.R;
 
 public class FragmentMap extends Fragment {
     @Override
