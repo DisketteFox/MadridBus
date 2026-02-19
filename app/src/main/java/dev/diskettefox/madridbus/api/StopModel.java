@@ -51,10 +51,6 @@ public class StopModel {
         private String headerA;
         @SerializedName("headerB")
         private String headerB;
-        @SerializedName("time1")
-        private String time1;
-        @SerializedName("time2")
-        private String time2;
 
         public String getLineId() {
             return lineId;
@@ -70,12 +66,6 @@ public class StopModel {
         }
         public String getHeaderB() {
             return headerB;
-        }
-        public String getTime1() {
-            return time1;
-        }
-        public String getTime2() {
-            return time2;
         }
     }
 }

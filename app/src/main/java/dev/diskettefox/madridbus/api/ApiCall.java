@@ -8,10 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiCall {
     public static String BASE_URL="https://datos.emtmadrid.es/";
-    public static final String token="dba4464d-4900-4c2b-96a9-1205aaf713ad";
+    public static final String token="349af0a5-f239-4317-804d-4d459b780bb0";
     private static Retrofit retrofit;
 
-    public static Retrofit callApi(){
+    public static Retrofit getStop(){
         if (retrofit == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
