@@ -33,11 +33,12 @@ public class StopActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private StopActivityAdapter adapter;
-    private List<StopModel.Dataline> linesList = new ArrayList<>();
+    private final List<StopModel.Dataline> linesList = new ArrayList<>();
     private TextView stopIdTextView;
     private TextView stopNameTextView;
     private LoadingIndicator loadingIndicator;
     private CardView stopCard;
+    private int timesResponsesReceived = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +105,10 @@ public class StopActivity extends AppCompatActivity {
 
                             linesList.clear();
                             List<StopModel.Dataline> dataLines = stop.getDataLine();
-                            if (dataLines != null) {
+                            if (dataLines != null && !dataLines.isEmpty()) {
                                 linesList.addAll(dataLines);
-                                adapter.notifyDataSetChanged();
                                 fetchArrivalTimes(stopId, apiInterface);
+                                return;
                             }
                         }
                     }
@@ -125,9 +126,9 @@ public class StopActivity extends AppCompatActivity {
     }
 
     private void fetchArrivalTimes(int stopId, ApiInterface apiInterface) {
+        timesResponsesReceived = 0;
         for (int i = 0; i < linesList.size(); i++) {
             StopModel.Dataline line = linesList.get(i);
-            final int position = i;
             try {
                 int lineId = Integer.parseInt(line.getLineId());
                 Call<TimeModel> timeCall = apiInterface.getTime(stopId, lineId, ApiCall.token, TimeRequest.get());
@@ -148,22 +149,33 @@ public class StopActivity extends AppCompatActivity {
                                     } else {
                                         line.setTimeNext("---");
                                     }
-                                    adapter.notifyItemChanged(position);
                                 }
                             }
                         } else {
                             Log.w("StopActivity", "Time response not successful for line " + line.getLabel());
                         }
+                        checkAllTimesReceived();
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<TimeModel> call, @NonNull Throwable t) {
                         Log.e("StopActivity", "Error fetching times for line " + line.getLabel(), t);
+                        checkAllTimesReceived();
                     }
                 });
             } catch (NumberFormatException e) {
                 Log.e("StopActivity", "Invalid line ID: " + line.getLineId());
+                checkAllTimesReceived();
             }
+        }
+    }
+
+    private void checkAllTimesReceived() {
+        timesResponsesReceived++;
+        if (timesResponsesReceived == linesList.size()) {
+            adapter.notifyDataSetChanged();
+            loadingIndicator.setVisibility(View.GONE);
+            stopCard.setVisibility(View.VISIBLE);
         }
     }
 
