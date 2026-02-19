@@ -41,7 +41,7 @@
                 app:liftOnScroll="true"
                 app:liftOnScrollColor="?attr/colorSurfaceContainerHighest">
                 <EditText
-                    android:id="@+id/editextL"
+                    android:id="@+id/lineET"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
             </com.google.android.material.search.SearchBar>
