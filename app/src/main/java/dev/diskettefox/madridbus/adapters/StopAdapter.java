@@ -21,26 +21,26 @@ import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.api.StopModel;
 
-public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
+public class StopAdapter extends RecyclerView.Adapter<StopAdapter.ViewHolder> {
 
     private final Context context;
     private final ArrayList<StopModel.Stop> stopsList;
 
-    public BusAdapter(Context context, ArrayList<StopModel.Stop> stopsList) {
+    public StopAdapter(Context context, ArrayList<StopModel.Stop> stopsList) {
         this.context = context;
         this.stopsList = stopsList;
     }
 
     @NonNull
     @Override
-    public BusAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StopAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.card_stop, parent, false);
-        return new BusAdapter.ViewHolder(view);
+        return new StopAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BusAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull StopAdapter.ViewHolder holder, int position) {
         StopModel.Stop stop = stopsList.get(position);
 
         if (stop != null) {
@@ -54,7 +54,7 @@ public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
                 context.startActivity(intent);
             });
 
-            // Clear previous views to fix duplication in recycler views
+            // Clear previous views
             holder.linesContainer.removeAllViews();
 
             List<StopModel.Dataline> lines = stop.getDataLine();

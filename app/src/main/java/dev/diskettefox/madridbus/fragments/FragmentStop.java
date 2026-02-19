@@ -15,10 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dev.diskettefox.madridbus.R;
-import dev.diskettefox.madridbus.adapters.BusAdapter;
+import dev.diskettefox.madridbus.adapters.StopAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.api.StopModel;
@@ -28,8 +32,13 @@ import retrofit2.Response;
 
 public class FragmentStop extends Fragment {
     private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
-    private BusAdapter adapter;
+    private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
+
+    private final int[] stopIds = {5710, 3862, 3542, 4812};
+    private int responsesReceived = 0;
+    private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,18 +51,22 @@ public class FragmentStop extends Fragment {
 
         // Initialize RecyclerView and Adapter
         recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BusAdapter(getContext(), stopsList);
+        adapter = new StopAdapter(getContext(), stopsList);
         recyclerStops.setAdapter(adapter);
 
         // Show loading screen
         loadingIndicator.setVisibility(View.VISIBLE);
 
-        // Array of stop IDs to fetch
-        int[] stopIds = {5710, 3862, 3542, 4812};
+        // Populate the map for sorting
+        for (int i = 0; i < stopIds.length; i++) {
+            stopIdToIndex.put(stopIds[i], i);
+        }
 
         // Fetch data for all stop IDs
-        for (int stopId : stopIds) {
-            fetchStopData(apiInterface, stopId, accessToken);
+        if (stopsList.isEmpty()) {
+            for (int stopId : stopIds) {
+                fetchStopData(apiInterface, stopId, accessToken);
+            }
         }
         return view;
     }
@@ -70,26 +83,39 @@ public class FragmentStop extends Fragment {
                         for (StopModel.Data data : stop.getStopsData()) {
                             List<StopModel.Stop> stops = data.getStops();
                             if (stops != null) {
-                                stopsList.addAll(stops);
+                                synchronized (stopsList) {
+                                    stopsList.addAll(stops);
+                                }
                             }
                         }
-                        adapter.notifyDataSetChanged();
-                        Log.d("JustWorking", "Stops loaded: " + stopsList);
+                        Log.d("JustWorking", "Stops loaded for stop ID: " + stopId);
                     } else {
                         Log.d("API Response", "No stops data for stop ID: " + stopId);
                     }
                 } else {
                     Log.d("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
                 }
-                hideLoadingIndicator(); // Hide loading indicator after all calls
+                onResponseReceived();
             }
 
             @Override
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
                 Log.e("Call Error", "Error retrieving data for stop ID: " + stopId, t);
-                hideLoadingIndicator(); // Hide loading indicator if it fails
+                onResponseReceived();
             }
         });
+    }
+
+    private void onResponseReceived() {
+        responsesReceived++;
+        if (responsesReceived == stopIds.length) {
+            // All responses received, now sort the list and update the UI
+            synchronized (stopsList) {
+                Collections.sort(stopsList, Comparator.comparing(stop -> stopIdToIndex.get(Integer.parseInt(stop.getStopId()))));
+            }
+            adapter.notifyDataSetChanged();
+            hideLoadingIndicator();
+        }
     }
 
     // Pretty self-explanatory
