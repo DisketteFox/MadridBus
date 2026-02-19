@@ -1,10 +1,13 @@
 package dev.diskettefox.madridbus.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.loadingindicator.LoadingIndicator;
+import com.google.android.material.search.SearchBar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +36,7 @@ import retrofit2.Response;
 
 public class FragmentStop extends Fragment {
     private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
+    private final ArrayList<StopModel.Stop> filtroStops = new ArrayList<>();
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
 
@@ -68,6 +73,39 @@ public class FragmentStop extends Fragment {
                 fetchStopData(apiInterface, stopId, accessToken);
             }
         }
+
+        // ingerto de barra de busqueda X2.
+        SearchBar searchBar=view.findViewById(R.id.search_bar_Stops);
+        EditText editText=view.findViewById(R.id.stopsET);
+        // prueba inestable para que de la sensación de click
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchBar.setText(" ");
+            }
+        });
+        // logica del "filtrado"
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {filtroStops.clear();}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchBar.setText(s);
+
+                for (StopModel.Stop parada: stopsList){
+                    if (parada.getStopId().contains(s)){
+                        filtroStops.add(parada);
+                    }
+                }
+                recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
+                adapter = new StopAdapter(getContext(), filtroStops);
+                recyclerStops.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
         return view;
     }
 

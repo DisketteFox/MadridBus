@@ -58,7 +58,7 @@ public class FragmentLines extends Fragment {
 
         // ingerto de barra de busqueda.
         SearchBar searchBar=view.findViewById(R.id.search_bar_Lines);
-        EditText editText=view.findViewById(R.id.editextL);
+        EditText editText=view.findViewById(R.id.lineET);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {}

@@ -39,7 +39,12 @@
                 android:layout_height="wrap_content"
                 android:hint="Search stop"
                 app:liftOnScroll="true"
-                app:liftOnScrollColor="?attr/colorSurfaceContainerHighest"/>
+                app:liftOnScrollColor="?attr/colorSurfaceContainerHighest">
+                <EditText
+                    android:id="@+id/stopsET"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"/>
+            </com.google.android.material.search.SearchBar>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_stops"
                 android:layout_width="match_parent"
