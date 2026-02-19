@@ -8,12 +8,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.google.android.material.loadingindicator.LoadingIndicator;
+import com.google.android.material.search.SearchBar;
 
 import java.util.ArrayList;
 
@@ -28,6 +32,7 @@ import retrofit2.Response;
 
 public class FragmentLines extends Fragment {
     private final ArrayList<LineModel.Data> lineData = new ArrayList<>();
+    private ArrayList<LineModel.Data> listaFiltrada = new ArrayList<>();
     private LineAdapter adapter;
     private LoadingIndicator loadingIndicator;
 
@@ -50,6 +55,31 @@ public class FragmentLines extends Fragment {
 
         // se llama a la API y rellena con todas las lineas.
         llamaAlaslineas(apiInterface, accessToken);
+
+        // ingerto de barra de busqueda.
+        SearchBar searchBar=view.findViewById(R.id.search_bar_Lines);
+        EditText editText=view.findViewById(R.id.editextL);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {}
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {listaFiltrada.clear();}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchBar.setText(s);
+
+                for (LineModel.Data dato: lineData){
+                    if (dato.getLabel().toLowerCase().contains(s)){
+                        listaFiltrada.add(dato);
+                    }
+                }
+                recyclerLines.setLayoutManager(new LinearLayoutManager(getContext()));
+                adapter = new LineAdapter(getContext(), listaFiltrada);
+                recyclerLines.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+        });
+
 
         return view;
     }
