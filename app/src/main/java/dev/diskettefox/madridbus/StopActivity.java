@@ -19,10 +19,12 @@ import com.google.android.material.loadingindicator.LoadingIndicator;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.diskettefox.madridbus.adapters.BusTimeAdapter;
+import dev.diskettefox.madridbus.adapters.StopActivityAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.api.StopModel;
+import dev.diskettefox.madridbus.api.TimeModel;
+import dev.diskettefox.madridbus.api.TimeRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,18 +32,20 @@ import retrofit2.Response;
 public class StopActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private BusTimeAdapter adapter;
-    private List<StopModel.Dataline> linesList = new ArrayList<>();
+    private StopActivityAdapter adapter;
+    private final List<StopModel.Dataline> linesList = new ArrayList<>();
     private TextView stopIdTextView;
     private TextView stopNameTextView;
     private LoadingIndicator loadingIndicator;
     private CardView stopCard;
+    private int timesResponsesReceived = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_stop);
+
         loadingIndicator = findViewById(R.id.progress_bar);
         stopCard = findViewById(R.id.busCard_Stop);
 
@@ -66,7 +70,7 @@ public class StopActivity extends AppCompatActivity {
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.recycler_stop);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new BusTimeAdapter(this, linesList);
+        adapter = new StopActivityAdapter(this, linesList);
         recyclerView.setAdapter(adapter);
 
         if (stopId != null && !stopId.isEmpty()) {
@@ -82,9 +86,9 @@ public class StopActivity extends AppCompatActivity {
         ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         Call<StopModel> call = apiInterface.getStop(stopId, ApiCall.token);
 
-        call.enqueue(new Callback<StopModel>() {
+        call.enqueue(new Callback<>() {
             @Override
-            public void onResponse(Call<StopModel> call, Response<StopModel> response) {
+            public void onResponse(@NonNull Call<StopModel> call, @NonNull Response<StopModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     StopModel stopModel = response.body();
                     if (stopModel.getStopsData() != null && !stopModel.getStopsData().isEmpty()) {
@@ -92,7 +96,6 @@ public class StopActivity extends AppCompatActivity {
                         if (stops != null && !stops.isEmpty()) {
                             StopModel.Stop stop = stops.get(0);
 
-                            // Update UI with stop details from API
                             if (stop.getName() != null) {
                                 stopNameTextView.setText(stop.getName());
                             }
@@ -102,10 +105,11 @@ public class StopActivity extends AppCompatActivity {
 
                             linesList.clear();
                             List<StopModel.Dataline> dataLines = stop.getDataLine();
-                            if (dataLines != null) {
+                            if (dataLines != null && !dataLines.isEmpty()) {
                                 linesList.addAll(dataLines);
+                                fetchArrivalTimes(stopId, apiInterface);
+                                return;
                             }
-                            adapter.notifyDataSetChanged();
                         }
                     }
                 }
@@ -114,11 +118,76 @@ public class StopActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StopModel> call, Throwable t) {
+            public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
                 Log.e("StopActivity", "Error fetching stop details", t);
                 loadingIndicator.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void fetchArrivalTimes(int stopId, ApiInterface apiInterface) {
+        timesResponsesReceived = 0;
+        for (int i = 0; i < linesList.size(); i++) {
+            StopModel.Dataline line = linesList.get(i);
+            try {
+                int lineId = Integer.parseInt(line.getLineId());
+                Call<TimeModel> timeCall = apiInterface.getTime(stopId, lineId, ApiCall.token, TimeRequest.get());
+                
+                Log.d("StopActivity", "Fetching time for line: " + lineId + " at stop: " + stopId);
+
+                timeCall.enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<TimeModel> call, @NonNull Response<TimeModel> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            TimeModel timeModel = response.body();
+                            if (timeModel.getData() != null && !timeModel.getData().isEmpty()) {
+                                List<TimeModel.Line> times = timeModel.getData().get(0).getLines();
+                                if (times != null && !times.isEmpty()) {
+                                    line.setTimeArriving(formatTime(times.get(0).getTime()));
+                                    if (times.size() > 1) {
+                                        line.setTimeNext(formatTime(times.get(1).getTime()));
+                                    } else {
+                                        line.setTimeNext("---");
+                                    }
+                                }
+                            }
+                        } else {
+                            Log.w("StopActivity", "Time response not successful for line " + line.getLabel());
+                        }
+                        checkAllTimesReceived();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<TimeModel> call, @NonNull Throwable t) {
+                        Log.e("StopActivity", "Error fetching times for line " + line.getLabel(), t);
+                        checkAllTimesReceived();
+                    }
+                });
+            } catch (NumberFormatException e) {
+                Log.e("StopActivity", "Invalid line ID: " + line.getLineId());
+                checkAllTimesReceived();
+            }
+        }
+    }
+
+    private void checkAllTimesReceived() {
+        timesResponsesReceived++;
+        if (timesResponsesReceived == linesList.size()) {
+            adapter.notifyDataSetChanged();
+            loadingIndicator.setVisibility(View.GONE);
+            stopCard.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private String formatTime(String timeInSeconds) {
+        try {
+            int seconds = Integer.parseInt(timeInSeconds);
+            if (seconds >= 999999) return "Delayed";
+            if (seconds < 60) return "Arriving";
+            return (seconds / 60) + " min";
+        } catch (NumberFormatException e) {
+            return timeInSeconds;
+        }
     }
 
     @Override
