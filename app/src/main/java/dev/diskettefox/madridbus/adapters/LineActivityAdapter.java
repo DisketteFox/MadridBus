@@ -1,7 +1,6 @@
 package dev.diskettefox.madridbus.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +8,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import dev.diskettefox.madridbus.LineActivity;
 import dev.diskettefox.madridbus.R;
-import dev.diskettefox.madridbus.api.LineModel;
+import dev.diskettefox.madridbus.models.LineModel;
 
 public class LineActivityAdapter extends RecyclerView.Adapter<LineActivityAdapter.ViewHolder> {
 

@@ -1,4 +1,4 @@
-package dev.diskettefox.madridbus.api;
+package dev.diskettefox.madridbus.models;
 
 import com.google.gson.annotations.SerializedName;
 

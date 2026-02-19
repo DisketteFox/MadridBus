@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import dev.diskettefox.madridbus.adapters.LineActivityAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
-import dev.diskettefox.madridbus.api.LineModel;
+import dev.diskettefox.madridbus.models.LineModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

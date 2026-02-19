@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import dev.diskettefox.madridbus.R;
-import dev.diskettefox.madridbus.api.StopModel;
+import dev.diskettefox.madridbus.models.StopModel;
 
 public class StopActivityAdapter extends RecyclerView.Adapter<StopActivityAdapter.ViewHolder> {
 
