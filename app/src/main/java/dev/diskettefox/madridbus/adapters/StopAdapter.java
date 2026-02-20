@@ -63,6 +63,12 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.ViewHolder> {
                     for (StopModel.Dataline line : lines) {
                         View lineView = LayoutInflater.from(context).inflate(R.layout.button_line, holder.linesContainer, false);
                         Button btnLine = lineView.findViewById(R.id.line_button);
+                        btnLine.setOnClickListener(v -> {
+                            Intent intent = new Intent(context, StopActivity.class);
+                            intent.putExtra("stopId", stop.getStopId());
+                            intent.putExtra("stopName", stop.getName());
+                            context.startActivity(intent);
+                        });
                         if (Integer.parseInt(line.getLineId()) > 500 & Integer.parseInt(line.getLineId()) < 600) {
                             btnLine.setBackgroundColor(ContextCompat.getColor(context, R.color.black));
                             btnLine.setTextColor(ContextCompat.getColor(context, R.color.gold));
