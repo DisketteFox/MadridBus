@@ -24,9 +24,12 @@ import java.util.List;
 import dev.diskettefox.madridbus.adapters.StopActivityAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
+import dev.diskettefox.madridbus.api.BaseDatosCall;
+import dev.diskettefox.madridbus.api.BaseDatosInterface;
+import dev.diskettefox.madridbus.api.BaseDatosModel;
+import dev.diskettefox.madridbus.api.TimeRequest;
 import dev.diskettefox.madridbus.models.StopModel;
 import dev.diskettefox.madridbus.models.TimeModel;
-import dev.diskettefox.madridbus.models.TimeRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,6 +45,7 @@ public class StopActivity extends AppCompatActivity {
     private CardView stopCard;
     private MaterialToolbar materialToolbar;
     private int timesResponsesReceived = 0;
+    private StopModel.Stop parada;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +109,8 @@ public class StopActivity extends AppCompatActivity {
                             if (stop.getStopId() != null) {
                                 stopIdTextView.setText(stop.getStopId());
                             }
-
+                            stop.setFavorite(false);
+                            parada=stop;
                             linesList.clear();
                             List<StopModel.Dataline> dataLines = stop.getDataLine();
                             if (dataLines != null && !dataLines.isEmpty()) {
@@ -222,10 +227,54 @@ public class StopActivity extends AppCompatActivity {
             }
             return true;
         } else if (itemId == R.id.favorite) {
-            // TODO: Add logic to add/remove from favorites
-            Log.d("StopActivity", "Favorite button clicked");
+            // Falta que el icono haga algo cuando es pulsado
+            if (!parada.isFavorite()){
+                parada.setFavorite(true);
+                item.setIcon(R.drawable.ic_favorite_filled_24dp);
+                //addFavoriteBBDD(parada.getStopId(),parada.isFavorite());
+                Log.d("StopActivity", "Favorite Stops is active clicked");
+            }else{
+                Log.d("StopActivity2", "Favorite Stops is inactive clicked Detele");
+                parada.setFavorite(false);
+                item.setIcon(R.drawable.ic_favorite_24dp);
+                //removeFavoriteBBDD(parada.getStopId(),parada.isFavorite());
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    private void addFavoriteBBDD(String paradaid,Boolean estado){
+        BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
+        BaseDatosModel modelo=new BaseDatosModel(paradaid,estado);
+        Call<BaseDatosModel> callB= baseDatosInterface.anadeFavorito(modelo);
+        callB.enqueue(new Callback<BaseDatosModel>() {
+            @Override
+            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
+                if (response.isSuccessful() && response.body()!=null){
+                    Log.d("llamado exitoso", "SE HA CREADO ALGO EN LA BASE DE DATOS.: ");
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
+                Log.e("Call Error", "Error retrieving data for BBDD.", t);
+            }
+        });
+    }
+    private void removeFavoriteBBDD(String paradaid,Boolean estado){
+        BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
+        BaseDatosModel modelo=new BaseDatosModel(paradaid,estado);
+        Call<BaseDatosModel> callB= baseDatosInterface.elimidaDFavoritos(modelo);
+        callB.enqueue(new Callback<BaseDatosModel>() {
+            @Override
+            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
+                if (response.isSuccessful() && response.body()!=null){
+                    Log.d("llamado exitoso", "SE HA ELIMINADO LA PARADA DE LA BASE DE DATOS:");
+                }
+            }
+            @Override
+            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
+                Log.e("Call Error", "Error retrieving data for BBDD.", t);
+            }
+        });
     }
 }

@@ -45,6 +45,7 @@ import retrofit2.Response;
 public class FragmentStop extends Fragment {
     private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
     private final ArrayList<StopModel.Stop> stopFilter = new ArrayList<>();
+    private final ArrayList<BaseDatosModel> misFavoritos = new ArrayList<>();
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
 
@@ -128,35 +129,34 @@ public class FragmentStop extends Fragment {
             }
         });
 
+        getMyFavoritesStops();
+
         //testeoBBDD();
+
+        Log.d("mis favoritos", misFavoritos.toString());
 
         return view;
     }
 
 
     // esto ira en el activity y habra un Get que traera las ids de las paradas de la base de datos y se guardaran en un array de favoritos
-    /*
-    private void testeoBBDD(){
+    private void getMyFavoritesStops(){
         BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        BaseDatosModel modelo=new BaseDatosModel("5710",true);
-        Call<BaseDatosModel> callB= baseDatosInterface.anadeFavorito(modelo);
+        Call<BaseDatosModel> callB= baseDatosInterface.llamaFavoritos();
         callB.enqueue(new Callback<BaseDatosModel>() {
             @Override
             public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
                 if (response.isSuccessful() && response.body()!=null){
-                    Log.d("llamado exitoso", "SE HA CREADO ALGO EN LA BASE DE DATOS.: ");
+                    misFavoritos.add(response.body());
+                    Log.d("llamado exitoso", "Se han recuperado tus paradas favoritas.");
                 }
             }
-
             @Override
             public void onFailure(Call<BaseDatosModel> call, Throwable t) {
-                Log.e("Call Error", "Error retrieving data for stop ID: ", t);
-                onResponseReceived();
+                Log.e("Call Error", "Error retrieving data for BBDD.", t);
             }
         });
     }
-    */
-
     private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
         Call<StopModel> call = apiInterface.getStop(stopId, accessToken);
         call.enqueue(new Callback<>() {

@@ -28,7 +28,7 @@ public class StopModel {
         private String name;
         @SerializedName("dataLine")
         private List<Dataline> dataLine;
-
+        private Boolean favorite;
         public String getStopId() {
             return stopId;
         }
@@ -37,6 +37,12 @@ public class StopModel {
         }
         public List<Dataline> getDataLine() {
             return dataLine;
+        }
+        public Boolean isFavorite() {
+            return favorite;
+        }
+        public void setFavorite(Boolean favorito) {
+            favorite = favorito;
         }
     }
 

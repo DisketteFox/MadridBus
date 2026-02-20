@@ -3,6 +3,8 @@ package dev.diskettefox.madridbus;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -121,5 +123,16 @@ public class LineActivity extends AppCompatActivity {
                 Log.e("StopActivity", "Error fetching line details", t);
             }
         });
+    }
+
+    // Esto hace que funcione el botón de regresar.
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
+    }
 }
