@@ -34,7 +34,7 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@color/white"
+                    android:background="@drawable/rounded_white_bg"
                     android:text="148"
                     android:textAlignment="center"
                     android:textColor="@color/blue"
@@ -67,7 +67,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:padding="4dp"
-                    app:tint="@color/blue"
+                    app:tint="?attr/colorPrimary"
                     app:srcCompat="@drawable/ic_bus" />
 
                 <TextView
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="Arriving"
-                    android:textColor="@color/blue"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="20sp" />
 
                 <TextView
@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:text="1 min"
                     android:textAlignment="textEnd"
-                    android:textColor="@color/blue"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="20sp" />
             </LinearLayout>
 
@@ -109,7 +109,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:text="Next bus"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"/>
 
                 <TextView
                     android:id="@+id/time_next"
