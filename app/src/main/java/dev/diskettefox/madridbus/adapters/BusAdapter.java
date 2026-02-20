@@ -19,7 +19,7 @@ import java.util.List;
 
 import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.StopActivity;
-import dev.diskettefox.madridbus.api.StopModel;
+import dev.diskettefox.madridbus.models.StopModel;
 
 public class BusAdapter extends RecyclerView.Adapter<BusAdapter.ViewHolder> {
 
