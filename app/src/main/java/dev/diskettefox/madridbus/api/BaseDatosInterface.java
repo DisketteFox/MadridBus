@@ -5,6 +5,6 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 public interface BaseDatosInterface {
-    @POST("admin/Favoritos/")
+    @POST("/api/favoritos/")
     Call<BaseDatosModel>anadeFavorito(@Body BaseDatosModel parada);
 }

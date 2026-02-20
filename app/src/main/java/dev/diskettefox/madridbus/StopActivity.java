@@ -24,7 +24,7 @@ import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.models.StopModel;
 import dev.diskettefox.madridbus.models.TimeModel;
-import dev.diskettefox.madridbus.api.TimeRequest;
+import dev.diskettefox.madridbus.models.TimeRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
