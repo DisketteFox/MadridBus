@@ -128,12 +128,14 @@ public class FragmentStop extends Fragment {
             }
         });
 
-        testeoBBDD();
+        //testeoBBDD();
 
         return view;
     }
 
 
+    // esto ira en el activity y habra un Get que traera las ids de las paradas de la base de datos y se guardaran en un array de favoritos
+    /*
     private void testeoBBDD(){
         BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
         BaseDatosModel modelo=new BaseDatosModel("5710",true);
@@ -153,6 +155,7 @@ public class FragmentStop extends Fragment {
             }
         });
     }
+    */
 
     private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
         Call<StopModel> call = apiInterface.getStop(stopId, accessToken);
