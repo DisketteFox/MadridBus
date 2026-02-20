@@ -5,12 +5,12 @@
         android:title="Favorite"
         android:icon="@drawable/ic_favorite_24dp"
         android:id="@+id/favorite"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
     <item
         android:title="Update"
         android:icon="@drawable/ic_update_24dp"
         android:id="@+id/update"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         />
 </menu>

@@ -67,7 +67,7 @@ public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
             fondoForma.setColor(ContextCompat.getColor(context, R.color.gold));
             holder.tvLineLabel.setTextColor(ContextCompat.getColor(context, R.color.black));
             line.setColor("gold");
-        } else if (line.getLineId() > 360 & line.getLineId() < 362) {
+        } else if (line.getLineId() > 360 & line.getLineId() < 363) {
             GradientDrawable fondoForma= (GradientDrawable) fondo;
             fondoForma.setColor(ContextCompat.getColor(context, R.color.turquoise));
             holder.tvLineLabel.setTextColor(ContextCompat.getColor(context, R.color.white));

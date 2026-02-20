@@ -34,6 +34,9 @@ import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.adapters.StopAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
+import dev.diskettefox.madridbus.api.BaseDatosCall;
+import dev.diskettefox.madridbus.api.BaseDatosInterface;
+import dev.diskettefox.madridbus.api.BaseDatosModel;
 import dev.diskettefox.madridbus.models.StopModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -124,8 +127,35 @@ public class FragmentStop extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+
+        //testeoBBDD();
+
         return view;
     }
+
+
+    // esto ira en el activity y habra un Get que traera las ids de las paradas de la base de datos y se guardaran en un array de favoritos
+    /*
+    private void testeoBBDD(){
+        BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
+        BaseDatosModel modelo=new BaseDatosModel("5710",true);
+        Call<BaseDatosModel> callB= baseDatosInterface.anadeFavorito(modelo);
+        callB.enqueue(new Callback<BaseDatosModel>() {
+            @Override
+            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
+                if (response.isSuccessful() && response.body()!=null){
+                    Log.d("llamado exitoso", "SE HA CREADO ALGO EN LA BASE DE DATOS.: ");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
+                Log.e("Call Error", "Error retrieving data for stop ID: ", t);
+                onResponseReceived();
+            }
+        });
+    }
+    */
 
     private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
         Call<StopModel> call = apiInterface.getStop(stopId, accessToken);

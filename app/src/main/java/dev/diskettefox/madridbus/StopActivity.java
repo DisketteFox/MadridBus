@@ -2,6 +2,7 @@ package dev.diskettefox.madridbus;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.models.StopModel;
 import dev.diskettefox.madridbus.models.TimeModel;
-import dev.diskettefox.madridbus.api.TimeRequest;
+import dev.diskettefox.madridbus.models.TimeRequest;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +40,7 @@ public class StopActivity extends AppCompatActivity {
     private TextView stopNameTextView;
     private LoadingIndicator loadingIndicator;
     private CardView stopCard;
+    private MaterialToolbar materialToolbar;
     private int timesResponsesReceived = 0;
 
     @Override
@@ -123,6 +126,8 @@ public class StopActivity extends AppCompatActivity {
                 loadingIndicator.setVisibility(View.GONE);
             }
         });
+
+        materialToolbar = findViewById(R.id.my_toolbar);
     }
 
     private void fetchArrivalTimes(int stopId, ApiInterface apiInterface) {
@@ -191,9 +196,34 @@ public class StopActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_stop, menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
             finish();
+            return true;
+        } else if (itemId == R.id.update) {
+            String stopId = getIntent().getStringExtra("stopId");
+            if (stopId != null && !stopId.isEmpty()) {
+                try {
+                    stopCard.setVisibility(View.GONE);
+                    loadingIndicator.setVisibility(View.VISIBLE);
+                    linesList.clear();
+                    adapter.notifyDataSetChanged();
+                    fetchStopDetails(Integer.parseInt(stopId));
+                } catch (NumberFormatException e) {
+                    Log.e("StopActivity", "Invalid stop ID format for refresh", e);
+                }
+            }
+            return true;
+        } else if (itemId == R.id.favorite) {
+            // TODO: Add logic to add/remove from favorites
+            Log.d("StopActivity", "Favorite button clicked");
             return true;
         }
         return super.onOptionsItemSelected(item);
