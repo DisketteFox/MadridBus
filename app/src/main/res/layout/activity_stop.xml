@@ -39,7 +39,7 @@
                 android:id="@+id/busCard_Stop"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorSecondaryContainer"
+                android:backgroundTint="?attr/colorSurfaceContainer"
                 app:cardCornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,6 @@
                         android:textSize="20sp"
                         android:gravity="center"
                         android:background="@drawable/circle"
-                        android:backgroundTint="?attr/colorPrimaryContainer"
                         android:layout_margin="15dp"
                         android:textStyle="bold"
                         />

@@ -8,7 +8,7 @@
         android:id="@+id/busTimeCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="?attr/colorSecondaryContainer"
+        android:backgroundTint="?attr/colorSurfaceContainer"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,8 +66,9 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:tint="@color/blue"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    android:padding="4dp"
+                    app:tint="@color/blue"
+                    app:srcCompat="@drawable/ic_bus" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -99,7 +100,9 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    android:padding="4dp"
+                    app:srcCompat="@drawable/ic_bus"
+                    app:tint="?attr/colorOnSurfaceVariant"/>
 
                 <TextView
                     android:layout_width="wrap_content"
