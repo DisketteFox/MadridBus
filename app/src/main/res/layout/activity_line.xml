@@ -17,6 +17,8 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:title="Line details"
+            app:titleCentered="true"
             app:menu="@menu/toolbar_stop"
             app:navigationIcon="@drawable/ic_back_24dp"
             />
@@ -26,7 +28,6 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="80dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,15 +53,14 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/stop_id_Line"
+                        android:id="@+id/line_label"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:text="1"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:gravity="center"
-                        android:background="@drawable/circle"
-                        android:backgroundTint="@color/blue"
+                        android:background="@drawable/circle_with_color"
                         android:layout_margin="15dp"
                         android:textStyle="bold"
                         />
@@ -174,22 +174,10 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-
-                />
-
             <com.google.android.material.tabs.TabLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
@@ -201,6 +189,12 @@
                     android:layout_height="wrap_content"
                     android:text="Return" />
             </com.google.android.material.tabs.TabLayout>
+            <com.google.android.material.loadingindicator.LoadingIndicator
+                style="@style/Widget.Material3.LoadingIndicator.Contained"
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

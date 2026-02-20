@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.loadingindicator.LoadingIndicator;
+import com.google.android.material.search.SearchBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,6 @@ import java.util.List;
 import dev.diskettefox.madridbus.adapters.BusAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
-import dev.diskettefox.madridbus.api.BaseDatosCall;
-import dev.diskettefox.madridbus.api.BaseDatosInterface;
-import dev.diskettefox.madridbus.api.BaseDatosModel;
 import dev.diskettefox.madridbus.api.StopModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,11 +31,13 @@ public class FragmentMain extends Fragment {
     private BusAdapter adapter;
     private LoadingIndicator loadingIndicator;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.view_stops, container, false);
         RecyclerView recyclerStops = view.findViewById(R.id.recycler_stops);
         loadingIndicator = view.findViewById(R.id.progress_bar);
+        SearchBar searchBar=view.findViewById(R.id.search_bar_Stops);
 
         ApiInterface apiInterface = ApiCall.getStop().create(ApiInterface.class);
         String accessToken = ApiCall.token;
@@ -58,24 +58,15 @@ public class FragmentMain extends Fragment {
             fetchStopData(apiInterface, stopId, accessToken);
         }
 
-        BaseDatosModel modelo=new BaseDatosModel("373",true);
-        BaseDatosInterface apiInterface2 = BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        Call<BaseDatosModel>call2=apiInterface2.anadeFavorito(modelo);
-        call2.enqueue(new Callback<BaseDatosModel>() {
-            @Override
-            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
-                Log.d("respuesta","FELIZIDADES FUNCIONA.");
-            }
-
-            @Override
-            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
-                Log.d("respuesta","LA MALA NENE MO FUNCIONA.");
-            }
-        });
+        busqueda(searchBar);
 
         return view;
     }
 
+    private void busqueda(SearchBar searchBar){
+
+
+    }
     private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
         Call<StopModel> call = apiInterface.getStop(stopId, accessToken);
         call.enqueue(new Callback<>() {
