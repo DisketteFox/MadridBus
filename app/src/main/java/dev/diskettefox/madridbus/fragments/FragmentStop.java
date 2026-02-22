@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.loadingindicator.LoadingIndicator;
 import com.google.android.material.search.SearchBar;
+import com.google.android.material.search.SearchView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,20 +91,28 @@ public class FragmentStop extends Fragment {
 
         // Search bar
         SearchBar searchBar = view.findViewById(R.id.search_bar_Stops);
-        EditText editText = view.findViewById(R.id.stopsET);
+        SearchView searchView = view.findViewById(R.id.search_view_Stops);
 
         // Handle Search action on keyboard
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        searchView.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
-                    int searchStopId = Integer.parseInt(v.getText().toString());
-                    Log.d("Search", "Search button clicked for stop ID: " + searchStopId);
+                    String text = v.getText().toString();
+                    if (!text.isEmpty()) {
+                        try {
+                            int searchStopId = Integer.parseInt(text);
+                            Log.d("Search", "Search button clicked for stop ID: " + searchStopId);
 
-                    Intent intent = new Intent(getContext(), StopActivity.class);
-                    intent.putExtra("stopId", String.valueOf(searchStopId));
-                    getContext().startActivity(intent);
-
+                            Intent intent = new Intent(getContext(), StopActivity.class);
+                            intent.putExtra("stopId", String.valueOf(searchStopId));
+                            getContext().startActivity(intent);
+                            
+                            searchView.hide();
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(getContext(), "Invalid Stop ID", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                     return true;
                 }
                 return false;
@@ -111,7 +120,7 @@ public class FragmentStop extends Fragment {
         });
 
         // Filter logic
-        // editText.addTextChangedListener(new TextWatcher() {
+        // searchView.getEditText().addTextChangedListener(new TextWatcher() {
         //     @Override
         //     public void afterTextChanged(Editable s) {}
         //     @Override

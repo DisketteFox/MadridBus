@@ -39,13 +39,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/search_stops"
                 app:liftOnScroll="true"
-                app:liftOnScrollColor="?attr/colorSurfaceContainerHighest">
-                <EditText
-                    android:id="@+id/stopsET"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:inputType="number"/>
-            </com.google.android.material.search.SearchBar>
+                app:liftOnScrollColor="?attr/colorSurfaceContainerHighest" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_stops"
                 android:layout_width="match_parent"
@@ -71,4 +66,13 @@
                 android:visibility="gone"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.search.SearchView
+        android:id="@+id/search_view_Stops"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/search_stops"
+        app:layout_anchor="@id/search_bar_Stops">
+    </com.google.android.material.search.SearchView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
