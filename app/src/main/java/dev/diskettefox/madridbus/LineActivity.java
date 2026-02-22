@@ -4,7 +4,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -12,10 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dev.diskettefox.madridbus.adapters.LineActivityAdapter;
+import dev.diskettefox.madridbus.adapters.LinePagerAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.models.LineModel;
@@ -27,7 +31,9 @@ public class LineActivity extends AppCompatActivity {
     private LineActivityAdapter adapter;
     private final ArrayList<LineModel.Data> data = new ArrayList<>();
 
-    private TextView linealabel,destinoA,destinoB;
+    private TextView linealabel, destinoA, destinoB;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,58 +52,85 @@ public class LineActivity extends AppCompatActivity {
         int lineId = getIntent().getIntExtra("lineId", -1);
         Log.e("LineActivity", "Line ID: " + lineId);
 
-        // recuperación de datos del bundle e inicialización de algunos elementos
         String lineaLabel = getIntent().getStringExtra("lineLabel");
         String nameA = getIntent().getStringExtra("dsA");
         String nameB = getIntent().getStringExtra("dsB");
-        linealabel =findViewById(R.id.line_label);
-        destinoA =findViewById(R.id.destino_A_Line);
-        destinoB =findViewById(R.id.destino_B_Line);
 
-        // asignación de datos
-        coloreaLinea(linealabel);
+        linealabel = findViewById(R.id.line_label);
+        destinoA = findViewById(R.id.destino_A_Line);
+        destinoB = findViewById(R.id.destino_B_Line);
+        viewPager = findViewById(R.id.view_pager);
+        tabLayout = findViewById(R.id.tab_layout);
+
+        // Data assigned
+        applyColoring(linealabel);
         linealabel.setText(lineaLabel);
         destinoA.setText(nameA);
         destinoB.setText(nameB);
 
+        setupViewPager(lineaLabel);
 
         // Initialize RecyclerView
         adapter = new LineActivityAdapter(this, data);
 
         if (lineId != -1) {
             try {
-                fetchStopDetails(apiInterface, lineId);
+                fetchLineDetails(apiInterface, lineId);
             } catch (NumberFormatException e) {
                 Log.d("StopActivity", "Invalid stop ID format", e);
             }
         }
     }
 
-    private void coloreaLinea(TextView linea){
-        String texto=getIntent().getStringExtra("lineColor");
-        GradientDrawable fondo= (GradientDrawable) linea.getBackground();
+    private void setupViewPager(String lineLabel) {
+        List<String> imageUrls = new ArrayList<>();
+        // Urls
+        imageUrls.add("https://www.madridbuses.com/img/autobuses-emt/horario-ida-linea-" + lineLabel + "-madrid-completo.png");
+        imageUrls.add("https://www.madridbuses.com/img/autobuses-emt/horario-vuelta-linea-" + lineLabel + "-madrid-completo.png");
 
-        if (texto.equals("black")) {
-            fondo.setColor(ContextCompat.getColor(getBaseContext(), R.color.black));
-            linea.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.gold));
-        } else if (texto.equals("gold")){
-            fondo.setColor(ContextCompat.getColor(getBaseContext(), R.color.gold));
-            linea.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
-        } else if (texto.equals("turquoise")) {
-            fondo.setColor(ContextCompat.getColor(getBaseContext(), R.color.turquoise));
-        } else if (texto.equals("lightblue")) {
-            fondo.setColor(ContextCompat.getColor(getBaseContext(), R.color.lightblue));
-        } else if (texto.equals("brown")) {
-            fondo.setColor(ContextCompat.getColor(getBaseContext(), R.color.brown));
-        } else if (texto.equals("yellow")) {
-            fondo.setColor(ContextCompat.getColor(getBaseContext(), R.color.yellow));
-            linea.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
-        } else {
-            fondo.setColor(ContextCompat.getColor(getBaseContext(), R.color.blue));
+        LinePagerAdapter pagerAdapter = new LinePagerAdapter(this, imageUrls);
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void applyColoring(TextView line) {
+        String text = getIntent().getStringExtra("lineColor");
+        GradientDrawable bf = (GradientDrawable) line.getBackground();
+
+        if (text == null) {
+            bf.setColor(ContextCompat.getColor(getBaseContext(), R.color.blue));
+            return;
+        }
+
+        switch (text) {
+            case "black":
+                bf.setColor(ContextCompat.getColor(getBaseContext(), R.color.black));
+                line.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.gold));
+                break;
+            case "gold":
+                bf.setColor(ContextCompat.getColor(getBaseContext(), R.color.gold));
+                line.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
+                break;
+            case "turquoise":
+                bf.setColor(ContextCompat.getColor(getBaseContext(), R.color.turquoise));
+                break;
+            case "lightblue":
+                bf.setColor(ContextCompat.getColor(getBaseContext(), R.color.lightblue));
+                break;
+            case "brown":
+                bf.setColor(ContextCompat.getColor(getBaseContext(), R.color.brown));
+                break;
+            case "yellow":
+                bf.setColor(ContextCompat.getColor(getBaseContext(), R.color.yellow));
+                line.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.black));
+                break;
+            default:
+                bf.setColor(ContextCompat.getColor(getBaseContext(), R.color.blue));
+                break;
         }
     }
 
-    private void fetchStopDetails(ApiInterface apiInterface, int lineId) {
+    private void fetchLineDetails(ApiInterface apiInterface, int lineId) {
         Call<LineModel> call = apiInterface.getLineDetail(lineId, ApiCall.token);
         call.enqueue(new Callback<>() {
             @Override
@@ -125,7 +158,6 @@ public class LineActivity extends AppCompatActivity {
         });
     }
 
-    // Esto hace que funcione el botón de regresar.
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();

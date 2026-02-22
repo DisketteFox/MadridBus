@@ -28,6 +28,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,12 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorSurfaceContainer"
-                app:cardCornerRadius="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:cardCornerRadius="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -99,12 +95,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorSurfaceContainer"
                 app:cardCornerRadius="20dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                android:layout_marginTop="20dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -175,8 +166,9 @@
             </androidx.cardview.widget.CardView>
 
             <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp">
 
                 <com.google.android.material.tabs.TabItem
@@ -189,6 +181,12 @@
                     android:layout_height="wrap_content"
                     android:text="Return" />
             </com.google.android.material.tabs.TabLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager"
+                android:layout_width="match_parent"
+                android:layout_height="1000dp" />
+
             <com.google.android.material.loadingindicator.LoadingIndicator
                 style="@style/Widget.Material3.LoadingIndicator.Contained"
                 android:id="@+id/progress_bar"
