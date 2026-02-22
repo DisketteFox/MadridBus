@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,14 +46,14 @@ import retrofit2.Response;
 public class FragmentStop extends Fragment {
     private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
     private final ArrayList<StopModel.Stop> stopFilter = new ArrayList<>();
-    private final ArrayList<BaseDatosModel> misFavoritos = new ArrayList<>();
+    private final ArrayList<BaseDatosModel> favorites = new ArrayList<>();
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
 
+    // private final int[] stopIds = {};
     private final int[] stopIds = {5710, 3862, 3542, 4812, 666};
     private int responsesReceived = 0;
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +70,11 @@ public class FragmentStop extends Fragment {
         recyclerStops.setAdapter(adapter);
 
         // Show loading screen
-        loadingIndicator.setVisibility(View.VISIBLE);
+        if (stopIds.length != 0) {
+            loadingIndicator.setVisibility(View.VISIBLE);
+        } else {
+            // No favorites image
+        }
 
         // Populate the map for sorting
         for (int i = 0; i < stopIds.length; i++) {
@@ -94,13 +99,11 @@ public class FragmentStop extends Fragment {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                     int searchStopId = Integer.parseInt(v.getText().toString());
                     Log.d("Search", "Search button clicked for stop ID: " + searchStopId);
-                    if (searchStopId < 51182) {
-                        Intent intent = new Intent(getContext(), StopActivity.class);
-                        intent.putExtra("stopId", String.valueOf(searchStopId));
-                        getContext().startActivity(intent);
-                    } else {
-                        Log.d("Search Error", "Invalid stop ID: " + searchStopId);
-                    }
+
+                    Intent intent = new Intent(getContext(), StopActivity.class);
+                    intent.putExtra("stopId", String.valueOf(searchStopId));
+                    getContext().startActivity(intent);
+
                     return true;
                 }
                 return false;
@@ -108,38 +111,37 @@ public class FragmentStop extends Fragment {
         });
 
         // Filter logic
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {}
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {stopFilter.clear();}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchBar.setText(s);
-
-                for (StopModel.Stop stop: stopsList){
-                    if (stop.getStopId().contains(s)){
-                        stopFilter.add(stop);
-                    }
-                }
-                recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new StopAdapter(getContext(), stopFilter);
-                recyclerStops.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-            }
-        });
+        // editText.addTextChangedListener(new TextWatcher() {
+        //     @Override
+        //     public void afterTextChanged(Editable s) {}
+        //     @Override
+        //     public void beforeTextChanged(CharSequence s, int start, int count, int after) {stopFilter.clear();}
+        //     @Override
+        //     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        //         searchBar.setText(s);
+        //         for (StopModel.Stop stop: stopsList){
+        //             if (stop.getStopId().contains(s)){
+        //                 stopFilter.add(stop);
+        //             }
+        //         }
+        //         recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
+        //         adapter = new StopAdapter(getContext(), stopFilter);
+        //         recyclerStops.setAdapter(adapter);
+        //         adapter.notifyDataSetChanged();
+        //     }
+        // });
 
         getMyFavoritesStops();
 
         //testeoBBDD();
 
-        Log.d("mis favoritos", misFavoritos.toString());
+        Log.d("mis favoritos", favorites.toString());
 
         return view;
     }
 
 
-    // esto ira en el activity y habra un Get que traera las ids de las paradas de la base de datos y se guardaran en un array de favoritos
+    // Favorites method for database
     private void getMyFavoritesStops(){
         BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
         Call<BaseDatosModel> callB= baseDatosInterface.llamaFavoritos();
@@ -147,13 +149,14 @@ public class FragmentStop extends Fragment {
             @Override
             public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
                 if (response.isSuccessful() && response.body()!=null){
-                    misFavoritos.add(response.body());
+                    favorites.add(response.body());
                     Log.d("llamado exitoso", "Se han recuperado tus paradas favoritas.");
                 }
             }
             @Override
             public void onFailure(Call<BaseDatosModel> call, Throwable t) {
                 Log.e("Call Error", "Error retrieving data for BBDD.", t);
+                Toast.makeText(getContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -176,10 +179,12 @@ public class FragmentStop extends Fragment {
                         }
                         Log.d("JustWorking", "Stops loaded for stop ID: " + stopId);
                     } else {
-                        Log.d("API Response", "No stops data for stop ID: " + stopId);
+                        Log.e("API Response", "No stops data for stop ID: " + stopId);
+                        Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.d("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
+                    Log.e("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
+                    Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
                 }
                 onResponseReceived();
             }
@@ -187,6 +192,7 @@ public class FragmentStop extends Fragment {
             @Override
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
                 Log.e("Call Error", "Error retrieving data for stop ID: " + stopId, t);
+                Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
                 onResponseReceived();
             }
         });

@@ -5,17 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StopModel {
+    @SerializedName("code")
+    private String code;
     @SerializedName("data")
     private ArrayList<Data> stops = new ArrayList<>();
-
     public ArrayList<Data> getStopsData() {
         return stops;
+    }
+    public String getCode() {
+        return code;
     }
 
     public static class Data {
         @SerializedName("stops")
         private List<Stop> stops;
-
         public List<Stop> getStops() {
             return stops;
         }

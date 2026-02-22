@@ -22,5 +22,17 @@
     <string name="search_lines">Buscar líneas</string>
 
     <string name="toolbar_favorite">Favorito</string>
-    <string name="toolbar_update">Actualizar</string>
+    <string name="toolbar_update">Recargar</string>
+
+    <string name="error_lines">Error recibiendo líneas</string>
+    <string name="stop_error">No se han encontrado datos de esta parada</string>
+    <string name="database_error">Incapaz de conectarse a la base de datos</string>
+    <string name="error_time">Error recibiendo tiempos de las líneas</string>
+    <string name="error_refreshing">Error recargando</string>
+
+    <string name="invalid_stop">ID de parada inválido</string>
+    <string name="invalid_line">ID de línea inválido</string>
+
+    <string name="message_favorite_add">Añadida a favoritos</string>
+    <string name="message_favorite_remove">Eliminada de favoritos</string>
 </resources>

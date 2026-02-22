@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -85,6 +86,7 @@ public class StopActivity extends AppCompatActivity {
                 fetchStopDetails(Integer.parseInt(stopId));
             } catch (NumberFormatException e) {
                 Log.e("StopActivity", "Invalid stop ID format", e);
+                Toast.makeText(getBaseContext(), R.string.invalid_stop, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -98,6 +100,16 @@ public class StopActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<StopModel> call, @NonNull Response<StopModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     StopModel stopModel = response.body();
+
+                    // Check if the response returns an error
+                    if (stopModel.getCode().equals("81")) {
+                        Toast.makeText(getBaseContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else if (stopModel.getCode().equals("90")) {
+                        Toast.makeText(getBaseContext(), R.string.invalid_stop, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+
                     if (stopModel.getStopsData() != null && !stopModel.getStopsData().isEmpty()) {
                         List<StopModel.Stop> stops = stopModel.getStopsData().get(0).getStops();
                         if (stops != null && !stops.isEmpty()) {
@@ -128,6 +140,7 @@ public class StopActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
                 Log.e("StopActivity", "Error fetching stop details", t);
+                Toast.makeText(getBaseContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
                 loadingIndicator.setVisibility(View.GONE);
             }
         });
@@ -162,7 +175,7 @@ public class StopActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            Log.w("StopActivity", "Time response not successful for line " + line.getLabel());
+                            Log.e("StopActivity", "Time response not successful for line " + line.getLabel());
                         }
                         checkAllTimesReceived();
                     }
@@ -170,11 +183,13 @@ public class StopActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<TimeModel> call, @NonNull Throwable t) {
                         Log.e("StopActivity", "Error fetching times for line " + line.getLabel(), t);
+                        Toast.makeText(getBaseContext(), R.string.error_time, Toast.LENGTH_SHORT).show();
                         checkAllTimesReceived();
                     }
                 });
             } catch (NumberFormatException e) {
                 Log.e("StopActivity", "Invalid line ID: " + line.getLineId());
+                Toast.makeText(getBaseContext(), R.string.invalid_line, Toast.LENGTH_SHORT).show();
                 checkAllTimesReceived();
             }
         }
@@ -222,7 +237,8 @@ public class StopActivity extends AppCompatActivity {
                     adapter.notifyDataSetChanged();
                     fetchStopDetails(Integer.parseInt(stopId));
                 } catch (NumberFormatException e) {
-                    Log.e("StopActivity", "Invalid stop ID format for refresh", e);
+                    Log.e("StopActivity", "Error while refreshing", e);
+                    Toast.makeText(getBaseContext(), R.string.error_refreshing, Toast.LENGTH_SHORT).show();
                 }
             }
             return true;
@@ -251,12 +267,14 @@ public class StopActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
                 if (response.isSuccessful() && response.body()!=null){
-                    Log.d("llamado exitoso", "SE HA CREADO ALGO EN LA BASE DE DATOS.: ");
+                    Log.d("Exit call", "Succefully added to favorites");
+                    Toast.makeText(getBaseContext(), R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<BaseDatosModel> call, Throwable t) {
                 Log.e("Call Error", "Error retrieving data for BBDD.", t);
+                Toast.makeText(getBaseContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -268,12 +286,14 @@ public class StopActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
                 if (response.isSuccessful() && response.body()!=null){
-                    Log.d("llamado exitoso", "SE HA ELIMINADO LA PARADA DE LA BASE DE DATOS:");
+                    Log.d("Exit call", "Succesfully removed from favorites");
+                    Toast.makeText(getBaseContext(), R.string.message_favorite_remove, Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
             public void onFailure(Call<BaseDatosModel> call, Throwable t) {
                 Log.e("Call Error", "Error retrieving data for BBDD.", t);
+                Toast.makeText(getBaseContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -50,7 +51,7 @@ public class LineActivity extends AppCompatActivity {
         }
 
         int lineId = getIntent().getIntExtra("lineId", -1);
-        Log.e("LineActivity", "Line ID: " + lineId);
+        Log.d("LineActivity", "Line ID: " + lineId);
 
         String lineaLabel = getIntent().getStringExtra("lineLabel");
         String nameA = getIntent().getStringExtra("dsA");
@@ -77,7 +78,8 @@ public class LineActivity extends AppCompatActivity {
             try {
                 fetchLineDetails(apiInterface, lineId);
             } catch (NumberFormatException e) {
-                Log.d("StopActivity", "Invalid stop ID format", e);
+                Log.e("StopActivity", "Invalid line ID format", e);
+                Toast.makeText(getBaseContext(), R.string.invalid_line, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -144,16 +146,19 @@ public class LineActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                         Log.d("JustWorking", "Line loaded");
                     } else {
-                        Log.d("API Response", "No stops data for line ID: " + lineId);
+                        Log.e("API Response", "No stops data for line ID: " + lineId);
+                        Toast.makeText(getBaseContext(), R.string.error_lines, Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Log.d("API Response", "Failed response for line ID: " + lineId + ", Response: " + response);
+                    Log.e("API Response", "Failed response for line ID: " + lineId + ", Response: " + response);
+                    Toast.makeText(getBaseContext(), R.string.error_lines, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<LineModel> call, Throwable t) {
                 Log.e("StopActivity", "Error fetching line details", t);
+                Toast.makeText(getBaseContext(), R.string.error_lines, Toast.LENGTH_SHORT).show();
             }
         });
     }

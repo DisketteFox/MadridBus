@@ -22,5 +22,17 @@
     <string name="search_lines">Search lines</string>
 
     <string name="toolbar_favorite">Favorite</string>
-    <string name="toolbar_update">Update</string>
+    <string name="toolbar_update">Refresh</string>
+
+    <string name="error_lines">Error retrieving lines</string>
+    <string name="stop_error">No data was found for this stop</string>
+    <string name="database_error">Unable to connect to database</string>
+    <string name="error_time">Error retrieving times for lines</string>
+    <string name="error_refreshing">Error refreshing</string>
+
+    <string name="invalid_stop">Invalid stop ID</string>
+    <string name="invalid_line">Invalid line ID</string>
+
+    <string name="message_favorite_add">Added to favorites</string>
+    <string name="message_favorite_remove">Removed from favorites</string>
 </resources>

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.loadingindicator.LoadingIndicator;
 import com.google.android.material.search.SearchBar;
@@ -54,7 +55,7 @@ public class FragmentLines extends Fragment {
         loadingIndicator.setVisibility(View.VISIBLE);
 
         // se llama a la API y rellena con todas las lineas.
-        llamaAlaslineas(apiInterface, accessToken);
+        fetchLinesData(apiInterface, accessToken);
 
         // ingerto de barra de busqueda.
         SearchBar searchBar=view.findViewById(R.id.search_bar_Lines);
@@ -84,36 +85,7 @@ public class FragmentLines extends Fragment {
         return view;
     }
 
-    private void fetchStopData(ApiInterface apiInterface, int lineId, String accessToken) {
-        Call<LineModel> call = apiInterface.getLineDetail(lineId, accessToken);
-        call.enqueue(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<LineModel> call, @NonNull Response<LineModel> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    LineModel line = response.body();
-                    // Process the response
-                    if (line.getData() != null) {
-                        lineData.addAll(line.getData());
-                        adapter.notifyDataSetChanged();
-                        Log.d("JustWorking", "Stops loaded");
-                    } else {
-                        Log.d("API Response", "No stops data for stop ID: " + lineId);
-                    }
-                } else {
-                    Log.d("API Response", "Failed response for stop ID: " + lineId + ", Response: " + response);
-                }
-                hideLoadingIndicator(); // Hide loading indicator after all calls
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<LineModel> call, @NonNull Throwable t) {
-                Log.e("Call Error", "Error retrieving data for stop ID: " + lineId, t);
-                hideLoadingIndicator(); // Hide loading indicator if it fails
-            }
-        });
-    }
-
-    private void llamaAlaslineas(ApiInterface apiInterface, String accessToken) {
+    private void fetchLinesData(ApiInterface apiInterface, String accessToken) {
         Call<LineModel> call = apiInterface.getLines( accessToken);
         call.enqueue(new Callback<>() {
             @Override
@@ -124,14 +96,16 @@ public class FragmentLines extends Fragment {
                     adapter.notifyDataSetChanged();
 
                 } else {
-                    Log.d("API Response", "fallo en la comunicación.");
+                    Log.e("API Error", "Unable to connect to database");
+                    Toast.makeText(getContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
                 }
                 hideLoadingIndicator(); // Hide loading indicator after all calls
             }
 
             @Override
             public void onFailure(@NonNull Call<LineModel> call, @NonNull Throwable t) {
-                Log.e("Call Error", "Error recibiendo los datos ",t);
+                Log.e("Call Error", "Error retrieving lines",t);
+                Toast.makeText(getContext(), R.string.error_lines, Toast.LENGTH_SHORT).show();
                 hideLoadingIndicator(); // Hide loading indicator if it fails
             }
         });
