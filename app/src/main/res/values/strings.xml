@@ -35,4 +35,7 @@
 
     <string name="message_favorite_add">Added to favorites</string>
     <string name="message_favorite_remove">Removed from favorites</string>
+
+    <string name="no_favorites">No favorites</string>
+    <string name="no_connection">No connection</string>
 </resources>
