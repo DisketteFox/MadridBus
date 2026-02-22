@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Madrid Bus</string>
+    <string name="title_activity_stop">Paradas</string>
+    <string name="title_activity_line">Líneas</string>
+    <string name="title_activity_map">Mapa</string>
+    <string name="title_activity_settings">Ajustes</string>
+    <string name="title_activity_token">Token</string>
+
+    <string name="title_line_details">Detalles de línea</string>
+    <string name="title_stop_details">Detalles de parada</string>
+
+    <string name="line_start_time">Hora de inicio</string>
+    <string name="line_end_time">Hora de fín</string>
+    <string name="line_outward">Ida</string>
+    <string name="line_return">Vuelta</string>
+
+    <string name="card_bus_arriving">Llegando</string>
+    <string name="card_bus_next">Siguiente bus</string>
+
+    <string name="search_stops">Buscar paradas</string>
+    <string name="search_lines">Buscar líneas</string>
+
+    <string name="toolbar_favorite">Favorito</string>
+    <string name="toolbar_update">Actualizar</string>
+</resources>

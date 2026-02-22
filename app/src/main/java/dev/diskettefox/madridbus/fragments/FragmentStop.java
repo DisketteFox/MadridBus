@@ -49,7 +49,7 @@ public class FragmentStop extends Fragment {
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
 
-    private final int[] stopIds = {5710, 3862, 3542, 4812};
+    private final int[] stopIds = {5710, 3862, 3542, 4812, 666};
     private int responsesReceived = 0;
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
 

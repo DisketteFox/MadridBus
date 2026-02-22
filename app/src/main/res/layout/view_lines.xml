@@ -17,7 +17,7 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Lines"
+            app:title="@string/title_activity_line"
             app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,7 +37,7 @@
                 android:id="@+id/search_bar_Lines"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search line"
+                android:hint="@string/search_lines"
                 app:liftOnScroll="true"
                 app:liftOnScrollColor="?attr/colorSurfaceContainerHighest">
                 <EditText

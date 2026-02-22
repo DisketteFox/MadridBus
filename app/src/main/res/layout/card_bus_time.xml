@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="Arriving"
+                    android:text="@string/card_bus_arriving"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="20sp" />
 
@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
-                    android:text="Next bus"
+                    android:text="@string/card_bus_next"
                     android:textSize="20sp"
                     android:textColor="?attr/colorOnSurfaceVariant"/>
 

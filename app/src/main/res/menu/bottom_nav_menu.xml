@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:title="Stops"
+    <item android:title="@string/title_activity_stop"
         android:id="@+id/menu_stops"
         android:icon="@drawable/ic_bus_24dp"
         app:showAsAction="always"
         />
-    <item android:title="Lines"
+    <item android:title="@string/title_activity_line"
         android:id="@+id/menu_lines"
         android:icon="@drawable/ic_calendar_24dp"
         app:showAsAction="always"
         />
-    <item android:title="Maps"
+    <item android:title="@string/title_activity_map"
         android:id="@+id/menu_maps"
         android:icon="@drawable/ic_location_24dp"
         app:showAsAction="always"

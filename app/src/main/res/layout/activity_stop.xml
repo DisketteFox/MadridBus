@@ -17,7 +17,7 @@
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Stop details"
+            app:title="@string/title_stop_details"
             app:titleCentered="true"
             app:menu="@menu/toolbar_stop"
             app:navigationIcon="@drawable/ic_back_24dp"

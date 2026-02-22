@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="Favorite"
+        android:title="@string/toolbar_favorite"
         android:icon="@drawable/ic_favorite_24dp"
         android:id="@+id/favorite"
         app:showAsAction="always"
         />
     <item
-        android:title="Update"
+        android:title="@string/toolbar_update"
         android:icon="@drawable/ic_update_24dp"
         android:id="@+id/update"
         app:showAsAction="always"

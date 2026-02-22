@@ -1,7 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Madrid Bus</string>
-    <string name="title_activity_stop">StopActivity</string>
-    <string name="title_activity_line">LineActivity</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_stop">Stops</string>
+    <string name="title_activity_line">Lines</string>
+    <string name="title_activity_map">Map</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_token">Token</string>
+
+    <string name="title_line_details">Line details</string>
+    <string name="title_stop_details">Stop details</string>
+
+    <string name="line_start_time">Start time</string>
+    <string name="line_end_time">End time</string>
+    <string name="line_outward">Outward</string>
+    <string name="line_return">Return</string>
+
+    <string name="card_bus_arriving">Arriving</string>
+    <string name="card_bus_next">Next bus</string>
+
+    <string name="search_stops">Search stops</string>
+    <string name="search_lines">Search lines</string>
+
+    <string name="toolbar_favorite">Favorite</string>
+    <string name="toolbar_update">Update</string>
 </resources>

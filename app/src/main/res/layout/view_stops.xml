@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/toolbar_menu"
-            app:title="Stops"
+            app:title="@string/title_activity_stop"
             app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -37,7 +37,7 @@
                 android:id="@+id/search_bar_Stops"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search stop"
+                android:hint="@string/search_stops"
                 app:liftOnScroll="true"
                 app:liftOnScrollColor="?attr/colorSurfaceContainerHighest">
                 <EditText
