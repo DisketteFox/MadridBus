@@ -29,6 +29,7 @@
     <string name="database_error">Unable to connect to database</string>
     <string name="error_time">Error retrieving times for lines</string>
     <string name="error_refreshing">Error refreshing</string>
+    <string name="error_token">Token not found</string>
 
     <string name="invalid_stop">Invalid stop ID</string>
     <string name="invalid_line">Invalid line ID</string>

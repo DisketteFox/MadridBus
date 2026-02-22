@@ -102,7 +102,10 @@ public class StopActivity extends AppCompatActivity {
                     StopModel stopModel = response.body();
 
                     // Check if the response returns an error
-                    if (stopModel.getCode().equals("81")) {
+                    if (stopModel.getCode().equals("80")) {
+                        Toast.makeText(getBaseContext(), R.string.error_token, Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else if (stopModel.getCode().equals("81")) {
                         Toast.makeText(getBaseContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
                         finish();
                     } else if (stopModel.getCode().equals("90")) {

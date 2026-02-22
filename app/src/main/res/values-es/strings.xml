@@ -29,6 +29,7 @@
     <string name="database_error">Incapaz de conectarse a la base de datos</string>
     <string name="error_time">Error recibiendo tiempos de las líneas</string>
     <string name="error_refreshing">Error recargando</string>
+    <string name="error_token">Token no encontrado</string>
 
     <string name="invalid_stop">ID de parada inválido</string>
     <string name="invalid_line">ID de línea inválido</string>
