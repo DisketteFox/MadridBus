@@ -1,5 +1,6 @@
 package dev.diskettefox.madridbus.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -104,13 +105,18 @@ public class FragmentStop extends Fragment {
                             int searchStopId = Integer.parseInt(text);
                             Log.d("Search", "Search button clicked for stop ID: " + searchStopId);
 
-                            Intent intent = new Intent(getContext(), StopActivity.class);
-                            intent.putExtra("stopId", String.valueOf(searchStopId));
-                            getContext().startActivity(intent);
+                            Context context = getContext();
+                            if (context != null) {
+                                Intent intent = new Intent(context, StopActivity.class);
+                                intent.putExtra("stopId", String.valueOf(searchStopId));
+                                context.startActivity(intent);
+                            }
                             
                             searchView.hide();
                         } catch (NumberFormatException e) {
-                            Toast.makeText(getContext(), "Invalid Stop ID", Toast.LENGTH_SHORT).show();
+                            if (getContext() != null) {
+                                Toast.makeText(getContext(), "Invalid Stop ID", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                     return true;
@@ -165,7 +171,9 @@ public class FragmentStop extends Fragment {
             @Override
             public void onFailure(Call<BaseDatosModel> call, Throwable t) {
                 Log.e("Call Error", "Error retrieving data for BBDD.", t);
-                Toast.makeText(getContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -189,11 +197,15 @@ public class FragmentStop extends Fragment {
                         Log.d("JustWorking", "Stops loaded for stop ID: " + stopId);
                     } else {
                         Log.e("API Response", "No stops data for stop ID: " + stopId);
-                        Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
+                        if (getContext() != null) {
+                            Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 } else {
                     Log.e("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
-                    Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
+                    if (getContext() != null) {
+                        Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
+                    }
                 }
                 onResponseReceived();
             }
@@ -201,7 +213,9 @@ public class FragmentStop extends Fragment {
             @Override
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
                 Log.e("Call Error", "Error retrieving data for stop ID: " + stopId, t);
-                Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
+                }
                 onResponseReceived();
             }
         });
@@ -221,7 +235,9 @@ public class FragmentStop extends Fragment {
 
     // Pretty self-explanatory
     private void hideLoadingIndicator() {
-        loadingIndicator.setVisibility(View.GONE);
+        if (loadingIndicator != null) {
+            loadingIndicator.setVisibility(View.GONE);
+        }
     }
 
     @Override
