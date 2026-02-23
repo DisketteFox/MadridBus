@@ -120,7 +120,7 @@ public class FragmentLines extends Fragment {
                 } else {
                     // Not intended to be  visible for user
                     Log.e("API Error", "Unable to connect to database");
-                    Toast.makeText(getContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
+                    showNoConnection();
                 }
                 hideLoadingIndicator(); // Hide loading indicator after all calls
             }

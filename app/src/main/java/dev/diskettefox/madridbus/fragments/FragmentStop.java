@@ -198,10 +198,12 @@ public class FragmentStop extends Fragment {
                     } else {
                         // Not intended to be  visible for user
                         Log.e("API Response", "No stops data for stop ID: " + stopId);
+                        showNoConnection();
                     }
                 } else {
                     // Not intended to be  visible for user
                     Log.e("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
+                    showNoConnection();
                 }
                 onResponseReceived();
             }
@@ -210,6 +212,7 @@ public class FragmentStop extends Fragment {
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
                 //No connection
                 Log.e("Call Error", "Unable to connect to EMT API", t);
+                showNoConnection();
             }
         });
     }
