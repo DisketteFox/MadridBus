@@ -33,13 +33,13 @@ public interface ApiInterface{
     );
     @GET("/v1/transport/busemtmad/stops/{stopId}/detail")
     Call<StopModel> getStop(
-            @Path("stopId") Integer stopId,
+            @Path("stopId") String stopId,
             @Header("accessToken") String accessToken
     );
 
     @POST("/v2/transport/busemtmad/stops/{stopId}/arrives/{lineArrive}/")
     Call<TimeModel> getTime(
-            @Path("stopId") Integer stopId,
+            @Path("stopId") String stopId,
             @Path("lineArrive") Integer lineId,
             @Header("accessToken") String accessToken,
             @Body TimeRequest body
