@@ -4,6 +4,7 @@ import dev.diskettefox.madridbus.models.HelloModel;
 import dev.diskettefox.madridbus.models.LineModel;
 import dev.diskettefox.madridbus.models.StopModel;
 import dev.diskettefox.madridbus.models.TimeModel;
+import dev.diskettefox.madridbus.models.TokenModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -16,6 +17,14 @@ public interface ApiInterface{
     // Interface for ping
     @GET("/v1/hello")
     Call<HelloModel> getHello();
+
+    // Interface for retrieving the token
+    @GET("/v3/mobilitylabs/user/login/")
+    Call<TokenModel> getToken(
+            @Header("XClientId") String clientId,
+            @Header("passKey") String passKey
+    );
+
 
     // Interfaces for stops
     @POST("/v1/transport/busemtmad/stops/list/")
