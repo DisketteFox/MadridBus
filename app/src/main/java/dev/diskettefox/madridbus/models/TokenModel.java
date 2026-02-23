@@ -3,12 +3,20 @@ package dev.diskettefox.madridbus.models;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TokenModel {
-    @SerializedName("accessToken")
-    private String accessToken;
+    @SerializedName("data")
+    private ArrayList<TokenModel.Data> data = new ArrayList<>();
 
-    public String getAccessToken() {
-        return accessToken;
-    };
+    public ArrayList<TokenModel.Data> getData() {
+        return data;
+    }
+    public static class Data {
+        @SerializedName("accessToken")
+        private String accessToken;
+        public String getAccessToken() {
+            return accessToken;
+        }
+    }
 }

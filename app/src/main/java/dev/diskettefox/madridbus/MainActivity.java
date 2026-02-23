@@ -66,8 +66,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call<TokenModel> call, @NonNull Response<TokenModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    TokenModel data = response.body();
-                    ApiCall.setToken(data.getAccessToken());
+                    TokenModel token = response.body();
+                    if (token.getData() != null) {
+                        TokenModel.Data data = token.getData().get(0);
+                        Log.d("Token", data.getAccessToken());
+                        ApiCall.setToken(data.getAccessToken());
+                    }
 
                 } else {
                     Log.e("API Error", "Unable to connect to database");

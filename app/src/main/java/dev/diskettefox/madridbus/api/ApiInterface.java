@@ -21,10 +21,15 @@ public interface ApiInterface{
     // Interface for retrieving the token
     @GET("/v3/mobilitylabs/user/login/")
     Call<TokenModel> getToken(
-            @Header("XClientId") String clientId,
+            @Header("X-ClientId") String clientId,
             @Header("passKey") String passKey
     );
 
+    @GET("/v3/mobilitylabs/user/login/")
+    Call<TokenModel> getTokenByUser(
+            @Header("email") String clientId,
+            @Header("password") String passKey
+    );
 
     // Interfaces for stops
     @POST("/v1/transport/busemtmad/stops/list/")
