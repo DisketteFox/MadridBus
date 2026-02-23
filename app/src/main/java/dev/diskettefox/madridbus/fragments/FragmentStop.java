@@ -76,9 +76,9 @@ public class FragmentStop extends Fragment {
 
         // Show loading screen
         if (stopIds.length != 0) {
-            loadingIndicator.setVisibility(View.VISIBLE);
+            showLoadingIndicator();
         } else {
-            noFavorites.setVisibility(View.VISIBLE);
+            showNoFavorites();
         }
 
         // Populate the map for sorting
@@ -128,12 +128,9 @@ public class FragmentStop extends Fragment {
             }
         });
 
-
         getMyFavoritesStops();
-
         //testeoBBDD();
-
-        Log.d("mis favoritos", favorites.toString());
+        Log.d("FragmentStop", "Favorites: " + favorites.toString());
 
         return view;
     }
@@ -195,8 +192,9 @@ public class FragmentStop extends Fragment {
 
             @Override
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
-                Log.e("Call Error", "Error retrieving data for stop ID: " + stopId, t);
-                noConnection.setVisibility(View.VISIBLE);
+                //No connection
+                Log.e("Call Error", "Unable to connect to EMT API", t);
+                showNoConnection();
                 if (getContext() != null) {
                     Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
                 }
@@ -219,9 +217,16 @@ public class FragmentStop extends Fragment {
 
     // Pretty self-explanatory
     private void hideLoadingIndicator() {
-        if (loadingIndicator != null) {
-            loadingIndicator.setVisibility(View.GONE);
-        }
+        loadingIndicator.setVisibility(View.GONE);
+    }
+    private void showLoadingIndicator() {
+        loadingIndicator.setVisibility(View.VISIBLE);
+    }
+    private void showNoFavorites() {
+        noFavorites.setVisibility(View.VISIBLE);
+    }
+    private void showNoConnection() {
+        noConnection.setVisibility(View.VISIBLE);
     }
 
     @Override
