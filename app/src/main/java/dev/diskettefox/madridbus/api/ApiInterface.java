@@ -32,7 +32,7 @@ public interface ApiInterface{
     );
 
     // Interfaces for lines
-    @GET("https://datos.emtmadrid.es/v2/transport/busemtmad/lines/info/{dateref}/")
+    @GET("/v2/transport/busemtmad/lines/info/{dateref}/")
     Call<LineModel> getLines(
             @Header("accessToken") String accessToken
     );

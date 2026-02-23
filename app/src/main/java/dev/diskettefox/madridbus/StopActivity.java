@@ -124,7 +124,6 @@ public class StopActivity extends AppCompatActivity {
                             if (stop.getStopId() != null) {
                                 stopIdTextView.setText(stop.getStopId());
                             }
-                            stop.setFavorite(false);
                             parada=stop;
                             linesList.clear();
                             List<StopModel.Dataline> dataLines = stop.getDataLine();
@@ -250,13 +249,13 @@ public class StopActivity extends AppCompatActivity {
             if (!parada.isFavorite()){
                 parada.setFavorite(true);
                 item.setIcon(R.drawable.ic_favorite_filled_24dp);
-                //addFavoriteBBDD(parada.getStopId(),parada.isFavorite());
+                addFavoriteBBDD(parada.getStopId(),parada.isFavorite());
                 Log.d("StopActivity", "Favorite Stops is active clicked");
             }else{
-                Log.d("StopActivity2", "Favorite Stops is inactive clicked Detele");
                 parada.setFavorite(false);
                 item.setIcon(R.drawable.ic_favorite_24dp);
-                //removeFavoriteBBDD(parada.getStopId(),parada.isFavorite());
+                removeFavoriteBBDD(parada.getStopId(),parada.isFavorite());
+                Log.d("StopActivity2", "Favorite Stops is inactive clicked Detele");
             }
             return true;
         }

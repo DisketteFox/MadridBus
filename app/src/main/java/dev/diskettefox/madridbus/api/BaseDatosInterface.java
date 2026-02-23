@@ -7,15 +7,14 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface BaseDatosInterface {
-    @POST("/api/favoritos/")
+    @POST("/api/addfavorito/")
     Call<BaseDatosModel>anadeFavorito(@Body BaseDatosModel parada);
 
-
     // aun no fue testeado ni creado.
-    @DELETE("/api/favoritos/")
+    @POST("/api/deletefavorito/")
     Call<BaseDatosModel>elimidaDFavoritos(@Body BaseDatosModel parada);
 
-    @GET("/api/favoritos/")
-    Call<BaseDatosModel>llamaFavoritos();
+    @GET("/api/getfavoritos/")
+    Call<BDMRespuesta>llamaFavoritos();
     // aun no fue testeado.
 }

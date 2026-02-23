@@ -32,12 +32,14 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.adapters.StopAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
+import dev.diskettefox.madridbus.api.BDMRespuesta;
 import dev.diskettefox.madridbus.api.BaseDatosCall;
 import dev.diskettefox.madridbus.api.BaseDatosInterface;
 import dev.diskettefox.madridbus.api.BaseDatosModel;
@@ -48,12 +50,11 @@ import retrofit2.Response;
 
 public class FragmentStop extends Fragment {
     private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
-    private final ArrayList<BaseDatosModel> favorites = new ArrayList<>();
+    private final ArrayList<String> favorites = new ArrayList<>();
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
     private LinearLayout noFavorites, noConnection;
 
-    // private final int[] stopIds = {};
     private final int[] stopIds = {5710, 3862, 3542, 4812, 666};
     private int responsesReceived = 0;
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
@@ -81,7 +82,7 @@ public class FragmentStop extends Fragment {
             showNoFavorites();
         }
 
-        // Populate the map for sorting
+        /*// Populate the map for sorting
         for (int i = 0; i < stopIds.length; i++) {
             stopIdToIndex.put(stopIds[i], i);
         }
@@ -91,7 +92,8 @@ public class FragmentStop extends Fragment {
             for (int stopId : stopIds) {
                 fetchStopData(apiInterface, stopId, accessToken);
             }
-        }
+        }*/
+        getMyFavoritesStops(apiInterface,accessToken);
 
         // Search bar
         SearchBar searchBar = view.findViewById(R.id.search_bar_Stops);
@@ -128,28 +130,37 @@ public class FragmentStop extends Fragment {
             }
         });
 
-        getMyFavoritesStops();
-        //testeoBBDD();
-        Log.d("FragmentStop", "Favorites: " + favorites.toString());
+        /*UUID codigo;
+        for (int i = 0; i < 6; i++) {
+            codigo=UUID.randomUUID();
+
+            Log.d("Codigo Nª"+i,codigo.toString());
+            Log.d("Codigos Nª"+i,"C-: "+codigo);
+            Toast.makeText(getContext(),"C: "+codigo,Toast.LENGTH_SHORT).show();
+        }*/
 
         return view;
     }
 
 
     // Favorites method for database
-    private void getMyFavoritesStops(){
+    private void getMyFavoritesStops(ApiInterface apiInterface, String accessToken){
         BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        Call<BaseDatosModel> callB= baseDatosInterface.llamaFavoritos();
-        callB.enqueue(new Callback<BaseDatosModel>() {
+        Call<BDMRespuesta> callB= baseDatosInterface.llamaFavoritos();
+        callB.enqueue(new Callback<BDMRespuesta>() {
             @Override
-            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
+            public void onResponse(Call<BDMRespuesta> call, Response<BDMRespuesta> response) {
                 if (response.isSuccessful() && response.body()!=null){
-                    favorites.add(response.body());
+                    BDMRespuesta paradas=response.body();
+                    for (BDMRespuesta.Respuestas parada:paradas.getFavoritos()){
+                        fetchStopData(apiInterface, parada.getParada_id(), accessToken);
+                        Toast.makeText(getContext(),"pa: "+parada.getParada_id(), Toast.LENGTH_SHORT).show();
+                    }
                     Log.d("llamado exitoso", "Se han recuperado tus paradas favoritas.");
                 }
             }
             @Override
-            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
+            public void onFailure(Call<BDMRespuesta> call, Throwable t) {
                 Log.e("Call Error", "Error retrieving data for BBDD.", t);
                 if (getContext() != null) {
                     Toast.makeText(getContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
