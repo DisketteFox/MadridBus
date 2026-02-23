@@ -112,7 +112,7 @@ public class FragmentLines extends Fragment {
     }
 
     private void fetchLinesData(ApiInterface apiInterface, String accessToken) {
-        Call<LineModel> call = apiInterface.getLines( accessToken);
+        Call<LineModel> call = apiInterface.getLines(accessToken);
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<LineModel> call, @NonNull Response<LineModel> response) {
