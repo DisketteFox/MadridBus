@@ -34,8 +34,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragmentLines extends Fragment {
-    private final ArrayList<LineModel.Data> lineData = new ArrayList<>();
-    private ArrayList<LineModel.Data> listaFiltrada = new ArrayList<>();
+    private static final ArrayList<LineModel.Data> lineData = new ArrayList<>();
+    private ArrayList<LineModel.Data> filteredList = new ArrayList<>();
     private LineAdapter adapter;
     private LoadingIndicator loadingIndicator;
     private LinearLayout noConnection;
@@ -55,14 +55,17 @@ public class FragmentLines extends Fragment {
         adapter = new LineAdapter(getContext(), lineData);
         recyclerLines.setAdapter(adapter);
 
-        // Show loading screen
-        loadingIndicator.setVisibility(View.VISIBLE);
+        // Show loading screen only if data is not yet loaded
+        if (lineData.isEmpty()) {
+            loadingIndicator.setVisibility(View.VISIBLE);
+            // Fetch data for all lines
+            fetchLinesData(apiInterface, accessToken);
+        } else {
+            loadingIndicator.setVisibility(View.GONE);
+        }
 
         // Check for connection to API
         checkPing(apiInterface);
-
-        // Fetch data for all lines
-        fetchLinesData(apiInterface, accessToken);
 
         // Homemade searchbar
         SearchBar searchBar = view.findViewById(R.id.search_bar_Lines);
@@ -71,18 +74,18 @@ public class FragmentLines extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {}
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {listaFiltrada.clear();}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {filteredList.clear();}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 searchBar.setText(s);
 
-                for (LineModel.Data dato: lineData){
-                    if (dato.getLabel().toLowerCase().contains(s)){
-                        listaFiltrada.add(dato);
+                for (LineModel.Data data: lineData){
+                    if (data.getLabel().toLowerCase().contains(s)){
+                        filteredList.add(data);
                     }
                 }
                 recyclerLines.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter = new LineAdapter(getContext(), listaFiltrada);
+                adapter = new LineAdapter(getContext(), filteredList);
                 recyclerLines.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
@@ -100,6 +103,7 @@ public class FragmentLines extends Fragment {
             public void onFailure(@NonNull Call<HelloModel> call, @NonNull Throwable t) {
                 hideLoadingIndicator();
                 showNoConnection();
+                lineData.clear();
                 if (getContext() != null) {
                     Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_SHORT).show();
                 }
@@ -114,8 +118,11 @@ public class FragmentLines extends Fragment {
             public void onResponse(@NonNull Call<LineModel> call, @NonNull Response<LineModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     LineModel line = response.body();
+                    lineData.clear();
                     lineData.addAll(line.getData());
-                    adapter.notifyDataSetChanged();
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
 
                 } else {
                     // Not intended to be  visible for user
@@ -135,13 +142,19 @@ public class FragmentLines extends Fragment {
     }
 
     private void hideLoadingIndicator() {
-        loadingIndicator.setVisibility(View.GONE);
+        if (loadingIndicator != null) {
+            loadingIndicator.setVisibility(View.GONE);
+        }
     }
     private void showLoadingIndicator() {
-        loadingIndicator.setVisibility(View.VISIBLE);
+        if (loadingIndicator != null) {
+            loadingIndicator.setVisibility(View.VISIBLE);
+        }
     }
     private void showNoConnection() {
-        noConnection.setVisibility(View.VISIBLE);
+        if (noConnection != null) {
+            noConnection.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

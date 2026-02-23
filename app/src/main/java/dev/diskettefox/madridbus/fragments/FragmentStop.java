@@ -48,7 +48,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragmentStop extends Fragment {
-    private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
+    private static final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
     private final ArrayList<BaseDatosModel> favorites = new ArrayList<>();
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
@@ -56,7 +56,7 @@ public class FragmentStop extends Fragment {
 
     // private final int[] stopIds = {};
     private final int[] stopIds = {5710, 3862, 3542, 4812, 666};
-    private int responsesReceived = 0;
+    private static int responsesReceived = 0;
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
 
     @Override
@@ -77,7 +77,11 @@ public class FragmentStop extends Fragment {
 
         // Show loading screen
         if (stopIds.length != 0) {
-            showLoadingIndicator();
+            if (stopsList.isEmpty()) {
+                showLoadingIndicator();
+            } else {
+                hideLoadingIndicator();
+            }
         } else {
             showNoFavorites();
         }
@@ -92,9 +96,12 @@ public class FragmentStop extends Fragment {
 
         // Fetch data for all stop IDs
         if (stopsList.isEmpty()) {
+            responsesReceived = 0;
             for (int stopId : stopIds) {
                 fetchStopData(apiInterface, stopId, accessToken);
             }
+        } else {
+            adapter.notifyDataSetChanged();
         }
 
         // Search bar
@@ -224,7 +231,9 @@ public class FragmentStop extends Fragment {
             synchronized (stopsList) {
                 stopsList.sort(Comparator.comparing(stop -> stopIdToIndex.get(Integer.parseInt(stop.getStopId()))));
             }
-            adapter.notifyDataSetChanged();
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
             hideLoadingIndicator();
         }
     }
