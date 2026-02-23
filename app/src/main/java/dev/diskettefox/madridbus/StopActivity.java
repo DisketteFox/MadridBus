@@ -21,7 +21,6 @@ import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import dev.diskettefox.madridbus.adapters.StopActivityAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
