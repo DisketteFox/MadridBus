@@ -31,7 +31,7 @@ public class StopModel {
         private String name;
         @SerializedName("dataLine")
         private List<Dataline> dataLine;
-        private Boolean favorite;
+        private Boolean favorite = Boolean.FALSE;
         public String getStopId() {
             return stopId;
         }

@@ -41,6 +41,7 @@ import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.api.BaseDatosCall;
 import dev.diskettefox.madridbus.api.BaseDatosInterface;
 import dev.diskettefox.madridbus.api.BaseDatosModel;
+import dev.diskettefox.madridbus.models.HelloModel;
 import dev.diskettefox.madridbus.models.StopModel;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -86,6 +87,9 @@ public class FragmentStop extends Fragment {
             stopIdToIndex.put(stopIds[i], i);
         }
 
+        // Check for connection to API
+        checkPing(apiInterface);
+
         // Fetch data for all stop IDs
         if (stopsList.isEmpty()) {
             for (int stopId : stopIds) {
@@ -128,8 +132,8 @@ public class FragmentStop extends Fragment {
             }
         });
 
-        getMyFavoritesStops();
-        //testeoBBDD();
+        // getMyFavoritesStops();
+        // testeoBBDD();
         Log.d("FragmentStop", "Favorites: " + favorites.toString());
 
         return view;
@@ -157,6 +161,22 @@ public class FragmentStop extends Fragment {
             }
         });
     }
+
+    private void checkPing(ApiInterface apiInterface){
+        Call<HelloModel> call = apiInterface.getHello();
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<HelloModel> call, @NonNull Response<HelloModel> response) {}
+            @Override
+            public void onFailure(@NonNull Call<HelloModel> call, @NonNull Throwable t) {
+                hideLoadingIndicator();
+                showNoConnection();
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
     private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
         Call<StopModel> call = apiInterface.getStop(stopId, accessToken);
         call.enqueue(new Callback<>() {
@@ -176,16 +196,12 @@ public class FragmentStop extends Fragment {
                         }
                         Log.d("JustWorking", "Stops loaded for stop ID: " + stopId);
                     } else {
+                        // Not intended to be  visible for user
                         Log.e("API Response", "No stops data for stop ID: " + stopId);
-                        if (getContext() != null) {
-                            Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
-                        }
                     }
                 } else {
+                    // Not intended to be  visible for user
                     Log.e("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
-                    if (getContext() != null) {
-                        Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
-                    }
                 }
                 onResponseReceived();
             }
@@ -194,11 +210,6 @@ public class FragmentStop extends Fragment {
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
                 //No connection
                 Log.e("Call Error", "Unable to connect to EMT API", t);
-                showNoConnection();
-                if (getContext() != null) {
-                    Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
-                }
-                onResponseReceived();
             }
         });
     }
@@ -208,14 +219,14 @@ public class FragmentStop extends Fragment {
         if (responsesReceived == stopIds.length) {
             // Sorting list
             synchronized (stopsList) {
-                Collections.sort(stopsList, Comparator.comparing(stop -> stopIdToIndex.get(Integer.parseInt(stop.getStopId()))));
+                stopsList.sort(Comparator.comparing(stop -> stopIdToIndex.get(Integer.parseInt(stop.getStopId()))));
             }
             adapter.notifyDataSetChanged();
             hideLoadingIndicator();
         }
     }
 
-    // Pretty self-explanatory
+    // Visibility changes
     private void hideLoadingIndicator() {
         loadingIndicator.setVisibility(View.GONE);
     }
