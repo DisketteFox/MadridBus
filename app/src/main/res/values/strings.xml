@@ -6,6 +6,7 @@
     <string name="title_activity_map">Map</string>
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_token">Token</string>
+    <string name="title_activity_login">Login</string>
 
     <string name="title_line_details">Line details</string>
     <string name="title_stop_details">Stop details</string>

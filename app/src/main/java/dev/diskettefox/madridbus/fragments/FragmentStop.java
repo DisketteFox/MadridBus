@@ -18,10 +18,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.loadingindicator.LoadingIndicator;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
@@ -33,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dev.diskettefox.madridbus.LoginActivity;
 import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.adapters.StopAdapter;
@@ -66,6 +69,16 @@ public class FragmentStop extends Fragment {
         loadingIndicator = view.findViewById(R.id.progress_bar);
         noFavorites = view.findViewById(R.id.no_favorites);
         noConnection = view.findViewById(R.id.no_connection);
+
+        MaterialToolbar toolbar = view.findViewById(R.id.my_toolbar);
+        toolbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.token) {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            return false;
+        });
 
         ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         String accessToken = ApiCall.token;

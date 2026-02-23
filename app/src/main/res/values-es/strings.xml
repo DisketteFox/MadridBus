@@ -6,6 +6,7 @@
     <string name="title_activity_map">Mapa</string>
     <string name="title_activity_settings">Ajustes</string>
     <string name="title_activity_token">Token</string>
+    <string name="title_activity_login">Iniciar sesión</string>
 
     <string name="title_line_details">Detalles de línea</string>
     <string name="title_stop_details">Detalles de parada</string>
