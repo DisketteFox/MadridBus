@@ -45,6 +45,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
             </com.google.android.material.search.SearchBar>
+            <LinearLayout
+                android:id="@+id/no_connection"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    app:srcCompat="@drawable/ic_link_off_24dp"
+                    app:tint="?attr/colorOnSurfaceVariant"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="18sp"
+                    android:text="@string/no_connection"
+                    android:textColor="?attr/colorOnSurfaceVariant"/>
+            </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_lines"
                 android:layout_width="match_parent"
@@ -61,7 +84,6 @@
                 tools:listitem="@layout/card_line"
 
                 />
-
             <com.google.android.material.loadingindicator.LoadingIndicator
                 style="@style/Widget.Material3.LoadingIndicator.Contained"
                 android:id="@+id/progress_bar"

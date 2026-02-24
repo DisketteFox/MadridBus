@@ -32,31 +32,31 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.adapters.StopAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
-import dev.diskettefox.madridbus.api.BDMRespuesta;
 import dev.diskettefox.madridbus.api.BaseDatosCall;
 import dev.diskettefox.madridbus.api.BaseDatosInterface;
 import dev.diskettefox.madridbus.api.BaseDatosModel;
+import dev.diskettefox.madridbus.models.HelloModel;
 import dev.diskettefox.madridbus.models.StopModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragmentStop extends Fragment {
-    private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
-    private final ArrayList<String> favorites = new ArrayList<>();
+    private static final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
+    private final ArrayList<BaseDatosModel> favorites = new ArrayList<>();
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
     private LinearLayout noFavorites, noConnection;
 
+    // private final int[] stopIds = {};
     private final int[] stopIds = {5710, 3862, 3542, 4812, 666};
-    private int responsesReceived = 0;
+    private static int responsesReceived = 0;
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
 
     @Override
@@ -77,23 +77,32 @@ public class FragmentStop extends Fragment {
 
         // Show loading screen
         if (stopIds.length != 0) {
-            showLoadingIndicator();
+            if (stopsList.isEmpty()) {
+                showLoadingIndicator();
+            } else {
+                hideLoadingIndicator();
+            }
         } else {
             showNoFavorites();
         }
 
-        /*// Populate the map for sorting
+        // Populate the map for sorting
         for (int i = 0; i < stopIds.length; i++) {
             stopIdToIndex.put(stopIds[i], i);
         }
 
+        // Check for connection to API
+        checkPing(apiInterface);
+
         // Fetch data for all stop IDs
         if (stopsList.isEmpty()) {
+            responsesReceived = 0;
             for (int stopId : stopIds) {
                 fetchStopData(apiInterface, stopId, accessToken);
             }
-        }*/
-        getMyFavoritesStops(apiInterface,accessToken);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
 
         // Search bar
         SearchBar searchBar = view.findViewById(R.id.search_bar_Stops);
@@ -130,40 +139,46 @@ public class FragmentStop extends Fragment {
             }
         });
 
-        /*UUID codigo;
-        for (int i = 0; i < 6; i++) {
-            codigo=UUID.randomUUID();
-
-            Log.d("Codigo Nª"+i,codigo.toString());
-            Log.d("Codigos Nª"+i,"C-: "+codigo);
-            Toast.makeText(getContext(),"C: "+codigo,Toast.LENGTH_SHORT).show();
-        }*/
+        // getMyFavoritesStops();
+        // testeoBBDD();
+        Log.d("FragmentStop", "Favorites: " + favorites.toString());
 
         return view;
     }
 
 
     // Favorites method for database
-    private void getMyFavoritesStops(ApiInterface apiInterface, String accessToken){
+    private void getMyFavoritesStops(){
         BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        Call<BDMRespuesta> callB= baseDatosInterface.llamaFavoritos();
-        callB.enqueue(new Callback<BDMRespuesta>() {
+        Call<BaseDatosModel> callB= baseDatosInterface.llamaFavoritos();
+        callB.enqueue(new Callback<BaseDatosModel>() {
             @Override
-            public void onResponse(Call<BDMRespuesta> call, Response<BDMRespuesta> response) {
+            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
                 if (response.isSuccessful() && response.body()!=null){
-                    BDMRespuesta paradas=response.body();
-                    for (BDMRespuesta.Respuestas parada:paradas.getFavoritos()){
-                        fetchStopData(apiInterface, parada.getParada_id(), accessToken);
-                        Toast.makeText(getContext(),"pa: "+parada.getParada_id(), Toast.LENGTH_SHORT).show();
-                    }
+                    favorites.add(response.body());
                     Log.d("llamado exitoso", "Se han recuperado tus paradas favoritas.");
                 }
             }
             @Override
-            public void onFailure(Call<BDMRespuesta> call, Throwable t) {
+            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
                 Log.e("Call Error", "Error retrieving data for BBDD.", t);
                 if (getContext() != null) {
                     Toast.makeText(getContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+    private void checkPing(ApiInterface apiInterface){
+        Call<HelloModel> call = apiInterface.getHello();
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<HelloModel> call, @NonNull Response<HelloModel> response) {}
+            @Override
+            public void onFailure(@NonNull Call<HelloModel> call, @NonNull Throwable t) {
+                hideLoadingIndicator();
+                showNoConnection();
+                if (getContext() != null) {
+                    Toast.makeText(getContext(), R.string.no_connection, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -187,16 +202,14 @@ public class FragmentStop extends Fragment {
                         }
                         Log.d("JustWorking", "Stops loaded for stop ID: " + stopId);
                     } else {
+                        // Not intended to be  visible for user
                         Log.e("API Response", "No stops data for stop ID: " + stopId);
-                        if (getContext() != null) {
-                            Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
-                        }
+                        showNoConnection();
                     }
                 } else {
+                    // Not intended to be  visible for user
                     Log.e("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
-                    if (getContext() != null) {
-                        Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
-                    }
+                    showNoConnection();
                 }
                 onResponseReceived();
             }
@@ -206,10 +219,6 @@ public class FragmentStop extends Fragment {
                 //No connection
                 Log.e("Call Error", "Unable to connect to EMT API", t);
                 showNoConnection();
-                if (getContext() != null) {
-                    Toast.makeText(getContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
-                }
-                onResponseReceived();
             }
         });
     }
@@ -219,14 +228,16 @@ public class FragmentStop extends Fragment {
         if (responsesReceived == stopIds.length) {
             // Sorting list
             synchronized (stopsList) {
-                Collections.sort(stopsList, Comparator.comparing(stop -> stopIdToIndex.get(Integer.parseInt(stop.getStopId()))));
+                stopsList.sort(Comparator.comparing(stop -> stopIdToIndex.get(Integer.parseInt(stop.getStopId()))));
             }
-            adapter.notifyDataSetChanged();
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
             hideLoadingIndicator();
         }
     }
 
-    // Pretty self-explanatory
+    // Visibility changes
     private void hideLoadingIndicator() {
         loadingIndicator.setVisibility(View.GONE);
     }

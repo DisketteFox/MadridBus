@@ -1,5 +1,6 @@
 package dev.diskettefox.madridbus.api;
 
+import dev.diskettefox.madridbus.models.HelloModel;
 import dev.diskettefox.madridbus.models.LineModel;
 import dev.diskettefox.madridbus.models.StopModel;
 import dev.diskettefox.madridbus.models.TimeModel;
@@ -11,6 +12,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface ApiInterface{
+
+    // Interface for ping
+    @GET("/v1/hello")
+    Call<HelloModel> getHello();
 
     // Interfaces for stops
     @POST("/v1/transport/busemtmad/stops/list/")

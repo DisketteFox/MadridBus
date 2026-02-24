@@ -46,7 +46,7 @@ public class StopActivity extends AppCompatActivity {
     private CardView stopCard;
     private MaterialToolbar materialToolbar;
     private int timesResponsesReceived = 0;
-    private StopModel.Stop parada;
+    private StopModel.Stop stop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +116,7 @@ public class StopActivity extends AppCompatActivity {
                     if (stopModel.getStopsData() != null && !stopModel.getStopsData().isEmpty()) {
                         List<StopModel.Stop> stops = stopModel.getStopsData().get(0).getStops();
                         if (stops != null && !stops.isEmpty()) {
-                            StopModel.Stop stop = stops.get(0);
+                            stop = stops.get(0);
 
                             if (stop.getName() != null) {
                                 stopNameTextView.setText(stop.getName());
@@ -124,7 +124,6 @@ public class StopActivity extends AppCompatActivity {
                             if (stop.getStopId() != null) {
                                 stopIdTextView.setText(stop.getStopId());
                             }
-                            parada=stop;
                             linesList.clear();
                             List<StopModel.Dataline> dataLines = stop.getDataLine();
                             if (dataLines != null && !dataLines.isEmpty()) {
@@ -143,6 +142,7 @@ public class StopActivity extends AppCompatActivity {
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
                 Log.e("StopActivity", "Error fetching stop details", t);
                 Toast.makeText(getBaseContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
+                finish();
                 loadingIndicator.setVisibility(View.GONE);
             }
         });
@@ -186,6 +186,7 @@ public class StopActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Call<TimeModel> call, @NonNull Throwable t) {
                         Log.e("StopActivity", "Error fetching times for line " + line.getLabel(), t);
                         Toast.makeText(getBaseContext(), R.string.error_time, Toast.LENGTH_SHORT).show();
+                        finish();
                         checkAllTimesReceived();
                     }
                 });
@@ -246,16 +247,16 @@ public class StopActivity extends AppCompatActivity {
             return true;
         } else if (itemId == R.id.favorite) {
             // Falta que el icono haga algo cuando es pulsado
-            if (!parada.isFavorite()){
-                parada.setFavorite(true);
+            if (!stop.isFavorite()){
+                stop.setFavorite(true);
                 item.setIcon(R.drawable.ic_favorite_filled_24dp);
-                addFavoriteBBDD(parada.getStopId(),parada.isFavorite());
+                //addFavoriteBBDD(parada.getStopId(),parada.isFavorite());
                 Log.d("StopActivity", "Favorite Stops is active clicked");
             }else{
-                parada.setFavorite(false);
-                item.setIcon(R.drawable.ic_favorite_24dp);
-                removeFavoriteBBDD(parada.getStopId(),parada.isFavorite());
                 Log.d("StopActivity2", "Favorite Stops is inactive clicked Detele");
+                stop.setFavorite(false);
+                item.setIcon(R.drawable.ic_favorite_24dp);
+                //removeFavoriteBBDD(parada.getStopId(),parada.isFavorite());
             }
             return true;
         }
