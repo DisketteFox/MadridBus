@@ -16,7 +16,7 @@ public class BBDDAO {
     public static class Respuestas{
 
         @SerializedName("parada_id")
-        private int parada_id;
+        private String parada_id;
 
         @SerializedName("is_favorite")
         private boolean estado;
@@ -25,7 +25,7 @@ public class BBDDAO {
             return estado;
         }
 
-        public int getParada_id() {
+        public String getParada_id() {
             return parada_id;
         }
     }

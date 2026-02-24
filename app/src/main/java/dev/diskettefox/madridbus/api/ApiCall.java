@@ -20,9 +20,6 @@ public class ApiCall {
                     .addInterceptor(interceptor)
                     .addInterceptor(chain -> {
                         Request request=chain.request().newBuilder()
-                                .addHeader(
-                                        "X-ApiKey",token
-                                )
                                 .build();
                         return chain.proceed(request);
                     })

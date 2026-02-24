@@ -25,7 +25,6 @@ import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,7 @@ public class FragmentStop extends Fragment {
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
     private LinearLayout noFavorites, noConnection;
-    private ArrayList<BaseDatosModel> paradasFav =new ArrayList<>();
+    private static ArrayList<BaseDatosModel> paradasFav = new ArrayList<>();
     private static int responsesReceived = 0;
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
 
@@ -63,8 +62,6 @@ public class FragmentStop extends Fragment {
         loadingIndicator = view.findViewById(R.id.progress_bar);
         noFavorites = view.findViewById(R.id.no_favorites);
         noConnection = view.findViewById(R.id.no_connection);
-
-        getMyFavoritesStops();
 
         MaterialToolbar toolbar = view.findViewById(R.id.my_toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
@@ -84,10 +81,50 @@ public class FragmentStop extends Fragment {
         adapter = new StopAdapter(getContext(), stopsList,favString);
         recyclerStops.setAdapter(adapter);
 
-        paradasFav.add(new BaseDatosModel("5710",true));
+
+        BaseDatosInterface baseDatosInterface = BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
+        Call<BBDDAO> callB = baseDatosInterface.llamaFavoritos();
+        synchronized (paradasFav){
+            callB.enqueue(new Callback<BBDDAO>() {
+                @Override
+                public void onResponse(@NonNull Call<BBDDAO> call, @NonNull Response<BBDDAO> response) {
+                    if (response.body() != null && response.isSuccessful()) {
+                        List<BBDDAO.Respuestas> favs = response.body().getFavoritos();
+                        for (BBDDAO.Respuestas dato:favs){
+                            paradasFav.add(new BaseDatosModel(dato.getParada_id(),dato.isEstado()));
+                        }
+                        Toast.makeText(getContext(),"len denbtro: "+paradasFav.size(),Toast.LENGTH_SHORT).show();
+                    }
+                    Log.d("llamado exitoso", "Se han recuperado tus paradas favoritas.");
+                }
+                @Override
+                public void onFailure(Call<BBDDAO> call, Throwable t) {
+                    Log.e("Call Error", "Unable to connect to BBDD local", t);
+                    showNoConnection();
+                }
+            });
+
+        }
+
+
+        if (!paradasFav.isEmpty()){
+            try {
+                adapter.notifyDataSetChanged();
+                for (BaseDatosModel parada:paradasFav){
+                    fetchStopData(apiInterface,parada.getParada_id(), accessToken);
+                }
+
+                favString.clear();
+                paradasFav.clear();
+                stopsList.clear();
+            }
+            catch (NumberFormatException e) {
+                Log.e("StopActivity", "Error while refreshing", e);
+                Toast.makeText(getContext(), R.string.error_refreshing, Toast.LENGTH_SHORT).show();
+            }
+        }
 
         // Show loading screen
-
         if (!paradasFav.isEmpty()) {
             if (stopsList.isEmpty()) {
                 showLoadingIndicator();
@@ -103,18 +140,8 @@ public class FragmentStop extends Fragment {
         for (int i = 0; i < paradasFav.size(); i++) {
             stopIdToIndex.put(Integer.valueOf(paradasFav.get(i).getParada_id()), i);
         }
-        paradasFav.add(new BaseDatosModel("2802",true));
-
-        paradasFav.add(new BaseDatosModel("376",true));
-
-        paradasFav.add(new BaseDatosModel("44",true));
-
-        paradasFav.add(new BaseDatosModel("765",true));
 
 
-
-        // Check for connection to API
-        checkPing(apiInterface);
 
         // Check for connection to API
         checkPing(apiInterface);
@@ -124,8 +151,8 @@ public class FragmentStop extends Fragment {
             responsesReceived = 0;
             for (BaseDatosModel stopId : paradasFav) {
                 fetchStopData(apiInterface, stopId.getParada_id(), accessToken);
-                synchronized (favString){
-                    favString.add(stopId.getParada_id()+";"+stopId.getIs_favorite());
+                synchronized (favString) {
+                    favString.add(stopId.getParada_id() + ";" + stopId.getIs_favorite());
                 }
             }
         } else {
@@ -153,7 +180,7 @@ public class FragmentStop extends Fragment {
                                 intent.putStringArrayListExtra("favs", favString);
                                 context.startActivity(intent);
                             }
-                            
+
                             searchView.hide();
                         } catch (NumberFormatException e) {
                             if (getContext() != null) {
@@ -172,26 +199,7 @@ public class FragmentStop extends Fragment {
 
 
     // Favorites method for database
-    private void getMyFavoritesStops(){
-        BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        Call<BBDDAO> callB= baseDatosInterface.llamaFavoritos();
-        callB.enqueue(new Callback<BBDDAO>() {
-            @Override
-            public void onResponse(Call<BBDDAO> call, Response<BBDDAO> response) {
-                if (response.body() != null && response.body()!=null) {
-                    for (BBDDAO.Respuestas parada: response.body().getFavoritos()){
-                        //stopIds.add(parada.getParada_id());
-                    }
-                    Log.d("llamado exitoso", "Se han recuperado tus paradas favoritas.");
-                }
-            }
-            @Override
-            public void onFailure(Call<BBDDAO> call, Throwable t) {
-                Log.e("Call Error", "Unable to connect to BBDD local", t);
-                showNoConnection();
-            }
-        });
-    }
+
     private void checkPing(ApiInterface apiInterface){
         Call<HelloModel> call = apiInterface.getHello();
         call.enqueue(new Callback<>() {
