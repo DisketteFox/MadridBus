@@ -16,7 +16,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import java.util.ArrayList;
@@ -25,9 +24,6 @@ import java.util.List;
 import dev.diskettefox.madridbus.adapters.StopActivityAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
-import dev.diskettefox.madridbus.api.BaseDatosCall;
-import dev.diskettefox.madridbus.api.BaseDatosInterface;
-import dev.diskettefox.madridbus.api.BaseDatosModel;
 import dev.diskettefox.madridbus.api.TimeRequest;
 import dev.diskettefox.madridbus.models.StopModel;
 import dev.diskettefox.madridbus.models.TimeModel;
@@ -48,7 +44,6 @@ public class StopActivity extends AppCompatActivity {
     private TextView stopNameTextView;
     private LoadingIndicator loadingIndicator;
     private CardView stopCard;
-    private MaterialToolbar materialToolbar;
     private int timesResponsesReceived = 0;
     private StopModel.Stop stop;
     private MenuItem itemFav;
@@ -160,8 +155,6 @@ public class StopActivity extends AppCompatActivity {
                 loadingIndicator.setVisibility(View.GONE);
             }
         });
-
-        materialToolbar = findViewById(R.id.my_toolbar);
     }
 
     private void fetchArrivalTimes(String stopId, ApiInterface apiInterface) {
@@ -171,7 +164,7 @@ public class StopActivity extends AppCompatActivity {
             try {
                 int lineId = Integer.parseInt(line.getLineId());
                 Call<TimeModel> timeCall = apiInterface.getTime(stopId, lineId, ApiCall.token, TimeRequest.get());
-                
+
                 Log.d("StopActivity", "Fetching time for line: " + lineId + " at stop: " + stopId);
 
                 timeCall.enqueue(new Callback<>() {
@@ -266,7 +259,6 @@ public class StopActivity extends AppCompatActivity {
             }
             return true;
         } else if (itemId == R.id.favorite) {
-            // Falta que el icono haga algo cuando es pulsado
             if (!stop.isFavorite()){
                 stop.setFavorite(true);
                 item.setIcon(R.drawable.ic_favorite_filled_24dp);
@@ -284,41 +276,9 @@ public class StopActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void addFavoriteBBDD(String paradaid,Boolean estado){
-        BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        BaseDatosModel modelo=new BaseDatosModel(paradaid,estado);
-        Call<BaseDatosModel> callB= baseDatosInterface.anadeFavorito(modelo);
-        callB.enqueue(new Callback<BaseDatosModel>() {
-            @Override
-            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
-                if (response.isSuccessful() && response.body()!=null){
-                    Log.d("Exit call", "Succefully added to favorites");
-                    Toast.makeText(getBaseContext(), R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
-                Log.e("Call Error", "Error retrieving data for BBDD.", t);
-                Toast.makeText(getBaseContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
-            }
-        });
+        // To implement
     }
     private void removeFavoriteBBDD(String paradaid,Boolean estado){
-        BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        BaseDatosModel modelo=new BaseDatosModel(paradaid,estado);
-        Call<BaseDatosModel> callB= baseDatosInterface.elimidaDFavoritos(modelo);
-        callB.enqueue(new Callback<BaseDatosModel>() {
-            @Override
-            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
-                if (response.isSuccessful() && response.body()!=null){
-                    Log.d("Exit call", "Succesfully removed from favorites");
-                    Toast.makeText(getBaseContext(), R.string.message_favorite_remove, Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
-                Log.e("Call Error", "Error retrieving data for BBDD.", t);
-                Toast.makeText(getBaseContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
-            }
-        });
+        // To implement
     }
 }

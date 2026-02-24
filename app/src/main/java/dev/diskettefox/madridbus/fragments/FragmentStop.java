@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,10 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.loadingindicator.LoadingIndicator;
-import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,10 +33,6 @@ import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.adapters.StopAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
-import dev.diskettefox.madridbus.api.BBDDAO;
-import dev.diskettefox.madridbus.api.BaseDatosCall;
-import dev.diskettefox.madridbus.api.BaseDatosInterface;
-import dev.diskettefox.madridbus.api.BaseDatosModel;
 import dev.diskettefox.madridbus.models.HelloModel;
 import dev.diskettefox.madridbus.models.StopModel;
 import retrofit2.Call;
@@ -47,11 +41,12 @@ import retrofit2.Response;
 
 public class FragmentStop extends Fragment {
     private static final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
-    private final ArrayList<String> favString = new ArrayList<>();
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
     private LinearLayout noFavorites, noConnection;
-    private static ArrayList<BaseDatosModel> paradasFav = new ArrayList<>();
+
+    // private final int[] stopIds = {};
+    private final int[] stopIds = {5710, 3862, 3542, 4812, 666};
     private static int responsesReceived = 0;
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
 
@@ -78,54 +73,11 @@ public class FragmentStop extends Fragment {
 
         // Initialize RecyclerView and Adapter
         recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new StopAdapter(getContext(), stopsList,favString);
+        adapter = new StopAdapter(getContext(), stopsList);
         recyclerStops.setAdapter(adapter);
 
-
-        BaseDatosInterface baseDatosInterface = BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        Call<BBDDAO> callB = baseDatosInterface.llamaFavoritos();
-        synchronized (paradasFav){
-            callB.enqueue(new Callback<BBDDAO>() {
-                @Override
-                public void onResponse(@NonNull Call<BBDDAO> call, @NonNull Response<BBDDAO> response) {
-                    if (response.body() != null && response.isSuccessful()) {
-                        List<BBDDAO.Respuestas> favs = response.body().getFavoritos();
-                        for (BBDDAO.Respuestas dato:favs){
-                            paradasFav.add(new BaseDatosModel(dato.getParada_id(),dato.isEstado()));
-                        }
-                        Toast.makeText(getContext(),"len denbtro: "+paradasFav.size(),Toast.LENGTH_SHORT).show();
-                    }
-                    Log.d("llamado exitoso", "Se han recuperado tus paradas favoritas.");
-                }
-                @Override
-                public void onFailure(Call<BBDDAO> call, Throwable t) {
-                    Log.e("Call Error", "Unable to connect to BBDD local", t);
-                    showNoConnection();
-                }
-            });
-
-        }
-
-
-        if (!paradasFav.isEmpty()){
-            try {
-                adapter.notifyDataSetChanged();
-                for (BaseDatosModel parada:paradasFav){
-                    fetchStopData(apiInterface,parada.getParada_id(), accessToken);
-                }
-
-                favString.clear();
-                paradasFav.clear();
-                stopsList.clear();
-            }
-            catch (NumberFormatException e) {
-                Log.e("StopActivity", "Error while refreshing", e);
-                Toast.makeText(getContext(), R.string.error_refreshing, Toast.LENGTH_SHORT).show();
-            }
-        }
-
         // Show loading screen
-        if (!paradasFav.isEmpty()) {
+        if (stopIds.length != 0) {
             if (stopsList.isEmpty()) {
                 showLoadingIndicator();
             } else {
@@ -135,13 +87,10 @@ public class FragmentStop extends Fragment {
             showNoFavorites();
         }
 
-
         // Populate the map for sorting
-        for (int i = 0; i < paradasFav.size(); i++) {
-            stopIdToIndex.put(Integer.valueOf(paradasFav.get(i).getParada_id()), i);
+        for (int i = 0; i < stopIds.length; i++) {
+            stopIdToIndex.put(stopIds[i], i);
         }
-
-
 
         // Check for connection to API
         checkPing(apiInterface);
@@ -149,56 +98,45 @@ public class FragmentStop extends Fragment {
         // Fetch data for all stop IDs
         if (stopsList.isEmpty()) {
             responsesReceived = 0;
-            for (BaseDatosModel stopId : paradasFav) {
-                fetchStopData(apiInterface, stopId.getParada_id(), accessToken);
-                synchronized (favString) {
-                    favString.add(stopId.getParada_id() + ";" + stopId.getIs_favorite());
-                }
+            for (int stopId : stopIds) {
+                fetchStopData(apiInterface, stopId, accessToken);
             }
         } else {
             adapter.notifyDataSetChanged();
         }
 
         // Search bar
-        SearchBar searchBar = view.findViewById(R.id.search_bar_Stops);
         SearchView searchView = view.findViewById(R.id.search_view_Stops);
 
         // Handle Search action on keyboard
-        searchView.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
-                    String text = v.getText().toString();
-                    if (!text.isEmpty()) {
-                        try {
-                            int searchStopId = Integer.parseInt(text);
-                            Log.d("Search", "Search button clicked for stop ID: " + searchStopId);
-                            Context context = getContext();
-                            if (context != null) {
-                                Intent intent = new Intent(context, StopActivity.class);
-                                intent.putExtra("stopId", String.valueOf(searchStopId));
-                                intent.putStringArrayListExtra("favs", favString);
-                                context.startActivity(intent);
-                            }
+        searchView.getEditText().setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                String text = v.getText().toString();
+                if (!text.isEmpty()) {
+                    try {
+                        int searchStopId = Integer.parseInt(text);
+                        Log.d("Search", "Search button clicked for stop ID: " + searchStopId);
 
-                            searchView.hide();
-                        } catch (NumberFormatException e) {
-                            if (getContext() != null) {
-                                Toast.makeText(getContext(), "Invalid Stop ID", Toast.LENGTH_SHORT).show();
-                            }
+                        Context context = getContext();
+                        if (context != null) {
+                            Intent intent = new Intent(context, StopActivity.class);
+                            intent.putExtra("stopId", String.valueOf(searchStopId));
+                            context.startActivity(intent);
+                        }
+
+                        searchView.hide();
+                    } catch (NumberFormatException e) {
+                        if (getContext() != null) {
+                            Toast.makeText(getContext(), "Invalid Stop ID", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    return true;
                 }
-                return false;
+                return true;
             }
+            return false;
         });
-
         return view;
     }
-
-
-    // Favorites method for database
 
     private void checkPing(ApiInterface apiInterface){
         Call<HelloModel> call = apiInterface.getHello();
@@ -215,7 +153,7 @@ public class FragmentStop extends Fragment {
             }
         });
     }
-    private void fetchStopData(ApiInterface apiInterface, String stopId, String accessToken) {
+    private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
         Call<StopModel> call = apiInterface.getStop(stopId, accessToken);
         call.enqueue(new Callback<>() {
             @Override
@@ -257,9 +195,11 @@ public class FragmentStop extends Fragment {
 
     private void onResponseReceived() {
         responsesReceived++;
-        if (responsesReceived == paradasFav.size()) {
+        if (responsesReceived == stopIds.length) {
             // Sorting list
-
+            synchronized (stopsList) {
+                stopsList.sort(Comparator.comparing(stop -> stopIdToIndex.get(Integer.parseInt(stop.getStopId()))));
+            }
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }
