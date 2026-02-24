@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class BDMRespuesta {
+public class BBDDAO {
 
     @SerializedName("data")
     ArrayList<Respuestas>favoritos=new ArrayList<>();
@@ -13,7 +13,7 @@ public class BDMRespuesta {
         return favoritos;
     }
 
-    public class Respuestas{
+    public static class Respuestas{
 
         @SerializedName("parada_id")
         private int parada_id;

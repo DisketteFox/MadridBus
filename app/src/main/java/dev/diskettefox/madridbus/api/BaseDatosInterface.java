@@ -2,7 +2,6 @@ package dev.diskettefox.madridbus.api;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -15,6 +14,6 @@ public interface BaseDatosInterface {
     Call<BaseDatosModel>elimidaDFavoritos(@Body BaseDatosModel parada);
 
     @GET("/api/getfavoritos/")
-    Call<BDMRespuesta>llamaFavoritos();
+    Call<BBDDAO>llamaFavoritos();
     // aun no fue testeado.
 }

@@ -250,13 +250,13 @@ public class StopActivity extends AppCompatActivity {
             if (!stop.isFavorite()){
                 stop.setFavorite(true);
                 item.setIcon(R.drawable.ic_favorite_filled_24dp);
-                //addFavoriteBBDD(parada.getStopId(),parada.isFavorite());
+                addFavoriteBBDD(stop.getStopId(),stop.isFavorite());
                 Log.d("StopActivity", "Favorite Stops is active clicked");
             }else{
                 Log.d("StopActivity2", "Favorite Stops is inactive clicked Detele");
                 stop.setFavorite(false);
                 item.setIcon(R.drawable.ic_favorite_24dp);
-                //removeFavoriteBBDD(parada.getStopId(),parada.isFavorite());
+                removeFavoriteBBDD(stop.getStopId(),stop.isFavorite());
             }
             return true;
         }
