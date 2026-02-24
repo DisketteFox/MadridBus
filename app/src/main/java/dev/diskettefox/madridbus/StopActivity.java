@@ -40,6 +40,10 @@ public class StopActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private StopActivityAdapter adapter;
     private final List<StopModel.Dataline> linesList = new ArrayList<>();
+
+    ArrayList<String> idsFavs=new ArrayList<>();
+    private String favorita="";
+
     private TextView stopIdTextView;
     private TextView stopNameTextView;
     private LoadingIndicator loadingIndicator;
@@ -47,6 +51,7 @@ public class StopActivity extends AppCompatActivity {
     private MaterialToolbar materialToolbar;
     private int timesResponsesReceived = 0;
     private StopModel.Stop stop;
+    private MenuItem itemFav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class StopActivity extends AppCompatActivity {
 
         loadingIndicator = findViewById(R.id.progress_bar);
         stopCard = findViewById(R.id.busCard_Stop);
+        idsFavs=getIntent().getStringArrayListExtra("favs");
 
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -68,9 +74,17 @@ public class StopActivity extends AppCompatActivity {
         stopCard.setVisibility(View.GONE);
         loadingIndicator.setVisibility(View.VISIBLE);
 
+
+        if (!idsFavs.isEmpty()){
+            for (String parada:idsFavs){
+                if (parada.split(";")[0].equals(stopId)){
+                    favorita=parada;
+                }
+            }
+        }
+
         stopIdTextView = findViewById(R.id.stop_id);
         stopNameTextView = findViewById(R.id.stop_name);
-
         if (stopId != null) {
             stopIdTextView.setText(stopId);
         }
@@ -83,7 +97,7 @@ public class StopActivity extends AppCompatActivity {
 
         if (stopId != null && !stopId.isEmpty()) {
             try {
-                fetchStopDetails(Integer.parseInt(stopId));
+                fetchStopDetails(stopId);
             } catch (NumberFormatException e) {
                 Log.e("StopActivity", "Invalid stop ID format", e);
                 Toast.makeText(getBaseContext(), R.string.invalid_stop, Toast.LENGTH_SHORT).show();
@@ -91,7 +105,7 @@ public class StopActivity extends AppCompatActivity {
         }
     }
 
-    private void fetchStopDetails(int stopId) {
+    private void fetchStopDetails(String stopId) {
         ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         Call<StopModel> call = apiInterface.getStop(stopId, ApiCall.token);
 
@@ -150,7 +164,7 @@ public class StopActivity extends AppCompatActivity {
         materialToolbar = findViewById(R.id.my_toolbar);
     }
 
-    private void fetchArrivalTimes(int stopId, ApiInterface apiInterface) {
+    private void fetchArrivalTimes(String stopId, ApiInterface apiInterface) {
         timesResponsesReceived = 0;
         for (int i = 0; i < linesList.size(); i++) {
             StopModel.Dataline line = linesList.get(i);
@@ -221,6 +235,12 @@ public class StopActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_stop, menu);
+        if (!favorita.isEmpty()){
+            if (favorita.split(";")[1].equals("true")){
+                itemFav=menu.findItem(R.id.favorite);
+                itemFav.setIcon(R.drawable.ic_favorite_filled_24dp);
+            }
+        }
         return true;
     }
 
@@ -238,7 +258,7 @@ public class StopActivity extends AppCompatActivity {
                     loadingIndicator.setVisibility(View.VISIBLE);
                     linesList.clear();
                     adapter.notifyDataSetChanged();
-                    fetchStopDetails(Integer.parseInt(stopId));
+                    fetchStopDetails(stopId);
                 } catch (NumberFormatException e) {
                     Log.e("StopActivity", "Error while refreshing", e);
                     Toast.makeText(getBaseContext(), R.string.error_refreshing, Toast.LENGTH_SHORT).show();
@@ -257,6 +277,7 @@ public class StopActivity extends AppCompatActivity {
                 stop.setFavorite(false);
                 item.setIcon(R.drawable.ic_favorite_24dp);
                 removeFavoriteBBDD(stop.getStopId(),stop.isFavorite());
+                Toast.makeText(getBaseContext(),"Favorite Stops is active clicked",Toast.LENGTH_SHORT).show();
             }
             return true;
         }

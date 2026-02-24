@@ -7,4 +7,11 @@ public class BaseDatosModel {
         this.parada_id = parada_id;
         this.is_favorite = is_favorite;
     }
+    public Boolean getIs_favorite() {
+        return is_favorite;
+    }
+
+    public String getParada_id() {
+        return parada_id;
+    }
 }

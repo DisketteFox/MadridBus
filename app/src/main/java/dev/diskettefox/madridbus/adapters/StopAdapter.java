@@ -25,10 +25,12 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.ViewHolder> {
 
     private final Context context;
     private final ArrayList<StopModel.Stop> stopsList;
+    private final ArrayList<String> favs;
 
-    public StopAdapter(Context context, ArrayList<StopModel.Stop> stopsList) {
+    public StopAdapter(Context context, ArrayList<StopModel.Stop> stopsList,ArrayList<String>favoritos) {
         this.context = context;
         this.stopsList = stopsList;
+        this.favs=favoritos;
     }
 
     @NonNull
@@ -51,6 +53,7 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.ViewHolder> {
                 Intent intent = new Intent(context, StopActivity.class);
                 intent.putExtra("stopId", stop.getStopId());
                 intent.putExtra("stopName", stop.getName());
+                intent.putStringArrayListExtra("favs", favs);
                 context.startActivity(intent);
             });
 

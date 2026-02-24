@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiCall {
     public static String BASE_URL="https://datos.emtmadrid.es/";
-    public static final String token="095a36d6-d0a2-4fd2-9365-8ecaec30f2fa";
+    public static String token="095a36d6-d0a2-4fd2-9365-8ecaec30f2fa";
     private static Retrofit retrofit;
 
     public static Retrofit callApi(){
@@ -34,5 +34,8 @@ public class ApiCall {
                     .build();
         }
         return retrofit;
+    }
+    public static void setToken(String newToken) {
+        token = newToken;
     }
 }
