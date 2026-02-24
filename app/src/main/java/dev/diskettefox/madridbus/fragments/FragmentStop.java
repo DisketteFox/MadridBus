@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dev.diskettefox.madridbus.FavoritesManager;
 import dev.diskettefox.madridbus.LoginActivity;
 import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.StopActivity;
@@ -45,9 +46,8 @@ public class FragmentStop extends Fragment {
     private LoadingIndicator loadingIndicator;
     private LinearLayout noFavorites, noConnection;
 
-    // private final int[] stopIds = {};
-    private final int[] stopIds = {5710, 3862, 3542, 4812, 666};
-    private static int responsesReceived = 0;
+    private List<Integer> stopIds = new ArrayList<>();
+    private int responsesReceived = 0;
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
 
     @Override
@@ -68,42 +68,10 @@ public class FragmentStop extends Fragment {
             return false;
         });
 
-        ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
-        String accessToken = ApiCall.token;
-
         // Initialize RecyclerView and Adapter
         recyclerStops.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new StopAdapter(getContext(), stopsList);
         recyclerStops.setAdapter(adapter);
-
-        // Show loading screen
-        if (stopIds.length != 0) {
-            if (stopsList.isEmpty()) {
-                showLoadingIndicator();
-            } else {
-                hideLoadingIndicator();
-            }
-        } else {
-            showNoFavorites();
-        }
-
-        // Populate the map for sorting
-        for (int i = 0; i < stopIds.length; i++) {
-            stopIdToIndex.put(stopIds[i], i);
-        }
-
-        // Check for connection to API
-        checkPing(apiInterface);
-
-        // Fetch data for all stop IDs
-        if (stopsList.isEmpty()) {
-            responsesReceived = 0;
-            for (int stopId : stopIds) {
-                fetchStopData(apiInterface, stopId, accessToken);
-            }
-        } else {
-            adapter.notifyDataSetChanged();
-        }
 
         // Search bar
         SearchView searchView = view.findViewById(R.id.search_view_Stops);
@@ -138,6 +106,48 @@ public class FragmentStop extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshFavorites();
+    }
+
+    private void refreshFavorites() {
+        if (getContext() == null) return;
+        
+        stopIds = FavoritesManager.getFavorites(getContext());
+        stopsList.clear();
+        stopIdToIndex.clear();
+        responsesReceived = 0;
+        
+        noConnection.setVisibility(View.GONE);
+        noFavorites.setVisibility(View.GONE);
+
+        if (stopIds.isEmpty()) {
+            hideLoadingIndicator();
+            showNoFavorites();
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
+        showLoadingIndicator();
+        
+        // Populate the map for sorting
+        for (int i = 0; i < stopIds.size(); i++) {
+            stopIdToIndex.put(stopIds.get(i), i);
+        }
+
+        ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
+        String accessToken = ApiCall.token;
+
+        // Check for connection to API
+        checkPing(apiInterface);
+
+        for (int stopId : stopIds) {
+            fetchStopData(apiInterface, stopId, accessToken);
+        }
+    }
+
     private void checkPing(ApiInterface apiInterface){
         Call<HelloModel> call = apiInterface.getHello();
         call.enqueue(new Callback<>() {
@@ -153,6 +163,7 @@ public class FragmentStop extends Fragment {
             }
         });
     }
+    
     private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
         Call<StopModel> call = apiInterface.getStop(stopId, accessToken);
         call.enqueue(new Callback<>() {
@@ -160,7 +171,6 @@ public class FragmentStop extends Fragment {
             public void onResponse(@NonNull Call<StopModel> call, @NonNull Response<StopModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     StopModel stop = response.body();
-                    // Process the response
                     if (stop.getStopsData() != null) {
                         for (StopModel.Data data : stop.getStopsData()) {
                             List<StopModel.Stop> stops = data.getStops();
@@ -170,59 +180,54 @@ public class FragmentStop extends Fragment {
                                 }
                             }
                         }
-                        Log.d("JustWorking", "Stops loaded for stop ID: " + stopId);
                     } else {
-                        // Not intended to be  visible for user
                         Log.e("API Response", "No stops data for stop ID: " + stopId);
-                        showNoConnection();
                     }
                 } else {
-                    // Not intended to be  visible for user
-                    Log.e("API Response", "Failed response for stop ID: " + stopId + ", Response: " + response);
-                    showNoConnection();
+                    Log.e("API Response", "Failed response for stop ID: " + stopId);
                 }
                 onResponseReceived();
             }
 
             @Override
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
-                //No connection
                 Log.e("Call Error", "Unable to connect to EMT API", t);
-                showNoConnection();
+                onResponseReceived(); // Still need to count it to hide loading
             }
         });
     }
 
     private void onResponseReceived() {
         responsesReceived++;
-        if (responsesReceived == stopIds.length) {
+        if (responsesReceived >= stopIds.size()) {
             // Sorting list
             synchronized (stopsList) {
-                stopsList.sort(Comparator.comparing(stop -> stopIdToIndex.get(Integer.parseInt(stop.getStopId()))));
+                stopsList.sort(Comparator.comparing(stop -> {
+                    Integer index = stopIdToIndex.get(Integer.parseInt(stop.getStopId()));
+                    return index != null ? index : Integer.MAX_VALUE;
+                }));
             }
             if (adapter != null) {
                 adapter.notifyDataSetChanged();
             }
             hideLoadingIndicator();
+            
+            if (stopsList.isEmpty() && !stopIds.isEmpty()) {
+                showNoConnection();
+            }
         }
     }
 
-    // Visibility changes
     private void hideLoadingIndicator() {
-        loadingIndicator.setVisibility(View.GONE);
+        if (loadingIndicator != null) loadingIndicator.setVisibility(View.GONE);
     }
     private void showLoadingIndicator() {
-        loadingIndicator.setVisibility(View.VISIBLE);
+        if (loadingIndicator != null) loadingIndicator.setVisibility(View.VISIBLE);
     }
     private void showNoFavorites() {
-        noFavorites.setVisibility(View.VISIBLE);
+        if (noFavorites != null) noFavorites.setVisibility(View.VISIBLE);
     }
     private void showNoConnection() {
-        noConnection.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        if (noConnection != null) noConnection.setVisibility(View.VISIBLE);
     }
 }

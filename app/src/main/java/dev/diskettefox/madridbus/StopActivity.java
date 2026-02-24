@@ -112,6 +112,10 @@ public class StopActivity extends AppCompatActivity {
                         List<StopModel.Stop> stops = stopModel.getStopsData().get(0).getStops();
                         if (stops != null && !stops.isEmpty()) {
                             stop = stops.get(0);
+                            
+                            // Initialize favorite state
+                            stop.setFavorite(FavoritesManager.isFavorite(StopActivity.this, stop.getStopId()));
+                            invalidateOptionsMenu();
 
                             if (stop.getName() != null) {
                                 stopNameTextView.setText(stop.getName());
@@ -214,6 +218,23 @@ public class StopActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_stop, menu);
+        
+        MenuItem favoriteItem = menu.findItem(R.id.favorite);
+        String stopId = getIntent().getStringExtra("stopId");
+        
+        boolean isFavorite = false;
+        if (stop != null) {
+            isFavorite = stop.isFavorite();
+        } else if (stopId != null) {
+            isFavorite = FavoritesManager.isFavorite(this, stopId);
+        }
+        
+        if (isFavorite) {
+            favoriteItem.setIcon(R.drawable.ic_favorite_filled_24dp);
+        } else {
+            favoriteItem.setIcon(R.drawable.ic_favorite_24dp);
+        }
+        
         return true;
     }
 
@@ -239,25 +260,44 @@ public class StopActivity extends AppCompatActivity {
             }
             return true;
         } else if (itemId == R.id.favorite) {
-            if (!stop.isFavorite()){
-                stop.setFavorite(true);
-                item.setIcon(R.drawable.ic_favorite_filled_24dp);
-                //addFavoriteBBDD(parada.getStopId(),parada.isFavorite());
-                Log.d("StopActivity", "Favorite Stops is active clicked");
-            }else{
-                Log.d("StopActivity2", "Favorite Stops is inactive clicked Detele");
-                stop.setFavorite(false);
-                item.setIcon(R.drawable.ic_favorite_24dp);
-                //removeFavoriteBBDD(parada.getStopId(),parada.isFavorite());
+            String currentStopId = stop != null ? stop.getStopId() : getIntent().getStringExtra("stopId");
+            if (currentStopId == null) return true;
+
+            if (stop == null) {
+                // If stop data isn't loaded yet, create a dummy one or handle it
+                boolean isFav = FavoritesManager.isFavorite(this, currentStopId);
+                if (!isFav) {
+                    addFavorite(currentStopId, true);
+                    item.setIcon(R.drawable.ic_favorite_filled_24dp);
+                } else {
+                    removeFavorite(currentStopId, false);
+                    item.setIcon(R.drawable.ic_favorite_24dp);
+                }
+            } else {
+                if (!stop.isFavorite()) {
+                    addFavorite(stop.getStopId(), true);
+                    item.setIcon(R.drawable.ic_favorite_filled_24dp);
+                    stop.setFavorite(true);
+                } else {
+                    removeFavorite(stop.getStopId(), false);
+                    item.setIcon(R.drawable.ic_favorite_24dp);
+                    stop.setFavorite(false);
+                }
             }
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    private void addFavoriteBBDD(String paradaid,Boolean estado){
-        // Yet to be implemented
+    
+    private void addFavorite(String paradaid, Boolean estado) {
+        FavoritesManager.addFavorite(this, paradaid);
+        Toast.makeText(this, R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
+        Log.d("StopActivity", "Favorite added: " + paradaid);
     }
-    private void removeFavoriteBBDD(String paradaid,Boolean estado){
-        // Yet to be implemented
+    
+    private void removeFavorite(String paradaid, Boolean estado) {
+        FavoritesManager.removeFavorite(this, paradaid);
+        Toast.makeText(this, R.string.message_favorite_remove, Toast.LENGTH_SHORT).show();
+        Log.d("StopActivity", "Favorite removed: " + paradaid);
     }
 }
