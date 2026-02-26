@@ -16,7 +16,6 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import java.util.ArrayList;
@@ -25,9 +24,6 @@ import java.util.List;
 import dev.diskettefox.madridbus.adapters.StopActivityAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
-import dev.diskettefox.madridbus.api.BaseDatosCall;
-import dev.diskettefox.madridbus.api.BaseDatosInterface;
-import dev.diskettefox.madridbus.api.BaseDatosModel;
 import dev.diskettefox.madridbus.api.TimeRequest;
 import dev.diskettefox.madridbus.models.StopModel;
 import dev.diskettefox.madridbus.models.TimeModel;
@@ -40,18 +36,12 @@ public class StopActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private StopActivityAdapter adapter;
     private final List<StopModel.Dataline> linesList = new ArrayList<>();
-
-    ArrayList<String> idsFavs=new ArrayList<>();
-    private String favorita="";
-
     private TextView stopIdTextView;
     private TextView stopNameTextView;
     private LoadingIndicator loadingIndicator;
     private CardView stopCard;
-    private MaterialToolbar materialToolbar;
     private int timesResponsesReceived = 0;
     private StopModel.Stop stop;
-    private MenuItem itemFav;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +51,6 @@ public class StopActivity extends AppCompatActivity {
 
         loadingIndicator = findViewById(R.id.progress_bar);
         stopCard = findViewById(R.id.busCard_Stop);
-        idsFavs=getIntent().getStringArrayListExtra("favs");
 
         Toolbar toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
@@ -74,17 +63,9 @@ public class StopActivity extends AppCompatActivity {
         stopCard.setVisibility(View.GONE);
         loadingIndicator.setVisibility(View.VISIBLE);
 
-
-        if (!idsFavs.isEmpty()){
-            for (String parada:idsFavs){
-                if (parada.split(";")[0].equals(stopId)){
-                    favorita=parada;
-                }
-            }
-        }
-
         stopIdTextView = findViewById(R.id.stop_id);
         stopNameTextView = findViewById(R.id.stop_name);
+
         if (stopId != null) {
             stopIdTextView.setText(stopId);
         }
@@ -97,7 +78,7 @@ public class StopActivity extends AppCompatActivity {
 
         if (stopId != null && !stopId.isEmpty()) {
             try {
-                fetchStopDetails(stopId);
+                fetchStopDetails(Integer.parseInt(stopId));
             } catch (NumberFormatException e) {
                 Log.e("StopActivity", "Invalid stop ID format", e);
                 Toast.makeText(getBaseContext(), R.string.invalid_stop, Toast.LENGTH_SHORT).show();
@@ -105,7 +86,7 @@ public class StopActivity extends AppCompatActivity {
         }
     }
 
-    private void fetchStopDetails(String stopId) {
+    private void fetchStopDetails(int stopId) {
         ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         Call<StopModel> call = apiInterface.getStop(stopId, ApiCall.token);
 
@@ -131,6 +112,10 @@ public class StopActivity extends AppCompatActivity {
                         List<StopModel.Stop> stops = stopModel.getStopsData().get(0).getStops();
                         if (stops != null && !stops.isEmpty()) {
                             stop = stops.get(0);
+                            
+                            // Initialize favorite state
+                            stop.setFavorite(FavoritesManager.isFavorite(StopActivity.this, stop.getStopId()));
+                            invalidateOptionsMenu();
 
                             if (stop.getName() != null) {
                                 stopNameTextView.setText(stop.getName());
@@ -160,18 +145,16 @@ public class StopActivity extends AppCompatActivity {
                 loadingIndicator.setVisibility(View.GONE);
             }
         });
-
-        materialToolbar = findViewById(R.id.my_toolbar);
     }
 
-    private void fetchArrivalTimes(String stopId, ApiInterface apiInterface) {
+    private void fetchArrivalTimes(int stopId, ApiInterface apiInterface) {
         timesResponsesReceived = 0;
         for (int i = 0; i < linesList.size(); i++) {
             StopModel.Dataline line = linesList.get(i);
             try {
                 int lineId = Integer.parseInt(line.getLineId());
                 Call<TimeModel> timeCall = apiInterface.getTime(stopId, lineId, ApiCall.token, TimeRequest.get());
-                
+
                 Log.d("StopActivity", "Fetching time for line: " + lineId + " at stop: " + stopId);
 
                 timeCall.enqueue(new Callback<>() {
@@ -235,12 +218,23 @@ public class StopActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_stop, menu);
-        if (!favorita.isEmpty()){
-            if (favorita.split(";")[1].equals("true")){
-                itemFav=menu.findItem(R.id.favorite);
-                itemFav.setIcon(R.drawable.ic_favorite_filled_24dp);
-            }
+        
+        MenuItem favoriteItem = menu.findItem(R.id.favorite);
+        String stopId = getIntent().getStringExtra("stopId");
+        
+        boolean isFavorite = false;
+        if (stop != null) {
+            isFavorite = stop.isFavorite();
+        } else if (stopId != null) {
+            isFavorite = FavoritesManager.isFavorite(this, stopId);
         }
+        
+        if (isFavorite) {
+            favoriteItem.setIcon(R.drawable.ic_favorite_filled_24dp);
+        } else {
+            favoriteItem.setIcon(R.drawable.ic_favorite_24dp);
+        }
+        
         return true;
     }
 
@@ -258,7 +252,7 @@ public class StopActivity extends AppCompatActivity {
                     loadingIndicator.setVisibility(View.VISIBLE);
                     linesList.clear();
                     adapter.notifyDataSetChanged();
-                    fetchStopDetails(stopId);
+                    fetchStopDetails(Integer.parseInt(stopId));
                 } catch (NumberFormatException e) {
                     Log.e("StopActivity", "Error while refreshing", e);
                     Toast.makeText(getBaseContext(), R.string.error_refreshing, Toast.LENGTH_SHORT).show();
@@ -266,59 +260,44 @@ public class StopActivity extends AppCompatActivity {
             }
             return true;
         } else if (itemId == R.id.favorite) {
-            // Falta que el icono haga algo cuando es pulsado
-            if (!stop.isFavorite()){
-                stop.setFavorite(true);
-                item.setIcon(R.drawable.ic_favorite_filled_24dp);
-                addFavoriteBBDD(stop.getStopId(),stop.isFavorite());
-                Log.d("StopActivity", "Favorite Stops is active clicked");
-            }else{
-                Log.d("StopActivity2", "Favorite Stops is inactive clicked Detele");
-                stop.setFavorite(false);
-                item.setIcon(R.drawable.ic_favorite_24dp);
-                removeFavoriteBBDD(stop.getStopId(),stop.isFavorite());
-                Toast.makeText(getBaseContext(),"Favorite Stops is active clicked",Toast.LENGTH_SHORT).show();
+            String currentStopId = stop != null ? stop.getStopId() : getIntent().getStringExtra("stopId");
+            if (currentStopId == null) return true;
+
+            if (stop == null) {
+                // If stop data isn't loaded yet, create a dummy one or handle it
+                boolean isFav = FavoritesManager.isFavorite(this, currentStopId);
+                if (!isFav) {
+                    addFavorite(currentStopId, true);
+                    item.setIcon(R.drawable.ic_favorite_filled_24dp);
+                } else {
+                    removeFavorite(currentStopId, false);
+                    item.setIcon(R.drawable.ic_favorite_24dp);
+                }
+            } else {
+                if (!stop.isFavorite()) {
+                    addFavorite(stop.getStopId(), true);
+                    item.setIcon(R.drawable.ic_favorite_filled_24dp);
+                    stop.setFavorite(true);
+                } else {
+                    removeFavorite(stop.getStopId(), false);
+                    item.setIcon(R.drawable.ic_favorite_24dp);
+                    stop.setFavorite(false);
+                }
             }
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-    private void addFavoriteBBDD(String paradaid,Boolean estado){
-        BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        BaseDatosModel modelo=new BaseDatosModel(paradaid,estado);
-        Call<BaseDatosModel> callB= baseDatosInterface.anadeFavorito(modelo);
-        callB.enqueue(new Callback<BaseDatosModel>() {
-            @Override
-            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
-                if (response.isSuccessful() && response.body()!=null){
-                    Log.d("Exit call", "Succefully added to favorites");
-                    Toast.makeText(getBaseContext(), R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
-                Log.e("Call Error", "Error retrieving data for BBDD.", t);
-                Toast.makeText(getBaseContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
-            }
-        });
+    
+    private void addFavorite(String paradaid, Boolean estado) {
+        FavoritesManager.addFavorite(this, paradaid);
+        Toast.makeText(this, R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
+        Log.d("StopActivity", "Favorite added: " + paradaid);
     }
-    private void removeFavoriteBBDD(String paradaid,Boolean estado){
-        BaseDatosInterface baseDatosInterface= BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        BaseDatosModel modelo=new BaseDatosModel(paradaid,estado);
-        Call<BaseDatosModel> callB= baseDatosInterface.elimidaDFavoritos(modelo);
-        callB.enqueue(new Callback<BaseDatosModel>() {
-            @Override
-            public void onResponse(Call<BaseDatosModel> call, Response<BaseDatosModel> response) {
-                if (response.isSuccessful() && response.body()!=null){
-                    Log.d("Exit call", "Succesfully removed from favorites");
-                    Toast.makeText(getBaseContext(), R.string.message_favorite_remove, Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onFailure(Call<BaseDatosModel> call, Throwable t) {
-                Log.e("Call Error", "Error retrieving data for BBDD.", t);
-                Toast.makeText(getBaseContext(), R.string.database_error, Toast.LENGTH_SHORT).show();
-            }
-        });
+    
+    private void removeFavorite(String paradaid, Boolean estado) {
+        FavoritesManager.removeFavorite(this, paradaid);
+        Toast.makeText(this, R.string.message_favorite_remove, Toast.LENGTH_SHORT).show();
+        Log.d("StopActivity", "Favorite removed: " + paradaid);
     }
 }

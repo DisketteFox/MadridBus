@@ -17,17 +17,20 @@ public interface ApiInterface{
     // Interface for ping
     @GET("/v1/hello")
     Call<HelloModel> getHello();
+
     // Interface for retrieving the token
     @GET("/v3/mobilitylabs/user/login/")
     Call<TokenModel> getToken(
             @Header("X-ClientId") String clientId,
             @Header("passKey") String passKey
     );
+
     @GET("/v3/mobilitylabs/user/login/")
     Call<TokenModel> getTokenByUser(
             @Header("email") String clientId,
             @Header("password") String passKey
     );
+
     // Interfaces for stops
     @POST("/v1/transport/busemtmad/stops/list/")
     Call<StopModel> getStopsList(
@@ -35,13 +38,13 @@ public interface ApiInterface{
     );
     @GET("/v1/transport/busemtmad/stops/{stopId}/detail")
     Call<StopModel> getStop(
-            @Path("stopId") String stopId,
+            @Path("stopId") Integer stopId,
             @Header("accessToken") String accessToken
     );
 
     @POST("/v2/transport/busemtmad/stops/{stopId}/arrives/{lineArrive}/")
     Call<TimeModel> getTime(
-            @Path("stopId") String stopId,
+            @Path("stopId") Integer stopId,
             @Path("lineArrive") Integer lineId,
             @Header("accessToken") String accessToken,
             @Body TimeRequest body
@@ -52,7 +55,7 @@ public interface ApiInterface{
     Call<LineModel> getLines(
             @Header("accessToken") String accessToken
     );
-    
+
     @GET("/v1/transport/busemtmad/lines/{lineId}/info/20260218/")
     Call<LineModel> getLineDetail(
             @Path("lineId") Integer lineId,
