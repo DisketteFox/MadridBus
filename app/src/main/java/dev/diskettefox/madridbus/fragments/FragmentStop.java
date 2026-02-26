@@ -3,6 +3,8 @@ package dev.diskettefox.madridbus.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,16 +28,19 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import dev.diskettefox.madridbus.FavoritesManager;
 import dev.diskettefox.madridbus.LoginActivity;
 import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.adapters.StopAdapter;
+import dev.diskettefox.madridbus.adapters.SuggestionAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
 import dev.diskettefox.madridbus.models.HelloModel;
 import dev.diskettefox.madridbus.models.StopModel;
+import dev.diskettefox.madridbus.models.StopsModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +54,10 @@ public class FragmentStop extends Fragment {
     private List<Integer> stopIds = new ArrayList<>();
     private int responsesReceived = 0;
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
+
+    private List<StopsModel.Stops> allStops = new ArrayList<>();
+    private List<StopsModel.Stops> filteredStops = new ArrayList<>();
+    private SuggestionAdapter suggestionAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,8 +82,32 @@ public class FragmentStop extends Fragment {
         adapter = new StopAdapter(getContext(), stopsList);
         recyclerStops.setAdapter(adapter);
 
-        // Search bar
+        // Search bar and suggestions
         SearchView searchView = view.findViewById(R.id.search_view_Stops);
+        RecyclerView recyclerSuggestions = view.findViewById(R.id.recycler_suggestions);
+        recyclerSuggestions.setLayoutManager(new LinearLayoutManager(getContext()));
+        
+        suggestionAdapter = new SuggestionAdapter(filteredStops, stop -> {
+            Intent intent = new Intent(getContext(), StopActivity.class);
+            intent.putExtra("stopId", stop.getStopId());
+            intent.putExtra("stopName", stop.getStopName());
+            startActivity(intent);
+            searchView.hide();
+        });
+        recyclerSuggestions.setAdapter(suggestionAdapter);
+
+        searchView.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterSuggestions(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         // Handle Search action on keyboard
         searchView.getEditText().setOnEditorActionListener((v, actionId, event) -> {
@@ -95,7 +128,9 @@ public class FragmentStop extends Fragment {
                         searchView.hide();
                     } catch (NumberFormatException e) {
                         if (getContext() != null) {
-                            Toast.makeText(getContext(), "Invalid Stop ID", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getContext(), StopActivity.class);
+                            intent.putExtra("stopName", text);
+                            getContext().startActivity(intent);
                         }
                     }
                 }
@@ -103,7 +138,44 @@ public class FragmentStop extends Fragment {
             }
             return false;
         });
+
+        fetchAllStops();
+
         return view;
+    }
+
+    private void fetchAllStops() {
+        ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
+        String accessToken = ApiCall.token;
+        if (accessToken == null || accessToken.isEmpty()) return;
+
+        apiInterface.getStopsList(accessToken).enqueue(new Callback<StopsModel>() {
+            @Override
+            public void onResponse(@NonNull Call<StopsModel> call, @NonNull Response<StopsModel> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    allStops = response.body().getStopsData();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<StopsModel> call, @NonNull Throwable t) {
+                Log.e("FragmentStop", "Error fetching stops list", t);
+            }
+        });
+    }
+
+    private void filterSuggestions(String query) {
+        filteredStops.clear();
+        if (!query.isEmpty()) {
+            String lowerCaseQuery = query.toLowerCase();
+            for (StopsModel.Stops stop : allStops) {
+                if (stop.getStopName().toLowerCase().contains(lowerCaseQuery) ||
+                        stop.getStopId().contains(lowerCaseQuery)) {
+                    filteredStops.add(stop);
+                }
+            }
+        }
+        suggestionAdapter.notifyDataSetChanged();
     }
 
     @Override
