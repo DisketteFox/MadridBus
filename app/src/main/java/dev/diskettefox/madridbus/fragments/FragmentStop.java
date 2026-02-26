@@ -179,11 +179,12 @@ public class FragmentStop extends Fragment {
                                     stopsList.addAll(stops);
                                 }
                             }
+
                         }
                     } else {
                         Log.e("API Response", "No stops data for stop ID: " + stopId);
                     }
-                } else {
+                }else {
                     Log.e("API Response", "Failed response for stop ID: " + stopId);
                 }
                 onResponseReceived();

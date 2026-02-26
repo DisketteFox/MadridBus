@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.diskettefox.madridbus.FavoritesManager;
 import dev.diskettefox.madridbus.R;
 import dev.diskettefox.madridbus.StopActivity;
 import dev.diskettefox.madridbus.models.StopModel;
@@ -45,7 +46,13 @@ public class StopAdapter extends RecyclerView.Adapter<StopAdapter.ViewHolder> {
 
         if (stop != null) {
             holder.tvStopId.setText(stop.getStopId());
-            holder.tvStopName.setText(stop.getName());
+            //holder.tvStopName.setText(stop.getName());
+            String nombreFav= FavoritesManager.getFavoriteName(context, stop.getStopId());
+            if (nombreFav!=null){
+                holder.tvStopName.setText(nombreFav);
+            }else{
+                holder.tvStopName.setText(stop.getName());
+            }
 
             holder.card.setOnClickListener(v -> {
                 Intent intent = new Intent(context, StopActivity.class);

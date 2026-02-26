@@ -11,6 +11,7 @@ import java.util.Set;
 public class FavoritesManager {
     private static final String PREFS_NAME = "FavoritesPrefs";
     private static final String KEY_FAVORITES = "favorite_stops";
+    private static final String KEY_FAVORITE_NAMES="favorite_names";
 
     public static void addFavorite(Context context, String stopId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -18,12 +19,17 @@ public class FavoritesManager {
         favorites.add(stopId);
         prefs.edit().putStringSet(KEY_FAVORITES, favorites).apply();
     }
+    public static void addFavoriteWithName(Context context, String stopId, String customName){
+        addFavorite(context, stopId);
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putString(KEY_FAVORITE_NAMES + stopId, customName).apply();
+    }
 
     public static void removeFavorite(Context context, String stopId) {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         Set<String> favorites = new HashSet<>(prefs.getStringSet(KEY_FAVORITES, new HashSet<>()));
         favorites.remove(stopId);
-        prefs.edit().putStringSet(KEY_FAVORITES, favorites).apply();
+        prefs.edit().putStringSet(KEY_FAVORITES, favorites).remove(KEY_FAVORITE_NAMES + stopId).apply();
     }
 
     public static boolean isFavorite(Context context, String stopId) {
@@ -42,5 +48,9 @@ public class FavoritesManager {
             } catch (NumberFormatException ignored) {}
         }
         return favoriteIds;
+    }
+    public static String getFavoriteName(Context context, String stopId){
+        SharedPreferences pref= context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return pref.getString(KEY_FAVORITE_NAMES + stopId , null);
     }
 }

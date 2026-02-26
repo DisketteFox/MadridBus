@@ -5,11 +5,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -117,7 +119,13 @@ public class StopActivity extends AppCompatActivity {
                             stop.setFavorite(FavoritesManager.isFavorite(StopActivity.this, stop.getStopId()));
                             invalidateOptionsMenu();
 
-                            if (stop.getName() != null) {
+                            //Mostrar nombre personalizado si existe
+                            String nombreFavorito = FavoritesManager.getFavoriteName(StopActivity.this,stop.getStopId());
+                            if (nombreFavorito!=null){
+                                stopNameTextView.setText(nombreFavorito);
+                            //if (stop.getName() != null) {
+                                //stopNameTextView.setText(stop.getName());
+                            } else if (stop.getStopId()!=null) {
                                 stopNameTextView.setText(stop.getName());
                             }
                             if (stop.getStopId() != null) {
@@ -288,10 +296,37 @@ public class StopActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void mostrarDialogNombre(String stopId){
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setTitle("Nombre del favorito");
+        EditText input=new EditText(this);
+        input.setHint("Ejemplo: casa, trabajo");
+
+        String nombreActual = FavoritesManager.getFavoriteName(this, stopId);
+        if (nombreActual!=null){
+            input.setText(nombreActual);
+        }
+
+        builder.setView(input);
+
+        builder.setPositiveButton("Guardar" , (dialog, which) -> {
+            String nombre = input.getText().toString().trim();
+            if (nombre.isEmpty()){
+                nombre = stop != null ? stop.getName() : "favorito";
+            }
+            FavoritesManager.addFavoriteWithName(this, stopId, nombre);
+            Toast.makeText(this, "Nombre guardado" +nombre, Toast.LENGTH_SHORT).show();
+        });
+        builder.setNegativeButton("Cancelar",null);
+        builder.show();
+
+    }
     
     private void addFavorite(String paradaid, Boolean estado) {
         FavoritesManager.addFavorite(this, paradaid);
-        Toast.makeText(this, R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
+        mostrarDialogNombre(paradaid);
+        //Toast.makeText(this, R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
         Log.d("StopActivity", "Favorite added: " + paradaid);
     }
     
