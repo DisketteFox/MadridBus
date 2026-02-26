@@ -82,46 +82,13 @@ public class FragmentStop extends Fragment {
         recyclerStops.setAdapter(adapter);
 
 
-        BaseDatosInterface baseDatosInterface = BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
-        Call<BBDDAO> callB = baseDatosInterface.llamaFavoritos();
-        synchronized (paradasFav){
-            callB.enqueue(new Callback<BBDDAO>() {
-                @Override
-                public void onResponse(@NonNull Call<BBDDAO> call, @NonNull Response<BBDDAO> response) {
-                    if (response.body() != null && response.isSuccessful()) {
-                        List<BBDDAO.Respuestas> favs = response.body().getFavoritos();
-                        for (BBDDAO.Respuestas dato:favs){
-                            paradasFav.add(new BaseDatosModel(dato.getParada_id(),dato.isEstado()));
-                        }
-                        Toast.makeText(getContext(),"len denbtro: "+paradasFav.size(),Toast.LENGTH_SHORT).show();
-                    }
-                    Log.d("llamado exitoso", "Se han recuperado tus paradas favoritas.");
-                }
-                @Override
-                public void onFailure(Call<BBDDAO> call, Throwable t) {
-                    Log.e("Call Error", "Unable to connect to BBDD local", t);
-                    showNoConnection();
-                }
-            });
-
-        }
+        getFavoritos();
 
 
-        if (!paradasFav.isEmpty()){
-            try {
-                adapter.notifyDataSetChanged();
-                for (BaseDatosModel parada:paradasFav){
-                    fetchStopData(apiInterface,parada.getParada_id(), accessToken);
-                }
-
-                favString.clear();
-                paradasFav.clear();
-                stopsList.clear();
-            }
-            catch (NumberFormatException e) {
-                Log.e("StopActivity", "Error while refreshing", e);
-                Toast.makeText(getContext(), R.string.error_refreshing, Toast.LENGTH_SHORT).show();
-            }
+        if (!stopsList.isEmpty()){
+            // medio lo que hace es actualiza favoritos al borrar
+            stopsList.clear();
+            Toast.makeText(getContext(),"borra :"+stopsList.size(),Toast.LENGTH_SHORT).show();
         }
 
         // Show loading screen
@@ -141,8 +108,6 @@ public class FragmentStop extends Fragment {
             stopIdToIndex.put(Integer.valueOf(paradasFav.get(i).getParada_id()), i);
         }
 
-
-
         // Check for connection to API
         checkPing(apiInterface);
 
@@ -151,9 +116,6 @@ public class FragmentStop extends Fragment {
             responsesReceived = 0;
             for (BaseDatosModel stopId : paradasFav) {
                 fetchStopData(apiInterface, stopId.getParada_id(), accessToken);
-                synchronized (favString) {
-                    favString.add(stopId.getParada_id() + ";" + stopId.getIs_favorite());
-                }
             }
         } else {
             adapter.notifyDataSetChanged();
@@ -194,11 +156,35 @@ public class FragmentStop extends Fragment {
             }
         });
 
+
+        paradasFav.clear();
         return view;
     }
 
 
     // Favorites method for database
+    private void getFavoritos(){
+        BaseDatosInterface baseDatosInterface = BaseDatosCall.getBBDD().create(BaseDatosInterface.class);
+        Call<BBDDAO> callB = baseDatosInterface.llamaFavoritos();
+        callB.enqueue(new Callback<BBDDAO>() {
+            @Override
+            public void onResponse(@NonNull Call<BBDDAO> call, @NonNull Response<BBDDAO> response) {
+                if (response.body() != null && response.isSuccessful()) {
+                    List<BBDDAO.Respuestas> favs = response.body().getFavoritos();
+                    for (BBDDAO.Respuestas dato:favs){
+                        paradasFav.add(new BaseDatosModel(dato.getParada_id(),dato.isEstado()));
+                        favString.add(dato.getParada_id() + ";" + dato.isEstado());
+                    }
+                }
+                Log.d("llamado exitoso", "Se han recuperado tus paradas favoritas.");
+            }
+            @Override
+            public void onFailure(Call<BBDDAO> call, Throwable t) {
+                Log.e("Call Error", "Unable to connect to BBDD local", t);
+                showNoConnection();
+            }
+        });
+    }
 
     private void checkPing(ApiInterface apiInterface){
         Call<HelloModel> call = apiInterface.getHello();
@@ -227,9 +213,7 @@ public class FragmentStop extends Fragment {
                         for (StopModel.Data data : stop.getStopsData()) {
                             List<StopModel.Stop> stops = data.getStops();
                             if (stops != null) {
-                                synchronized (stopsList) {
-                                    stopsList.addAll(stops);
-                                }
+                                stopsList.addAll(stops);
                             }
                         }
                         Log.d("JustWorking", "Stops loaded for stop ID: " + stopId);
