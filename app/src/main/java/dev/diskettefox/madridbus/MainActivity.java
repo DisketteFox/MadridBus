@@ -14,10 +14,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
-import dev.diskettefox.madridbus.fragments.FragmentLines;
-import dev.diskettefox.madridbus.fragments.FragmentMap;
-import dev.diskettefox.madridbus.fragments.FragmentStop;
-import dev.diskettefox.madridbus.models.LineModel;
 import dev.diskettefox.madridbus.models.TokenModel;
 import retrofit2.Call;
 import retrofit2.Callback;

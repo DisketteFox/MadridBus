@@ -1,9 +1,5 @@
 package dev.diskettefox.madridbus.api;
 
-import dev.diskettefox.madridbus.models.HelloModel;
-import dev.diskettefox.madridbus.models.LineModel;
-import dev.diskettefox.madridbus.models.StopModel;
-import dev.diskettefox.madridbus.models.TimeModel;
 import dev.diskettefox.madridbus.models.TokenModel;
 import retrofit2.Call;
 import retrofit2.http.Body;
