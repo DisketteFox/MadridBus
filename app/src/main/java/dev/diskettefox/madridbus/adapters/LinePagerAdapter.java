@@ -34,11 +34,11 @@ public class LinePagerAdapter extends PagerAdapter {
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         PhotoView photoView = new PhotoView(context);
         photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        
+
         Glide.with(context)
                 .load(imageUrls.get(position))
                 .into(photoView);
-        
+
         container.addView(photoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         return photoView;
     }

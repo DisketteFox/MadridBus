@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import dev.diskettefox.madridbus.R;
+import dev.diskettefox.madridbus.models.LineModel;
 
 public class LineActivityAdapter extends RecyclerView.Adapter<LineActivityAdapter.ViewHolder> {
 

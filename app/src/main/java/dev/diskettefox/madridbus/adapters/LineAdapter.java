@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import dev.diskettefox.madridbus.LineActivity;
 import dev.diskettefox.madridbus.R;
+import dev.diskettefox.madridbus.models.LineModel;
 
 public class LineAdapter extends RecyclerView.Adapter<LineAdapter.ViewHolder> {
 

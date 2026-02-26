@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import dev.diskettefox.madridbus.R;
+import dev.diskettefox.madridbus.models.StopModel;
 
 public class BusTimeAdapter extends RecyclerView.Adapter<BusTimeAdapter.ViewHolder> {
 
@@ -69,7 +70,7 @@ public class BusTimeAdapter extends RecyclerView.Adapter<BusTimeAdapter.ViewHold
                 holder.busDirection.setTextColor(ContextCompat.getColor(context, R.color.black));
                 holder.busNumber.setTextColor(ContextCompat.getColor(context, R.color.yellow));
             }
-            
+
             // MORE TO IMPLEMENT
         }
     }
