@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +22,7 @@ import com.google.android.material.loadingindicator.LoadingIndicator;
 import com.google.android.material.search.SearchView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -73,6 +74,29 @@ public class FragmentStop extends Fragment {
         adapter = new StopAdapter(getContext(), stopsList);
         recyclerStops.setAdapter(adapter);
 
+        // Drag and Drop logic
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int fromPosition = viewHolder.getAbsoluteAdapterPosition();
+                int toPosition = target.getAbsoluteAdapterPosition();
+
+                synchronized (stopsList) {
+                    Collections.swap(stopsList, fromPosition, toPosition);
+                }
+                adapter.notifyItemMoved(fromPosition, toPosition);
+
+                updateStopIdsFromStopsList();
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                // Not implemented (Tho I don't think it'll be used at all)
+            }
+        });
+        itemTouchHelper.attachToRecyclerView(recyclerStops);
+
         // Search bar
         SearchView searchView = view.findViewById(R.id.search_view_Stops);
 
@@ -106,6 +130,27 @@ public class FragmentStop extends Fragment {
         return view;
     }
 
+    private void updateStopIdsFromStopsList() {
+        List<Integer> newStopIds = new ArrayList<>();
+        synchronized (stopsList) {
+            for (StopModel.Stop stop : stopsList) {
+                try {
+                    newStopIds.add(Integer.parseInt(stop.getStopId()));
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+        stopIds = newStopIds;
+        if (getContext() != null) {
+            FavoritesManager.saveFavorites(getContext(), stopIds);
+        }
+        
+        // Update the list
+        stopIdToIndex.clear();
+        for (int i = 0; i < stopIds.size(); i++) {
+            stopIdToIndex.put(stopIds.get(i), i);
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -116,7 +161,9 @@ public class FragmentStop extends Fragment {
         if (getContext() == null) return;
         
         stopIds = FavoritesManager.getFavorites(getContext());
-        stopsList.clear();
+        synchronized (stopsList) {
+            stopsList.clear();
+        }
         stopIdToIndex.clear();
         responsesReceived = 0;
         
