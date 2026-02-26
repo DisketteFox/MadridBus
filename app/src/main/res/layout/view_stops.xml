@@ -118,6 +118,12 @@
         android:layout_height="match_parent"
         android:hint="@string/search_stops"
         app:layout_anchor="@id/search_bar_Stops">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_suggestions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
     </com.google.android.material.search.SearchView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

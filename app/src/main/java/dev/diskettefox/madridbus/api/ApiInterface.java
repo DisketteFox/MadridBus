@@ -3,6 +3,7 @@ package dev.diskettefox.madridbus.api;
 import dev.diskettefox.madridbus.models.HelloModel;
 import dev.diskettefox.madridbus.models.LineModel;
 import dev.diskettefox.madridbus.models.StopModel;
+import dev.diskettefox.madridbus.models.StopsModel;
 import dev.diskettefox.madridbus.models.TimeModel;
 import dev.diskettefox.madridbus.models.TokenModel;
 import retrofit2.Call;
@@ -33,7 +34,7 @@ public interface ApiInterface{
 
     // Interfaces for stops
     @POST("/v1/transport/busemtmad/stops/list/")
-    Call<StopModel> getStopsList(
+    Call<StopsModel> getStopsList(
             @Header("accessToken") String accessToken
     );
     @GET("/v1/transport/busemtmad/stops/{stopId}/detail")

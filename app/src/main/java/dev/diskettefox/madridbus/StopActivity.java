@@ -114,7 +114,7 @@ public class StopActivity extends AppCompatActivity {
                         List<StopModel.Stop> stops = stopModel.getStopsData().get(0).getStops();
                         if (stops != null && !stops.isEmpty()) {
                             stop = stops.get(0);
-                            
+
                             // Initialize favorite state
                             stop.setFavorite(FavoritesManager.isFavorite(StopActivity.this, stop.getStopId()));
                             invalidateOptionsMenu();
@@ -226,23 +226,23 @@ public class StopActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_stop, menu);
-        
+
         MenuItem favoriteItem = menu.findItem(R.id.favorite);
         String stopId = getIntent().getStringExtra("stopId");
-        
+
         boolean isFavorite = false;
         if (stop != null) {
             isFavorite = stop.isFavorite();
         } else if (stopId != null) {
             isFavorite = FavoritesManager.isFavorite(this, stopId);
         }
-        
+
         if (isFavorite) {
             favoriteItem.setIcon(R.drawable.ic_favorite_filled_24dp);
         } else {
             favoriteItem.setIcon(R.drawable.ic_favorite_24dp);
         }
-        
+
         return true;
     }
 
@@ -296,7 +296,6 @@ public class StopActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
     private void mostrarDialogNombre(String stopId){
         AlertDialog.Builder builder=new AlertDialog.Builder(this);
         builder.setTitle("Nombre del favorito");
@@ -322,14 +321,14 @@ public class StopActivity extends AppCompatActivity {
         builder.show();
 
     }
-    
+
     private void addFavorite(String paradaid, Boolean estado) {
         FavoritesManager.addFavorite(this, paradaid);
         mostrarDialogNombre(paradaid);
         //Toast.makeText(this, R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
         Log.d("StopActivity", "Favorite added: " + paradaid);
     }
-    
+
     private void removeFavorite(String paradaid, Boolean estado) {
         FavoritesManager.removeFavorite(this, paradaid);
         Toast.makeText(this, R.string.message_favorite_remove, Toast.LENGTH_SHORT).show();

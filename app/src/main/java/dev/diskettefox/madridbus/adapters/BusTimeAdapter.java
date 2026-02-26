@@ -70,7 +70,7 @@ public class BusTimeAdapter extends RecyclerView.Adapter<BusTimeAdapter.ViewHold
                 holder.busDirection.setTextColor(ContextCompat.getColor(context, R.color.black));
                 holder.busNumber.setTextColor(ContextCompat.getColor(context, R.color.yellow));
             }
-            
+
             // MORE TO IMPLEMENT
         }
     }
