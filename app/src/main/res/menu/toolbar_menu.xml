@@ -5,8 +5,4 @@
         android:title="@string/title_activity_token"
         android:id="@+id/token"
         />
-    <item
-        android:title="@string/title_activity_settings"
-        android:id="@+id/settings"
-        />
 </menu>
