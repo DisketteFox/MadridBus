@@ -7,7 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiCall {
-    public static String BASE_URL="https://datos.emtmadrid.es/";
+    public static String BASE_URL="https://openapi.emtmadrid.es";
     public static String token="0e751555-fa20-4201-9836-5ec2f19940d5";
     private static Retrofit retrofit;
 
