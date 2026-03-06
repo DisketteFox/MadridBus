@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Madrid Bus</string>
+    <string name="app_name">Libre EMT</string>
     <string name="title_activity_stop">Paradas</string>
     <string name="title_activity_line">Líneas</string>
     <string name="title_activity_map">Mapa</string>

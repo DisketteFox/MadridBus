@@ -26,7 +26,7 @@
     <img src="./docs/images/scr4.png" width=29%>
 </div>
 
-### Requirements
+## Requirements
 
 - A device with Android
 - Internet connexion
