@@ -1,10 +1,10 @@
 <p align=center><image src="./docs/images/logo.png" height="150" /></p>
-<h1 align="center">Libre Madrid Transport</h1>
+<h1 align="center">Madrid Libre Transport</h1>
 
 [![Static Badge](https://img.shields.io/badge/-Figma-d8cded?style=flat&logo=Figma&)](https://www.figma.com/design/BzCBkvpquUvUQghGU2Qyu1/)
 ![Static Badge](https://img.shields.io/badge/-Android_Studio-10161d?style=flat&logo=android)
 
-**Libre Madrid Transport** is an open source Android app that offers real time information about EMT buses arriving time, lines information and routes of these lines.
+**Madrid Libre Transport** is an open source Android app that offers real time information about EMT buses arriving time, lines information and routes of these lines.
 
 > [!WARNING]
 > This project is still in early development
