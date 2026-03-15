@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Madrid Transporte Libre</string>
+    <string name="version">0.1.0</string>
+    <string name="license">GNU GPLv3</string>
+    <string name="love_signature">Made with ❤️ in Spain</string>
+
     <string name="title_activity_stop">Paradas</string>
     <string name="title_activity_line">Líneas</string>
     <string name="title_activity_map">Mapa</string>
@@ -19,8 +23,6 @@
 
     <string name="card_bus_arriving">Llegando</string>
     <string name="card_bus_next">Siguiente bus</string>
-    <string name="version">0.1.0</string>
-    <string name="license">GNU GPLv3</string>
 
     <string name="search_stops">Buscar paradas</string>
     <string name="search_lines">Buscar líneas</string>
@@ -59,5 +61,11 @@
     <string name="title_license">Licencia</string>
     <string name="api1">OpenAPI EMT Madrid</string>
 
-    <string name="love_signature">Made with ❤️ in Spain</string>
+    <string name="description_about_logo">Un icono de autobús sobre un fondo azul</string>
+    <string name="description_emt_logo">El logo de la EMT</string>
+    <string name="description_star">Un icono de estrella</string>
+    <string name="description_chain">Un icono de cadena rota</string>
+    <string name="description_bus_icon">Un icono de bus</string>
+    <string name="description_map">Un mapa de Madrid con líneas de autobús y metro indicadas</string>
+    <string name="description_line_stops">Una lista de paradas para esta línea</string>
 </resources>

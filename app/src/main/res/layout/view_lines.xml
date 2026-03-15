@@ -53,6 +53,7 @@
                 android:visibility="gone">
 
                 <ImageView
+                    android:contentDescription="@string/description_chain"
                     android:layout_width="match_parent"
                     android:layout_height="90dp"
                     app:srcCompat="@drawable/ic_link_off_24dp"

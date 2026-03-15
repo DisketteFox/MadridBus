@@ -3,6 +3,7 @@
     <string name="app_name">Madrid Libre Transport</string>
     <string name="version">0.1.0</string>
     <string name="license">GNU GPLv3</string>
+    <string name="love_signature">Made with ❤️ in Spain</string>
 
     <string name="title_activity_stop">Stops</string>
     <string name="title_activity_line">Lines</string>
@@ -60,5 +61,11 @@
     <string name="title_license">License</string>
     <string name="api1">OpenAPI EMT Madrid</string>
 
-    <string name="love_signature">Made with ❤️ in Spain</string>
+    <string name="description_about_logo">A bus icon over a blue background</string>
+    <string name="description_emt_logo">The EMT logo</string>
+    <string name="description_star">A star icon</string>
+    <string name="description_chain">A broken chain icon</string>
+    <string name="description_bus_icon">A bus icon</string>
+    <string name="description_map">A map of Madrid with indicated Bus and Metro lines</string>
+    <string name="description_line_stops">A list of stops for this line</string>
 </resources>

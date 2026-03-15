@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/rounded_white_bg"
-                    android:text="148"
+                    android:text=""
                     android:textAlignment="center"
                     android:textColor="@color/blue"
                     android:textSize="18sp"
@@ -48,7 +48,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:text="Callao"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
@@ -64,6 +64,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:contentDescription="@string/description_bus_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:padding="4dp"
@@ -73,7 +74,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:text="@string/card_bus_arriving"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="20sp" />
@@ -82,7 +83,7 @@
                     android:id="@+id/time_arriving"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1 min"
+                    android:text=""
                     android:textAlignment="textEnd"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="20sp" />
@@ -98,6 +99,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:contentDescription="@string/description_bus_icon"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:padding="4dp"
@@ -107,7 +109,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
                     android:text="@string/card_bus_next"
                     android:textSize="20sp"
                     android:textColor="?attr/colorOnSurfaceVariant"/>
@@ -116,7 +118,7 @@
                     android:id="@+id/time_next"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="12 min"
+                    android:text=""
                     android:textAlignment="textEnd"
                     android:textSize="20sp" />
             </LinearLayout>

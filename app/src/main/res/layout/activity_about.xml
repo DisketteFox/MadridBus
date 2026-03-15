@@ -35,6 +35,7 @@
             android:padding="20dp">
 
             <ImageView
+                android:contentDescription="@string/description_about_logo"
                 android:src="@drawable/ic_bus"
                 android:background="@drawable/ic_launcher_background"
                 android:id="@+id/login"

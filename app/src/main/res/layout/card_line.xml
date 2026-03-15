@@ -26,8 +26,9 @@ android:layout_height="wrap_content">
                 android:id="@+id/line_label"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:text="1"
+                android:text=""
                 android:textSize="22sp"
+                android:textColor="@color/white"
                 android:gravity="center"
                 android:background="@drawable/circle_with_color"
                 android:layout_margin="14dp"
@@ -45,7 +46,7 @@ android:layout_height="wrap_content">
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
                     android:textSize="18sp"
-                    android:text="Cristo Rey"
+                    android:text=""
                     android:textStyle="bold"
                     />
 
@@ -54,7 +55,7 @@ android:layout_height="wrap_content">
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    android:text="Prosperidad"
+                    android:text=""
                     android:textStyle="bold"
                     />
             </LinearLayout>

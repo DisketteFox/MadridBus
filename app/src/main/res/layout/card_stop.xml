@@ -27,7 +27,7 @@
                 android:id="@+id/stop_id_Stops"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:text="5135"
+                android:text=""
                 android:textSize="20sp"
                 android:gravity="center"
                 android:background="@drawable/circle"
@@ -46,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:text="Círculo de las Bellas Artes"
+                    android:text=""
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
