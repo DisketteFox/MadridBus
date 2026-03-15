@@ -42,11 +42,15 @@
 
     <string name="message_favorite_add">Added to favorites</string>
     <string name="message_favorite_remove">Removed from favorites</string>
+    <string name="message_successful_login">Successfully logged in</string>
+    <string name="message_invalid_credentials">Invalid username or password</string>
+    <string name="message_empty_username">Username cannot empty</string>
+    <string name="message_empty_password">Password cannot be empty</string>
+    <string name="message_short_password">Password must be at least 8 characters long</string>
+    <string name="message_invalid_username">Username must be a valid email</string>
 
     <string name="no_favorites">No favorites</string>
     <string name="no_connection">No connection</string>
-
-    <string name="succesful_login">Successfully logged in</string>
 
     <string name="mpass">Login with MPASS</string>
     <string name="user">User</string>

@@ -43,18 +43,40 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         login.setOnClickListener(v -> {
-            String user = "";
-            String pass = "";
-            if (username.getEditText() != null){
-                user = username.getEditText().getText().toString();
+            String user = username.getEditText().getText().toString();
+            String pass = password.getEditText().getText().toString();
+            boolean valid = true;
+            if (user.isEmpty()){
+                username.setErrorEnabled(true);
+                username.setError(getResources().getText(R.string.message_empty_username));
+                valid = false;
+            } else {
+                if (!user.contains("@") || !user.contains(".")) {
+                    username.setErrorEnabled(true);
+                    username.setError(getResources().getText(R.string.message_invalid_username));
+                    valid = false;
+                } else {
+                    username.setErrorEnabled(false);
+                }
             }
-
-            if (password.getEditText() != null){
-                pass = password.getEditText().getText().toString();
+            if (pass.isEmpty()){
+                password.setErrorEnabled(true);
+                password.setError(getResources().getText(R.string.message_empty_password));
+                valid = false;
+            } else {
+                if (pass.length() < 8) {
+                    password.setErrorEnabled(true);
+                    password.setError(getResources().getText(R.string.message_short_password));
+                    valid = false;
+                } else {
+                    password.setErrorEnabled(false);
+                }
             }
-
-            getToken(user, pass);
-            finish();
+            if (valid) {
+                username.setErrorEnabled(false);
+                password.setErrorEnabled(false);
+                getToken(user, pass);
+            }
         });
         register.setOnClickListener(v -> {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://datos.emtmadrid.es/user/register"));
@@ -81,13 +103,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<TokenModel> call, @NonNull Response<TokenModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     TokenModel token = response.body();
-                    if (token.getData() != null) {
-                        if (token.getData().isEmpty()) {
-                            TokenModel.Data data = token.getData().get(0);
-                            Log.d("Token", data.getAccessToken());
-                            ApiCall.setToken(data.getAccessToken());
-                            Toast.makeText(LoginActivity.this, R.string.succesful_login, Toast.LENGTH_SHORT).show();
-                        }
+                    if (token.getCode() == 1) {
+                        TokenModel.Data data = token.getData().get(0);
+                        Log.d("Token", data.getAccessToken());
+                        ApiCall.setToken(data.getAccessToken());
+                        Toast.makeText(LoginActivity.this, R.string.message_successful_login, Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else if (token.getCode() == 89) {
+                        Toast.makeText(LoginActivity.this, R.string.message_invalid_credentials, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d("API Error", "Unexpected error");
                     }
 
                 } else {
