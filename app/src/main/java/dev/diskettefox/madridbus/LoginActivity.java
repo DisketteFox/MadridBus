@@ -1,5 +1,7 @@
 package dev.diskettefox.madridbus;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.*;
@@ -26,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Button login = findViewById(R.id.lg_button);
+        TextView register = findViewById(R.id.lg_register);
         TextInputLayout username = findViewById(R.id.lg_TxtUser);
         TextInputLayout password = findViewById(R.id.login_Password);
 
@@ -42,6 +45,10 @@ public class LoginActivity extends AppCompatActivity {
 
             getToken(user, pass);
             finish();
+        });
+        register.setOnClickListener(v -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://datos.emtmadrid.es/user/register"));
+            startActivity(browserIntent);
         });
     }
 
