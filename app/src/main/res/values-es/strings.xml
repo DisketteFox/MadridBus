@@ -19,6 +19,8 @@
 
     <string name="card_bus_arriving">Llegando</string>
     <string name="card_bus_next">Siguiente bus</string>
+    <string name="version">0.1.0</string>
+    <string name="license">GNU GPLv3</string>
 
     <string name="search_stops">Buscar paradas</string>
     <string name="search_lines">Buscar líneas</string>
@@ -49,6 +51,13 @@
     <string name="password">Contraseña</string>
     <string name="login">Iniciar sesión</string>
     <string name="signup">¿No tienes cuenta? Regístrate</string>
+
+    <string name="title_basic_info">Información básica</string>
+    <string name="title_version">Versión</string>
+    <string name="title_database">Base de datos</string>
+    <string name="title_legal_and_regulatory">Título y regulaciones</string>
+    <string name="title_license">Licencia</string>
+    <string name="api1">OpenAPI EMT Madrid</string>
 
     <string name="love_signature">Made with ❤️ in Spain</string>
 </resources>
