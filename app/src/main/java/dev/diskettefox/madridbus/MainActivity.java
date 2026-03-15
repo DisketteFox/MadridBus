@@ -3,6 +3,8 @@ package dev.diskettefox.madridbus;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
@@ -39,14 +42,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadMain(Bundle savedInstanceState) {
-        BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
+        FrameLayout fl = findViewById(R.id.frame_layout);
+        LoadingIndicator ld = findViewById(R.id.loading_indicator);
+        BottomNavigationView nv = findViewById(R.id.bottom_navigation);
 
         if (savedInstanceState == null) {
             loadFragment(new FragmentStop(), true);
         }
 
         // Navigation bar logic
-        navigationBarView.setOnItemSelectedListener(menuItem -> {
+        nv.setOnItemSelectedListener(menuItem -> {
             int itemId = menuItem.getItemId();
 
             // Menu selection
@@ -59,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+
+        ld.setVisibility(View.GONE);
+        fl.setVisibility(View.VISIBLE);
+        nv.setVisibility(View.VISIBLE);
     }
 
     public void getToken(Bundle savedInstanceState) {
@@ -80,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                             ApiCall.setToken(data.getAccessToken());
 
                             // Notify existing fragment if it was restored from saved state
-                            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.framelayout_main);
+                            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout);
                             if (currentFragment instanceof FragmentStop) {
                                 ((FragmentStop) currentFragment).refreshFavorites();
                                 ((FragmentStop) currentFragment).fetchAllStops();
@@ -111,9 +120,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (booted) {
-            fragmentTransaction.add(R.id.framelayout_main, fragment);
+            fragmentTransaction.add(R.id.frame_layout, fragment);
         } else {
-            fragmentTransaction.replace(R.id.framelayout_main, fragment);
+            fragmentTransaction.replace(R.id.frame_layout, fragment);
         }
 
         fragmentTransaction.commit();
