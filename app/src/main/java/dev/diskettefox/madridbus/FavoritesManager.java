@@ -38,6 +38,9 @@ public class FavoritesManager {
             favorites.remove(Integer.valueOf(stopId));
         } catch (NumberFormatException ignored) {}
         saveFavorites(context, favorites);
+        
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().remove(KEY_FAVORITE_NAMES + stopId).apply();
     }
 
     public static boolean isFavorite(Context context, String stopId) {

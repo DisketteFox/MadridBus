@@ -2,23 +2,24 @@ package dev.diskettefox.madridbus;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.loadingindicator.LoadingIndicator;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,15 +100,19 @@ public class StopActivity extends AppCompatActivity {
                     StopModel stopModel = response.body();
 
                     // Check if the response returns an error
-                    if (stopModel.getCode().equals("80")) {
-                        Toast.makeText(getBaseContext(), R.string.error_token, Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else if (stopModel.getCode().equals("81")) {
-                        Toast.makeText(getBaseContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
-                        finish();
-                    } else if (stopModel.getCode().equals("90")) {
-                        Toast.makeText(getBaseContext(), R.string.invalid_stop, Toast.LENGTH_SHORT).show();
-                        finish();
+                    switch (stopModel.getCode()) {
+                        case "80":
+                            Toast.makeText(getBaseContext(), R.string.error_token, Toast.LENGTH_SHORT).show();
+                            finish();
+                            break;
+                        case "81":
+                            Toast.makeText(getBaseContext(), R.string.stop_error, Toast.LENGTH_SHORT).show();
+                            finish();
+                            break;
+                        case "90":
+                            Toast.makeText(getBaseContext(), R.string.invalid_stop, Toast.LENGTH_SHORT).show();
+                            finish();
+                            break;
                     }
 
                     if (stopModel.getStopsData() != null && !stopModel.getStopsData().isEmpty()) {
@@ -119,15 +124,7 @@ public class StopActivity extends AppCompatActivity {
                             stop.setFavorite(FavoritesManager.isFavorite(StopActivity.this, stop.getStopId()));
                             invalidateOptionsMenu();
 
-                            //Mostrar nombre personalizado si existe
-                            String nombreFavorito = FavoritesManager.getFavoriteName(StopActivity.this,stop.getStopId());
-                            if (nombreFavorito!=null){
-                                stopNameTextView.setText(nombreFavorito);
-                            //if (stop.getName() != null) {
-                                //stopNameTextView.setText(stop.getName());
-                            } else if (stop.getStopId()!=null) {
-                                stopNameTextView.setText(stop.getName());
-                            }
+                            stopNameTextView.setText(stop.getName());
                             if (stop.getStopId() != null) {
                                 stopIdTextView.setText(stop.getStopId());
                             }
@@ -296,42 +293,34 @@ public class StopActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    private void mostrarDialogNombre(String stopId){
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setTitle("Nombre del favorito");
-        EditText input=new EditText(this);
-        input.setHint("Ejemplo: casa, trabajo");
+    private void showDialog(String stopId){
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle(R.string.favorite_name);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_edit_favorite, null);
+        TextInputEditText input = view.findViewById(R.id.edit_text);
 
-        String nombreActual = FavoritesManager.getFavoriteName(this, stopId);
-        if (nombreActual!=null){
-            input.setText(nombreActual);
-        }
-
-        builder.setView(input);
-
-        builder.setPositiveButton("Guardar" , (dialog, which) -> {
-            String nombre = input.getText().toString().trim();
-            if (nombre.isEmpty()){
-                nombre = stop != null ? stop.getName() : "favorito";
+        builder.setView(view);
+        builder.setPositiveButton(R.string.save , (dialog, which) -> {
+            String name = input.getText().toString().trim();
+            if (name.isEmpty()){
+                name = stop != null ? stop.getName() : "favorito";
             }
-            FavoritesManager.addFavoriteWithName(this, stopId, nombre);
-            Toast.makeText(this, "Nombre guardado" +nombre, Toast.LENGTH_SHORT).show();
+            FavoritesManager.addFavoriteWithName(this, stopId, name);
+            Toast.makeText(this, R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
         });
-        builder.setNegativeButton("Cancelar",null);
+        builder.setNegativeButton(R.string.cancel,null);
         builder.show();
-
     }
 
-    private void addFavorite(String paradaid, Boolean estado) {
-        FavoritesManager.addFavorite(this, paradaid);
-        mostrarDialogNombre(paradaid);
-        //Toast.makeText(this, R.string.message_favorite_add, Toast.LENGTH_SHORT).show();
-        Log.d("StopActivity", "Favorite added: " + paradaid);
+    private void addFavorite(String stopId, Boolean status) {
+        FavoritesManager.addFavorite(this, stopId);
+        showDialog(stopId);
+        Log.d("StopActivity", "Favorite added: " + stopId);
     }
 
-    private void removeFavorite(String paradaid, Boolean estado) {
-        FavoritesManager.removeFavorite(this, paradaid);
+    private void removeFavorite(String stopId, Boolean status) {
+        FavoritesManager.removeFavorite(this, stopId);
         Toast.makeText(this, R.string.message_favorite_remove, Toast.LENGTH_SHORT).show();
-        Log.d("StopActivity", "Favorite removed: " + paradaid);
+        Log.d("StopActivity", "Favorite removed: " + stopId);
     }
 }

@@ -6,9 +6,6 @@
 
 **Madrid Libre Transport** is an open source Android app that offers real time information about EMT buses arriving time, lines information and routes of these lines.
 
-> [!WARNING]
-> This project is still in early development
-
 ## Features
 
 | Name       | Description                                                             |
@@ -23,7 +20,7 @@
 <div display="flex" align=center>
     <img src="./docs/images/scr1.png" width=29% style="margin-right: 20px;">
     <img src="./docs/images/scr2.png" width=29% style="margin-right: 20px">
-    <img src="./docs/images/scr4.png" width=29%>
+    <img src="./docs/images/scr3.png" width=29%>
 </div>
 
 ## Requirements
@@ -38,9 +35,12 @@ It uses Material 3 as main theme, but there are also hard-coded colors based on 
 
 | Color                                                                                                        | Hex       |
 |--------------------------------------------------------------------------------------------------------------|-----------|
-| <img src="./docs/images/color-blue.png" style="margin-top: 5px; margin-right: 5px"> **EMT blue**             | `#0f6bb4` |
-| <img src="./docs/images/color-turquoise.png" style="margin-top: 5px; margin-right: 5px"> **Madrid 360 blue** | `#00adcf` |
+| <img src="./docs/images/color-blue.png" style="margin-top: 5px; margin-right: 5px"> **EMT blue**             | `#0072ce` |
+| <img src="./docs/images/color-turquoise.png" style="margin-top: 5px; margin-right: 5px"> **Madrid 360 blue** | `#00aecf` |
+| <img src="./docs/images/color-lightblue.png" style="margin-top: 5px; margin-right: 5px"> **Light blue**      | `#7bb7e9` |
 | <img src="./docs/images/color-gold.png" style="margin-top: 5px; margin-right: 5px"> **Golden yellow**        | `#f8dd43` |
+| <img src="./docs/images/color-yellow.png" style="margin-top: 5px; margin-right: 5px"> **Yellow**             | `#ede939` |
+| <img src="./docs/images/color-brown.png" style="margin-top: 5px; margin-right: 5px"> **Brown**               | `#764709` |
 
 ## License
 

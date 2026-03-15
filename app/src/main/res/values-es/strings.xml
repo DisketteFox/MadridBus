@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Madrid Transporte Libre</string>
-    <string name="version">0.1.0</string>
+    <string name="version">1.0.0</string>
     <string name="license">GNU GPLv3</string>
     <string name="love_signature">Made with ❤️ in Spain</string>
 

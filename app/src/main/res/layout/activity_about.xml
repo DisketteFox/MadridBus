@@ -2,7 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/activity_about"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false">
@@ -36,10 +36,10 @@
 
             <ImageView
                 android:contentDescription="@string/description_about_logo"
-                android:src="@drawable/ic_bus"
+                android:src="@drawable/ic_mybus_24dp"
                 android:background="@drawable/ic_launcher_background"
                 android:id="@+id/login"
-                android:padding="20dp"
+                android:padding="26dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
