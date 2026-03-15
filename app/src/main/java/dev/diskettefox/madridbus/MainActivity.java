@@ -79,6 +79,13 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("Token", data.getAccessToken());
                             ApiCall.setToken(data.getAccessToken());
 
+                            // Notify existing fragment if it was restored from saved state
+                            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.framelayout_main);
+                            if (currentFragment instanceof FragmentStop) {
+                                ((FragmentStop) currentFragment).refreshFavorites();
+                                ((FragmentStop) currentFragment).fetchAllStops();
+                            }
+
                             loadMain(savedInstanceState);
                         }
                     } else {

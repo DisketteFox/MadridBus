@@ -47,7 +47,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragmentStop extends Fragment {
-    private static final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
+    private final ArrayList<StopModel.Stop> stopsList = new ArrayList<>();
     private StopAdapter adapter;
     private LoadingIndicator loadingIndicator;
     private LinearLayout noFavorites, noConnection;
@@ -59,6 +59,8 @@ public class FragmentStop extends Fragment {
     private List<StopsModel.Stops> allStops = new ArrayList<>();
     private final List<StopsModel.Stops> filteredStops = new ArrayList<>();
     private SuggestionAdapter suggestionAdapter;
+
+    private int currentLoadId = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -173,7 +175,7 @@ public class FragmentStop extends Fragment {
         return view;
     }
 
-    private void fetchAllStops() {
+    public void fetchAllStops() {
         ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         String accessToken = ApiCall.token;
         if (accessToken == null || accessToken.isEmpty()) return;
@@ -233,9 +235,10 @@ public class FragmentStop extends Fragment {
         refreshFavorites();
     }
 
-    private void refreshFavorites() {
+    public void refreshFavorites() {
         if (getContext() == null) return;
 
+        final int loadId = ++currentLoadId;
         stopIds = FavoritesManager.getFavorites(getContext());
         synchronized (stopsList) {
             stopsList.clear();
@@ -262,22 +265,26 @@ public class FragmentStop extends Fragment {
 
         ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         String accessToken = ApiCall.token;
+        if (accessToken == null || accessToken.isEmpty()) {
+            return;
+        }
 
         // Check for connection to API
-        checkPing(apiInterface);
+        checkPing(apiInterface, loadId);
 
         for (int stopId : stopIds) {
-            fetchStopData(apiInterface, stopId, accessToken);
+            fetchStopData(apiInterface, stopId, accessToken, loadId);
         }
     }
 
-    private void checkPing(ApiInterface apiInterface){
+    private void checkPing(ApiInterface apiInterface, final int loadId){
         Call<HelloModel> call = apiInterface.getHello();
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<HelloModel> call, @NonNull Response<HelloModel> response) {}
             @Override
             public void onFailure(@NonNull Call<HelloModel> call, @NonNull Throwable t) {
+                if (loadId != currentLoadId) return;
                 hideLoadingIndicator();
                 showNoConnection();
                 if (getContext() != null) {
@@ -287,11 +294,12 @@ public class FragmentStop extends Fragment {
         });
     }
 
-    private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken) {
+    private void fetchStopData(ApiInterface apiInterface, int stopId, String accessToken, final int loadId) {
         Call<StopModel> call = apiInterface.getStop(stopId, accessToken);
         call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<StopModel> call, @NonNull Response<StopModel> response) {
+                if (loadId != currentLoadId) return;
                 if (response.isSuccessful() && response.body() != null) {
                     StopModel stop = response.body();
                     if (stop.getStopsData() != null) {
@@ -310,25 +318,31 @@ public class FragmentStop extends Fragment {
                 }else {
                     Log.e("API Response", "Failed response for stop ID: " + stopId);
                 }
-                onResponseReceived();
+                onResponseReceived(loadId);
             }
 
             @Override
             public void onFailure(@NonNull Call<StopModel> call, @NonNull Throwable t) {
+                if (loadId != currentLoadId) return;
                 Log.e("Call Error", "Unable to connect to EMT API", t);
-                onResponseReceived(); // Still need to count it to hide loading
+                onResponseReceived(loadId); // Still need to count it to hide loading
             }
         });
     }
 
-    private void onResponseReceived() {
+    private void onResponseReceived(int loadId) {
+        if (loadId != currentLoadId) return;
         responsesReceived++;
         if (responsesReceived >= stopIds.size()) {
             // Sorting list
             synchronized (stopsList) {
                 stopsList.sort(Comparator.comparing(stop -> {
-                    Integer index = stopIdToIndex.get(Integer.parseInt(stop.getStopId()));
-                    return index != null ? index : Integer.MAX_VALUE;
+                    try {
+                        Integer index = stopIdToIndex.get(Integer.parseInt(stop.getStopId()));
+                        return index != null ? index : Integer.MAX_VALUE;
+                    } catch (NumberFormatException e) {
+                        return Integer.MAX_VALUE;
+                    }
                 }));
             }
             if (adapter != null) {
