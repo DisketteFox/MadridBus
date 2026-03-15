@@ -1,5 +1,6 @@
 package dev.diskettefox.madridbus;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -32,9 +33,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
 
-        getToken();
+
+        getToken(savedInstanceState);
+    }
+
+    public void loadMain(Bundle savedInstanceState) {
+        BottomNavigationView navigationBarView = findViewById(R.id.bottom_navigation);
 
         if (savedInstanceState == null) {
             loadFragment(new FragmentStop(), true);
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void getToken() {
+    public void getToken(Bundle savedInstanceState) {
         ApiInterface apiInterface = ApiCall.callApi().create(ApiInterface.class);
         String clientId = "b0c015e3-7e51-401a-b69b-0c8bb6e6e55f";
         String passKey = "A5C462BF6FD9BE59C286125F9A4101BA38071FCB1D0CDA03F205C0F07DA8CE2E7E5D1AB6A5A2829D60A7C2E3E7116E134B7BBCE782ACB70DC7FA880A294F4D75";
@@ -67,10 +72,18 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call<TokenModel> call, @NonNull Response<TokenModel> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     TokenModel token = response.body();
-                    if (token.getData() != null) {
-                        TokenModel.Data data = token.getData().get(0);
-                        Log.d("Token", data.getAccessToken());
-                        ApiCall.setToken(data.getAccessToken());
+
+                    if (token.getCode() == 01) {
+                        if (token.getData() != null) {
+                            TokenModel.Data data = token.getData().get(0);
+                            Log.d("Token", data.getAccessToken());
+                            ApiCall.setToken(data.getAccessToken());
+
+                            loadMain(savedInstanceState);
+                        }
+                    } else {
+                        Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                        startActivity(intent);
                     }
 
                 } else {
