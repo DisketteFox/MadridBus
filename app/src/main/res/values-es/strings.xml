@@ -7,6 +7,7 @@
     <string name="title_activity_settings">Ajustes</string>
     <string name="title_activity_token">Token</string>
     <string name="title_activity_login">Iniciar sesión</string>
+    <string name="title_activity_about">Acerca de</string>
 
     <string name="title_line_details">Detalles de línea</string>
     <string name="title_stop_details">Detalles de parada</string>
@@ -40,4 +41,14 @@
 
     <string name="no_favorites">No hay favoritos</string>
     <string name="no_connection">Sin conexión</string>
+
+    <string name="succesful_login">Sesión iniciada correctamente</string>
+
+    <string name="mpass">Inicia sesión en MPASS</string>
+    <string name="user">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Iniciar sesión</string>
+    <string name="signup">¿No tienes cuenta? Regístrate</string>
+
+    <string name="love_signature">Made with ❤️ in Spain</string>
 </resources>

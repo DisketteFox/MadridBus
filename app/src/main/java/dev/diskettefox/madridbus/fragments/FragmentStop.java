@@ -38,6 +38,7 @@ import dev.diskettefox.madridbus.adapters.StopAdapter;
 import dev.diskettefox.madridbus.adapters.SuggestionAdapter;
 import dev.diskettefox.madridbus.api.ApiCall;
 import dev.diskettefox.madridbus.api.ApiInterface;
+import dev.diskettefox.madridbus.AboutActivity;
 import dev.diskettefox.madridbus.models.HelloModel;
 import dev.diskettefox.madridbus.models.StopModel;
 import dev.diskettefox.madridbus.models.StopsModel;
@@ -56,7 +57,7 @@ public class FragmentStop extends Fragment {
     private final Map<Integer, Integer> stopIdToIndex = new HashMap<>();
 
     private List<StopsModel.Stops> allStops = new ArrayList<>();
-    private List<StopsModel.Stops> filteredStops = new ArrayList<>();
+    private final List<StopsModel.Stops> filteredStops = new ArrayList<>();
     private SuggestionAdapter suggestionAdapter;
 
     @Override
@@ -69,8 +70,12 @@ public class FragmentStop extends Fragment {
 
         MaterialToolbar toolbar = view.findViewById(R.id.my_toolbar);
         toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.token) {
+            if (item.getItemId() == R.id.login) {
                 Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (item.getItemId() == R.id.about) {
+                Intent intent = new Intent(getContext(), AboutActivity.class);
                 startActivity(intent);
                 return true;
             }

@@ -1,19 +1,13 @@
 package dev.diskettefox.madridbus;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.*;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -35,25 +29,19 @@ public class LoginActivity extends AppCompatActivity {
         TextInputLayout username = findViewById(R.id.lg_TxtUser);
         TextInputLayout password = findViewById(R.id.login_Password);
 
-        Bundle bundle = new Bundle();
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String user = "";
-                String pass = "";
-                if (username.getEditText() != null){
-                    user = username.getEditText().getText().toString();
-                }
-
-                if (password.getEditText() != null){
-                    pass = password.getEditText().getText().toString();
-                }
-
-                getToken(user, pass);
-
-                finish();
+        login.setOnClickListener(v -> {
+            String user = "";
+            String pass = "";
+            if (username.getEditText() != null){
+                user = username.getEditText().getText().toString();
             }
+
+            if (password.getEditText() != null){
+                pass = password.getEditText().getText().toString();
+            }
+
+            getToken(user, pass);
+            finish();
         });
     }
 
@@ -67,13 +55,17 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     TokenModel token = response.body();
                     if (token.getData() != null) {
-                        TokenModel.Data data = token.getData().get(0);
-                        Log.d("Token", data.getAccessToken());
-                        ApiCall.setToken(data.getAccessToken());
+                        if (token.getData().isEmpty()) {
+                            TokenModel.Data data = token.getData().get(0);
+                            Log.d("Token", data.getAccessToken());
+                            ApiCall.setToken(data.getAccessToken());
+                            Toast.makeText(LoginActivity.this, R.string.succesful_login, Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                 } else {
                     Log.e("API Error", "Unable to connect to database");
+                    Toast.makeText(LoginActivity.this, R.string.no_connection, Toast.LENGTH_SHORT).show();
                 }
             }
 
