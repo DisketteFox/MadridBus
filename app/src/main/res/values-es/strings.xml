@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Madrid Transporte Libre</string>
-    <string name="version">1.0.0</string>
+    <string name="version">1.1.0</string>
     <string name="license">GNU GPLv3</string>
     <string name="love_signature">Made with ❤️ in Spain</string>
 
@@ -64,6 +64,10 @@
     <string name="title_legal_and_regulatory">Título y regulaciones</string>
     <string name="title_license">Licencia</string>
     <string name="api1">OpenAPI EMT Madrid</string>
+
+    <string name="favorite_name">Nombre de favorito</string>
+    <string name="save">Guardar</string>
+    <string name="cancel">Cancelar</string>
 
     <string name="description_about_logo">Un icono de autobús sobre un fondo azul</string>
     <string name="description_emt_logo">El logo de la EMT</string>
