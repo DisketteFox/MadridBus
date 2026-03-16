@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.diskettefox.madridbus"
+    namespace = "dev.diskettefox.MadridLibreTransport"
     compileSdk {
         version = release(36)
     }
@@ -39,15 +39,15 @@ android {
 
 
 dependencies {
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.okhttp3:okhttp:5.3.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.3.0")
-    implementation("com.google.code.gson:gson:2.13.2")
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
-    implementation("com.github.chrisbanes:PhotoView:2.3.0")
-    implementation ("com.github.bumptech.glide:glide:4.16.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0") // Apache 2.0
+    implementation("com.squareup.okhttp3:okhttp:5.3.0") // Apache 2.0
+    implementation("com.squareup.okhttp3:logging-interceptor:5.3.0") // Apache 2.0
+    implementation("com.google.code.gson:gson:2.13.2") // Apache 2.0
+    implementation("com.google.android.material:material:1.4.0")  // Apache 2.0
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0") // Apache 2.0
+    implementation("com.github.chrisbanes:PhotoView:2.3.0") // Apache 2.0
+    implementation ("com.github.bumptech.glide:glide:4.16.0") // MIT and Apache 2.0
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0") // MIT and Apache 2.0
 
     implementation(libs.appcompat)
     implementation(libs.material)
